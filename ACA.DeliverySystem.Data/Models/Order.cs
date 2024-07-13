@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ACA.DeliverySystem.Data.Models
+﻿namespace ACA.DeliverySystem.Data.Models
 {
-    internal class Order
+    public class Order
     {
+
+        public int Id { get; set; }
+
+        public int UserId { get; set; }
+        public int ItemId { get; set; }
+        public DateOnly Date { get; set; }
+
+        public decimal PaidAmount { get; set; }
+
+        public ProgressEnum ProgressEnum { get; set; }
+
+        public List<Item> Items { get; set; } = new List<Item>();
+
     }
 }
