@@ -1,0 +1,6 @@
+@ACA.DeliverySystem_Api_HostAddress = http://localhost:5250
+
+GET {{ACA.DeliverySystem_Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
