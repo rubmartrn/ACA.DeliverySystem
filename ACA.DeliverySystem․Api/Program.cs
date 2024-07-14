@@ -1,9 +1,13 @@
+using ACA.DeliverySystem.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<DeliveryDbContext>();
 
 var app = builder.Build();
 
