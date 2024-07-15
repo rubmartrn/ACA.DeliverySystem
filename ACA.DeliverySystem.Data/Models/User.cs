@@ -15,7 +15,6 @@ namespace ACA.DeliverySystem.Data.Models
 
         public string Name { get; set; }
 
-
         public string SureName { get; set; }
 
         [EmailAddress]
