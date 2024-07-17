@@ -5,13 +5,15 @@ VisualStudioVersion = 17.11.35017.193
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACA.DeliverySystem․Api", "ACA.DeliverySystem․Api.csproj", "{E8D5AB26-0761-46B4-A736-C55E78086604}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACA.DeliverySystem.Data", "..\ACA.DeliverySystem.Data\ACA.DeliverySystem.Data.csproj", "{8FF5538B-A2EA-410E-BC52-788D2A4EDB98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACA.DeliverySystem.Data", "..\ACA.DeliverySystem.Data\ACA.DeliverySystem.Data.csproj", "{8FF5538B-A2EA-410E-BC52-788D2A4EDB98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACA.DeliverySystem.Business", "..\ACA.DeliverySystem.Business\ACA.DeliverySystem.Business.csproj", "{9BD34BC9-D528-4CDE-A64E-B662EB9E8071}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACA.DeliverySystem.Business", "..\ACA.DeliverySystem.Business\ACA.DeliverySystem.Business.csproj", "{9BD34BC9-D528-4CDE-A64E-B662EB9E8071}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACA.DeliverySystem.UI", "..\ACA.DeliverySystem.UI\ACA.DeliverySystem.UI.csproj", "{EE121BD6-CAB9-4003-8E4C-DC3A53526C40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACA.DeliverySystem.UI", "..\ACA.DeliverySystem.UI\ACA.DeliverySystem.UI.csproj", "{EE121BD6-CAB9-4003-8E4C-DC3A53526C40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACA.DeliverySystem.Business.Tests", "..\ACA.DeliverySystem.Business.Tests\ACA.DeliverySystem.Business.Tests.csproj", "{BC0AFDC0-60CF-49E0-824D-0225909D3993}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACA.DeliverySystem.Business.Tests", "..\ACA.DeliverySystem.Business.Tests\ACA.DeliverySystem.Business.Tests.csproj", "{BC0AFDC0-60CF-49E0-824D-0225909D3993}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACA.DeliverySystem.Data.Test", "..\ACA.DeliverySystem.Data.Test\ACA.DeliverySystem.Data.Test.csproj", "{478692C2-FDF1-428E-91DB-F5E1B5DFCA0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{BC0AFDC0-60CF-49E0-824D-0225909D3993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC0AFDC0-60CF-49E0-824D-0225909D3993}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC0AFDC0-60CF-49E0-824D-0225909D3993}.Release|Any CPU.Build.0 = Release|Any CPU
+		{478692C2-FDF1-428E-91DB-F5E1B5DFCA0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{478692C2-FDF1-428E-91DB-F5E1B5DFCA0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{478692C2-FDF1-428E-91DB-F5E1B5DFCA0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{478692C2-FDF1-428E-91DB-F5E1B5DFCA0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
