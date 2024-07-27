@@ -15,5 +15,7 @@
 
         public List<Item> Items { get; set; } = new List<Item>();
 
+        public List<User> Users { get; set; } = new List<User> { };
+
     }
 }
