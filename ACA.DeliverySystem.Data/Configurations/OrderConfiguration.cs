@@ -9,6 +9,15 @@ namespace ACA.DeliverySystem.Data.Configurations
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.HasKey(x => x.Id);
+
+            builder.HasMany(x => x.Users)
+                .WithOne(x => x.Order)
+                .HasForeignKey(x => x.OrderId);
+
+
+            builder.HasMany(x => x.Items)
+                .WithOne(x => x.Order)
+                .HasForeignKey(x => x.OrderId);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace ACA.DeliverySystem.Data
     {
         public DbSet<Item> Items { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public DeliveryDbContext(DbContextOptions<DeliveryDbContext> options) : base(options)
         {
@@ -18,6 +19,7 @@ namespace ACA.DeliverySystem.Data
         {
             modelBuilder.ApplyConfiguration(new ItemConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
         }
     }
 
