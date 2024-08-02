@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ACA.DeliverySystem.Data\ACA.DeliverySystem.Data.csproj" />
+  </ItemGroup>
+
 </Project>

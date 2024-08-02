@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ACA.DeliverySystem.Data\ACA.DeliverySystem.Data.csproj" />
+    <ProjectReference Include="..\ACA.DeliverySystem.Business\ACA.DeliverySystem.Business.csproj" />
   </ItemGroup>
 
 </Project>
