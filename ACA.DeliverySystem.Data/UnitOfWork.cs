@@ -16,6 +16,7 @@ namespace ACA.DeliverySystem.Data
         }
 
         private IItemRepository? itemRepository;
+        private IUserRepository? userRepository;
 
         public IItemRepository ItemRepository
         {
@@ -30,6 +31,20 @@ namespace ACA.DeliverySystem.Data
             }
             set => itemRepository = value;
         }
+
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                if(userRepository is null)
+                {
+                    userRepository = new UserRepository(_context);
+                }
+                return userRepository;
+            }
+            set => userRepository = value;
+        }
+
 
         public async Task Save(CancellationToken token)
         {
