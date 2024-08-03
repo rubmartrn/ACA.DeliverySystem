@@ -1,6 +1,6 @@
 ﻿using ACA.DeliverySystem.Data.Models;
 
-namespace ACA.DeliverySystem.Business
+namespace ACA.DeliverySystem.Business.Services
 {
     public interface IItemService
     {

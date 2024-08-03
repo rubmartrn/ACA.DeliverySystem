@@ -1,14 +1,9 @@
 ﻿using ACA.DeliverySystem.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ACA.DeliverySystem.Data.Repository
 {
-    public class OrderRepository
+    public class OrderRepository : IOrderRepository
     {
         private DeliveryDbContext _context;
 
@@ -22,7 +17,7 @@ namespace ACA.DeliverySystem.Data.Repository
             _context.Orders.Add(model);
         }
 
-        public async Task<Order> Get(int id,CancellationToken token)
+        public async Task<Order> Get(int id, CancellationToken token)
         {
             return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, token);
         }
@@ -32,11 +27,11 @@ namespace ACA.DeliverySystem.Data.Repository
             return await _context.Orders.ToListAsync(token);
         }
 
-        public async Task Delete(int id,CancellationToken token)
+        public async Task Delete(int id, CancellationToken token)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(x=>x.Id == id, token);
+            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, token);
             _context.Orders.Remove(order);
-        } 
+        }
 
     }
 }

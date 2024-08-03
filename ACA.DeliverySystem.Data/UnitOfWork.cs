@@ -1,9 +1,4 @@
 ﻿using ACA.DeliverySystem.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ACA.DeliverySystem.Data
 {
@@ -30,6 +25,22 @@ namespace ACA.DeliverySystem.Data
             }
             set => itemRepository = value;
         }
+
+        private IOrderRepository? _orderRepository;
+        public IOrderRepository OrderRepository
+        {
+            get
+            {
+                if (itemRepository is null)
+                {
+                    itemRepository = new ItemRepository(_context);
+                }
+
+                return _orderRepository;
+            }
+            set => _orderRepository = value;
+        }
+
 
         public async Task Save(CancellationToken token)
         {

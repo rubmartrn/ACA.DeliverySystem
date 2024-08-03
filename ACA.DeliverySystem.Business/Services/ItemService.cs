@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ACA.DeliverySystem.Business
+namespace ACA.DeliverySystem.Business.Services
 {
-    public class ItemService:IItemService
+    public class ItemService : IItemService
     {
         private readonly IUnitOfWork _uow;
 
