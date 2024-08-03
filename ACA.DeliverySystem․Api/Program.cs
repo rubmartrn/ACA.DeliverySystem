@@ -1,3 +1,4 @@
+using ACA.DeliverySystem.Business.MappingProfiles;
 using ACA.DeliverySystem.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DeliveryDbContext>(
 options => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=ACA.DS"));
+
+builder.Services.AddAutoMapper(typeof(ItemProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(OrderProfile).Assembly);
+
 
 var app = builder.Build();
 
