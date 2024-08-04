@@ -26,8 +26,6 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
             CreateMap<UserUpdateModel, User>()
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .ForMember(d => d.SureName, d => d.MapFrom(s => s.SureName))
-                .ForMember(d => d.Email, d => d.MapFrom(s => s.Email))
-                .ForMember(d => d.OrderId, d => d.MapFrom(s => s.OrderId))
                 .PreserveReferences();
         }
     }
