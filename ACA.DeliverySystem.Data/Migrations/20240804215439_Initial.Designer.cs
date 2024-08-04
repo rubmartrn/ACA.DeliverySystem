@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACA.DeliverySystem.Data.Migrations
 {
     [DbContext(typeof(DeliveryDbContext))]
-    [Migration("20240716184713_Adding_Models")]
-    partial class Adding_Models
+    [Migration("20240804215439_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -82,16 +82,63 @@ namespace ACA.DeliverySystem.Data.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("ACA.DeliverySystem.Data.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SureName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("ACA.DeliverySystem.Data.Models.Item", b =>
                 {
-                    b.HasOne("ACA.DeliverySystem.Data.Models.Order", null)
+                    b.HasOne("ACA.DeliverySystem.Data.Models.Order", "Order")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("ACA.DeliverySystem.Data.Models.User", b =>
+                {
+                    b.HasOne("ACA.DeliverySystem.Data.Models.Order", "Order")
+                        .WithMany("Users")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ACA.DeliverySystem.Data.Models.Order", b =>
                 {
                     b.Navigation("Items");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
