@@ -11,6 +11,7 @@ namespace ACA.DeliverySystem.Data
         }
 
         private IItemRepository? itemRepository;
+        private IUserRepository? userRepository;
 
         public IItemRepository ItemRepository
         {
@@ -39,6 +40,20 @@ namespace ACA.DeliverySystem.Data
                 return _orderRepository;
             }
             set => _orderRepository = value;
+        }
+
+
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                if(userRepository is null)
+                {
+                    userRepository = new UserRepository(_context);
+                }
+                return userRepository;
+            }
+            set => userRepository = value;
         }
 
 
