@@ -15,6 +15,11 @@ namespace ACA.DeliverySystem.Data
 
         }
 
+        public DeliveryDbContext() 
+        {
+
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ItemConfiguration());
