@@ -11,7 +11,7 @@ namespace ACA.DeliverySystem.Business.Services
 
         public async Task<Order> CreateOrder(Order order, CancellationToken token)
         {
-            await _uow.OrderRepository.Add(order, token);
+            _uow.OrderRepository.Add(order);
             await _uow.Save(token);
             return order;
         }
