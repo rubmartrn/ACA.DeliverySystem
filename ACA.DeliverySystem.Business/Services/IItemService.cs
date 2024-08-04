@@ -6,8 +6,8 @@ namespace ACA.DeliverySystem.Business.Services
     {
         Task<Item> CreateItem(Item item, CancellationToken token);
         Task Delete(int id, CancellationToken token);
-        Task<IEnumerable<Item>> GetAllItems(CancellationToken token);
-        Task<Item> GetItemById(int id, CancellationToken token);
+        Task<IEnumerable<Item>> GetAll(CancellationToken token);
+        Task<Item> GetById(int id, CancellationToken token);
         Task Update(Item item, CancellationToken token);
     }
 }
