@@ -1,13 +1,8 @@
-﻿using Moq;
-using ACA.DeliverySystem.Business.Services;
+﻿using ACA.DeliverySystem.Business.Services;
 using ACA.DeliverySystem.Data;
-using ACA.DeliverySystem.Data.Repository;
 using ACA.DeliverySystem.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ACA.DeliverySystem.Data.Repository;
+using Moq;
 
 namespace ACA.DeliverySystem.Business.Tests
 {
@@ -20,7 +15,7 @@ namespace ACA.DeliverySystem.Business.Tests
 
         [Fact]
 
-        public async Task CreateItem_Success() 
+        public async Task CreateItem_Success()
         {
             //Arrange
             var items = new List<Item>();
@@ -50,7 +45,7 @@ namespace ACA.DeliverySystem.Business.Tests
         }
 
         [Fact]
-        public async Task GetAllItems_Success() 
+        public async Task GetAllItems_Success()
         {
             //Arrange
             var items = new List<Item>
@@ -61,7 +56,7 @@ namespace ACA.DeliverySystem.Business.Tests
             _iItemRepositoryMock.Setup(e => e.GetAllItem(It.IsAny<CancellationToken>())).ReturnsAsync(items);
             _uowMock.Setup(u => u.ItemRepository).Returns(_iItemRepositoryMock.Object);
             //Act
-            var result=await service.GetAllItems(CancellationToken.None);
+            var result = await service.GetAll(CancellationToken.None);
             //Assert
             Assert.Equal(2, result.Count());
 
@@ -76,14 +71,14 @@ namespace ACA.DeliverySystem.Business.Tests
 
             _uowMock.Setup(u => u.ItemRepository).Returns(_iItemRepositoryMock.Object);
             // Act
-            await service.GetItemById(1, CancellationToken.None);
+            await service.GetById(1, CancellationToken.None);
 
             //Assert
             _iItemRepositoryMock.Verify(m => m.GetItemById(It.Is<int>(c => c == 1), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
-        public async Task Update() 
+        public async Task Update()
         {
             //Arrange
             var items = new List<Item>
@@ -93,7 +88,7 @@ namespace ACA.DeliverySystem.Business.Tests
             };
             _iItemRepositoryMock.Setup(e => e.GetAllItem(It.IsAny<CancellationToken>())).ReturnsAsync(items);
             _uowMock.Setup(u => u.ItemRepository).Returns(_iItemRepositoryMock.Object);
-            var currentItem = await service.GetItemById(1,CancellationToken.None);
+            var currentItem = await service.GetById(1, CancellationToken.None);
             //Act
 
             await service.Update(currentItem, CancellationToken.None);
