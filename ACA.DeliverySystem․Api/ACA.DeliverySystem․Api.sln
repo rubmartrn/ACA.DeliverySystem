@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACA.DeliverySystem.UI", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACA.DeliverySystem.Business.Tests", "..\ACA.DeliverySystem.Business.Tests\ACA.DeliverySystem.Business.Tests.csproj", "{BC0AFDC0-60CF-49E0-824D-0225909D3993}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACA.DeliverySystem.Data.Test", "..\ACA.DeliverySystem.Data.Test\ACA.DeliverySystem.Data.Test.csproj", "{478692C2-FDF1-428E-91DB-F5E1B5DFCA0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACA.DeliverySystem.Data.Test", "..\ACA.DeliverySystem.Data.Test\ACA.DeliverySystem.Data.Test.csproj", "{478692C2-FDF1-428E-91DB-F5E1B5DFCA0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
