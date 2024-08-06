@@ -24,12 +24,12 @@ namespace ACA.DeliverySystem.Business.Services
 
         public async Task<IEnumerable<User>> GetAllItem(CancellationToken token)
         {
-            return await _uow.UserRepository.GetAllItem(token);
+            return await _uow.UserRepository.GetAll(token);
         }
 
         public async Task<User> GetItemById(int id, CancellationToken token)
         {
-            return await _uow.UserRepository.GetItemById(id, token);
+            return await _uow.UserRepository.GetById(id, token);
         }
 
         public async Task Update(User user, CancellationToken token)
