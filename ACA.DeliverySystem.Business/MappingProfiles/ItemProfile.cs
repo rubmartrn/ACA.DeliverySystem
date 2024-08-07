@@ -18,7 +18,6 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
 
             CreateMap<ItemUpdateModel, Item>()
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
-                .ForMember(d => d.OrderId, d => d.MapFrom(s => s.OrderId))
                 .ForMember(d => d.Description, d => d.MapFrom(s => s.Description))
                 .ForMember(d => d.Price, d => d.MapFrom(s => s.Price))
                 .PreserveReferences();
