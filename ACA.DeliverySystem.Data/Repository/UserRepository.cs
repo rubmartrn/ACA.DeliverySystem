@@ -15,12 +15,12 @@ namespace ACA.DeliverySystem.Data.Repository
         {
             _context = context;
         }
-        public async Task<IEnumerable<User>> GetAllItem(CancellationToken token)
+        public async Task<IEnumerable<User>> GetAll(CancellationToken token)
         {
             return await _context.Users.ToListAsync(token);
         }
 
-        public async Task<User> GetItemById(int id, CancellationToken token)
+        public async Task<User> GetById(int id, CancellationToken token)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
