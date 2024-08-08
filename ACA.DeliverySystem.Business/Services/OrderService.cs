@@ -29,12 +29,12 @@ namespace ACA.DeliverySystem.Business.Services
 
         public async Task<Order> Get(int id, CancellationToken token)
         {
-            return await _uow.OrderRepository.Get(id, token);
+            return await _uow.OrderRepository.GetById(id, token);
         }
 
         public async Task<bool> Update(int id, Order model, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.Get(id, token);
+            var order = await _uow.OrderRepository.GetById(id, token);
             if (order == null)
             {
                 return false;

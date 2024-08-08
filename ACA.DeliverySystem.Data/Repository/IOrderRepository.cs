@@ -7,7 +7,9 @@ namespace ACA.DeliverySystem.Data.Repository
         void Add(Order order);
         Task Delete(int id, CancellationToken token);
         Task<IEnumerable<Order>> GetAll(CancellationToken token);
-        Task<Order> Get(int id, CancellationToken token);
+
+        Task<Order> GetById(int id, CancellationToken token);
+
         Task Update(Order order, CancellationToken token);
     }
 }

@@ -20,7 +20,7 @@ namespace ACA.DeliverySystem.Business.Tests
             //Arrange
             var items = new List<Item>();
             var item = new Item { Id = 1, OrderId = 1, Name = "fast food", Description = "5 pies", Price = 25, Order = _mockOrder.Object };
-            _iItemRepositoryMock.Setup(e => e.GetAllItem(It.IsAny<CancellationToken>())).ReturnsAsync(items);
+            _iItemRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(items);
             _uowMock.Setup(u => u.ItemRepository).Returns(_iItemRepositoryMock.Object);
             //Act
             await service.CreateItem(item, CancellationToken.None);
@@ -37,7 +37,7 @@ namespace ACA.DeliverySystem.Business.Tests
                 new Item { Id = 1, OrderId = 1, Name = "fast food", Description = "5 pies", Price = 25, Order = _mockOrder.Object },
                 new Item { Id = 2, OrderId = 1, Name = "Donar", Description = "6 pies", Price = 35, Order = _mockOrder.Object },
             };
-            _iItemRepositoryMock.Setup(e => e.GetAllItem(It.IsAny<CancellationToken>())).ReturnsAsync(items);
+            _iItemRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(items);
             _uowMock.Setup(u => u.ItemRepository).Returns(_iItemRepositoryMock.Object);
             //Act
             await service.Delete(1, CancellationToken.None);
@@ -53,7 +53,7 @@ namespace ACA.DeliverySystem.Business.Tests
                 new Item { Id = 1, OrderId = 1, Name = "fast food", Description = "5 pies", Price = 25, Order = _mockOrder.Object },
                 new Item { Id = 2, OrderId = 1, Name = "Donar", Description = "6 pies", Price = 35, Order = _mockOrder.Object },
             };
-            _iItemRepositoryMock.Setup(e => e.GetAllItem(It.IsAny<CancellationToken>())).ReturnsAsync(items);
+            _iItemRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(items);
             _uowMock.Setup(u => u.ItemRepository).Returns(_iItemRepositoryMock.Object);
             //Act
             var result = await service.GetAll(CancellationToken.None);
@@ -67,14 +67,14 @@ namespace ACA.DeliverySystem.Business.Tests
         {
             //Arrange
             var item = new Item { Id = 1, OrderId = 1, Name = "fast food", Description = "5 pies", Price = 25, Order = _mockOrder.Object };
-            _iItemRepositoryMock.Setup(e => e.GetItemById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(item);
+            _iItemRepositoryMock.Setup(e => e.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(item);
 
             _uowMock.Setup(u => u.ItemRepository).Returns(_iItemRepositoryMock.Object);
             // Act
             await service.GetById(1, CancellationToken.None);
 
             //Assert
-            _iItemRepositoryMock.Verify(m => m.GetItemById(It.Is<int>(c => c == 1), It.IsAny<CancellationToken>()), Times.Once);
+            _iItemRepositoryMock.Verify(m => m.GetById(It.Is<int>(c => c == 1), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace ACA.DeliverySystem.Business.Tests
                 new Item { Id = 1, OrderId = 1, Name = "fast food", Description = "5 pies", Price = 25, Order = _mockOrder.Object },
                 new Item { Id = 2, OrderId = 1, Name = "Donar", Description = "6 pies", Price = 35, Order = _mockOrder.Object },
             };
-            _iItemRepositoryMock.Setup(e => e.GetAllItem(It.IsAny<CancellationToken>())).ReturnsAsync(items);
+            _iItemRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(items);
             _uowMock.Setup(u => u.ItemRepository).Returns(_iItemRepositoryMock.Object);
             var currentItem = await service.GetById(1, CancellationToken.None);
             //Act
