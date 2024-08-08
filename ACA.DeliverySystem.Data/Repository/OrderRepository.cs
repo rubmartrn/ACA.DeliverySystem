@@ -12,19 +12,19 @@ namespace ACA.DeliverySystem.Data.Repository
             _context = context;
         }
 
-        public void Add(Order model)
+        public async Task<IEnumerable<Order>> GetAll(CancellationToken token)
         {
-            _context.Orders.Add(model);
+            return await _context.Orders.ToListAsync(token);
         }
 
-        public async Task<Order> Get(int id, CancellationToken token)
+        public async Task<Order> GetById(int id, CancellationToken token)
         {
             return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, token);
         }
 
-        public async Task<IEnumerable<Order>> GetAll(CancellationToken token)
+        public void Add(Order model)
         {
-            return await _context.Orders.ToListAsync(token);
+            _context.Orders.Add(model);
         }
 
         public async Task Delete(int id, CancellationToken token)
@@ -33,10 +33,11 @@ namespace ACA.DeliverySystem.Data.Repository
             _context.Orders.Remove(order);
         }
 
-        public async Task Update(Order item, CancellationToken token)
+
+        public  async Task Update(Order order, CancellationToken token)
         {
-            _context.Orders.Update(item);
-           await _context.SaveChangesAsync(token);
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync(token);
 
         }
     }
