@@ -40,8 +40,8 @@ namespace ACA.DeliverySystem.Business.Services
                 return false;
             }
             order = model;
-            _uow.OrderRepository.Update(order, token);
-            _uow.Save(token);
+            await _uow.OrderRepository.Update(order, token);
+            await _uow.Save(token);
             return true;
         }
     }
