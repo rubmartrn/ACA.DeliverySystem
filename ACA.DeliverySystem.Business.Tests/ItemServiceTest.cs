@@ -71,7 +71,8 @@ namespace ACA.DeliverySystem.Business.Tests
 
             _uowMock.Setup(u => u.ItemRepository).Returns(_iItemRepositoryMock.Object);
             // Act
-            await service.GetById(1, CancellationToken.None);
+          
+            await service.GetAll(1, CancellationToken.None);
 
             //Assert
             _iItemRepositoryMock.Verify(m => m.GetById(It.Is<int>(c => c == 1), It.IsAny<CancellationToken>()), Times.Once);
