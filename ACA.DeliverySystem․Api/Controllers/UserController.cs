@@ -35,8 +35,7 @@ namespace ACA.DeliverySystem_Api.Controllers
             {
                 return NotFound();
             }
-            user = _mapper.Map<User>(model);
-            await _userService.Update(user, token);
+            await _userService.Update(id, model, token);
             return Ok();
         }
     }

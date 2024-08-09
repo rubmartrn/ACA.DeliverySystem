@@ -34,10 +34,9 @@ namespace ACA.DeliverySystem.Data.Repository
         }
 
 
-        public  async Task Update(Order order, CancellationToken token)
+        public async Task Update(Order order, CancellationToken token)
         {
             _context.Orders.Update(order);
-            await _context.SaveChangesAsync(token);
 
         }
     }

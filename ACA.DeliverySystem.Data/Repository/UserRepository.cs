@@ -1,10 +1,5 @@
 ﻿using ACA.DeliverySystem.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ACA.DeliverySystem.Data.Repository
 {
@@ -28,13 +23,11 @@ namespace ACA.DeliverySystem.Data.Repository
         public async Task Add(User user, CancellationToken token)
         {
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
         }
 
         public async Task Update(User user, CancellationToken token)
         {
             _context.Users.Update(user);
-            await _context.SaveChangesAsync();
 
         }
 
@@ -42,7 +35,6 @@ namespace ACA.DeliverySystem.Data.Repository
         {
             var user = await _context.Users.SingleAsync(e => e.Id == id, token);
             _context.Users.Remove(user);
-            await _context.SaveChangesAsync(token);
         }
     }
 }
