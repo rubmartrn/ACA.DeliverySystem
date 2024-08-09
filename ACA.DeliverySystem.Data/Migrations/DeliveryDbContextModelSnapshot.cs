@@ -38,7 +38,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -62,7 +62,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<int>("ItemId")
+                    b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("PaidAmount")
@@ -71,7 +71,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                     b.Property<int>("ProgressEnum")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -95,7 +95,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<string>("SureName")
@@ -113,9 +113,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                 {
                     b.HasOne("ACA.DeliverySystem.Data.Models.Order", "Order")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("Order");
                 });
@@ -124,9 +122,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                 {
                     b.HasOne("ACA.DeliverySystem.Data.Models.Order", "Order")
                         .WithMany("Users")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("Order");
                 });
