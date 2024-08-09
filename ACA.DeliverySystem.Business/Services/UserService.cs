@@ -1,10 +1,5 @@
 ﻿using ACA.DeliverySystem.Data;
 using ACA.DeliverySystem.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ACA.DeliverySystem.Business.Services
 {
@@ -16,18 +11,24 @@ namespace ACA.DeliverySystem.Business.Services
         {
             _uow = uow;
         }
+
+        public async Task Create(User user, CancellationToken token)
+        {
+            await _uow.UserRepository.Add(user, token);
+            await _uow.Save(token);
+        }
         public async Task Delete(int id, CancellationToken token)
         {
             await _uow.UserRepository.Delete(id, token);
             await _uow.Save(token);
         }
 
-        public async Task<IEnumerable<User>> GetAllItem(CancellationToken token)
+        public async Task<IEnumerable<User>> GetAll(CancellationToken token)
         {
             return await _uow.UserRepository.GetAll(token);
         }
 
-        public async Task<User> GetItemById(int id, CancellationToken token)
+        public async Task<User> GetById(int id, CancellationToken token)
         {
             return await _uow.UserRepository.GetById(id, token);
         }

@@ -62,7 +62,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<int>("ItemId")
+                    b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("PaidAmount")
@@ -71,7 +71,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                     b.Property<int>("ProgressEnum")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -95,25 +95,43 @@ namespace ACA.DeliverySystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SureName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrderId");
+
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ACA.DeliverySystem.Data.Models.Item", b =>
                 {
-                    b.HasOne("ACA.DeliverySystem.Data.Models.Order", null)
+                    b.HasOne("ACA.DeliverySystem.Data.Models.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("ACA.DeliverySystem.Data.Models.User", b =>
+                {
+                    b.HasOne("ACA.DeliverySystem.Data.Models.Order", "Order")
+                        .WithMany("Users")
+                        .HasForeignKey("OrderId");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ACA.DeliverySystem.Data.Models.Order", b =>
                 {
                     b.Navigation("Items");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

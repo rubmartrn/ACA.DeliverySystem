@@ -17,8 +17,8 @@ namespace ACA.DeliverySystem.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    ItemId = table.Column<int>(type: "int", nullable: true),
                     Date = table.Column<DateOnly>(type: "date", nullable: false),
                     PaidAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ProgressEnum = table.Column<int>(type: "int", nullable: false)
@@ -34,7 +34,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
@@ -46,8 +46,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                         name: "FK_Items_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -56,7 +55,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SureName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -68,8 +67,7 @@ namespace ACA.DeliverySystem.Data.Migrations
                         name: "FK_Users_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
