@@ -3,11 +3,7 @@ using ACA.DeliverySystem.Data.Models;
 using ACA.DeliverySystem.Data.Repository;
 using ACA.DeliverySystem.Data;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ACA.DeliverySystem.Business.Tests
 {
@@ -89,12 +85,8 @@ namespace ACA.DeliverySystem.Business.Tests
         public async Task Update()
         {
             //Arrange
-            var orders = new List<Order>
-        {
-            new Order() { Id = 1, UserId = 1, Date = new DateOnly(2022, 1, 6), PaidAmount = 25, ProgressEnum = ProgressEnum.Created, Items = _mockItems.Object, Users = _mockUsers.Object },
-            new Order() { Id = 2, UserId = 2, Date = new DateOnly(2023, 2, 3), PaidAmount = 15, ProgressEnum = ProgressEnum.Done, Items = _mockItems.Object, Users = _mockUsers.Object }
-        };
-            _iOrderRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(orders);
+            var order = new Order() { Id = 1, UserId = 1, Date = new DateOnly(2022, 1, 6), PaidAmount = 25, ProgressEnum = ProgressEnum.Created, Items = _mockItems.Object, Users = _mockUsers.Object };
+            _iOrderRepositoryMock.Setup(e => e.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(order);
             _uowMock.Setup(u => u.OrderRepository).Returns(_iOrderRepositoryMock.Object);
             var currentOrder = new Order() { Id = 3, UserId = 3, Date = new DateOnly(2025, 4, 6), PaidAmount = 15, ProgressEnum = ProgressEnum.InProgress, Items = _mockItems.Object, Users = _mockUsers.Object };
             //Act
@@ -103,6 +95,5 @@ namespace ACA.DeliverySystem.Business.Tests
             _iOrderRepositoryMock.Verify(m => m.Update(It.Is<Order>(c => c == currentOrder), It.IsAny<CancellationToken>()), Times.Once);
 
         }
-
     }
 }
