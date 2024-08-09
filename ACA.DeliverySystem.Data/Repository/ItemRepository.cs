@@ -34,7 +34,7 @@ namespace ACA.DeliverySystem.Data.Repository
         }
         public async Task Delete(int id, CancellationToken token)
         {
-            var item = await _context.Items.SingleAsync(e => e.Id == id, token);
+            var item = await _context.Items.FirstOrDefaultAsync(e => e.Id == id, token);
             _context.Items.Remove(item);
         }
     }

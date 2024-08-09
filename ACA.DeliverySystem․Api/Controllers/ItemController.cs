@@ -39,7 +39,7 @@ namespace ACA.DeliverySystem_Api.Controllers
             {
                 return NotFound();
             }
-            _itemService.Delete(item.Id, token);
+            await _itemService.Delete(item.Id, token);
             return Ok();
         }
 
