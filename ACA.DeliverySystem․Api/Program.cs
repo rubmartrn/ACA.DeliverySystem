@@ -20,8 +20,8 @@ builder.Services.AddDbContext<DeliveryDbContext>(
 options => options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=ACA.DS"));
 
 builder.Services.AddAutoMapper(typeof(ItemProfile).Assembly);
-builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
-builder.Services.AddAutoMapper(typeof(OrderProfile).Assembly);
+//builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
+//builder.Services.AddAutoMapper(typeof(OrderProfile).Assembly);
 
 
 var app = builder.Build();
