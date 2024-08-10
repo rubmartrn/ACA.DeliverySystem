@@ -30,13 +30,7 @@ namespace ACA.DeliverySystem_Api.Controllers
         public async Task<IActionResult> Delete([FromQuery] int id, CancellationToken token)
         {
 
-            var item = await _itemService.GetById(id, token);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-            await _itemService.Delete(item.Id, token);
+            await _itemService.Delete(id, token);
             return Ok();
         }
 
@@ -51,15 +45,8 @@ namespace ACA.DeliverySystem_Api.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromQuery] int id, [FromBody] ItemUpdateModelDTO model, CancellationToken token)
         {
-
-            var item = await _itemService.GetById(id, token);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
             var mappedModel = _mapper.Map<ItemUpdateModel>(model);
-            await _itemService.Update(item.Id, mappedModel, token);
+            await _itemService.Update(id, mappedModel, token);
             return Ok();
         }
     }

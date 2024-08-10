@@ -26,6 +26,12 @@ namespace ACA.DeliverySystem.Business.Services
 
         public async Task Delete(int id, CancellationToken token)
         {
+            var item = await _uow.ItemRepository.GetById(id, token);
+
+            if (item == null)
+                throw new KeyNotFoundException($"Item with ID {id} not found.");
+
+
             await _uow.ItemRepository.Delete(id, token);
             await _uow.Save(token);
         }
@@ -45,6 +51,9 @@ namespace ACA.DeliverySystem.Business.Services
         public async Task Update(int id, ItemUpdateModel model, CancellationToken token)
         {
             var oldItem = await _uow.ItemRepository.GetById(id, token);
+
+            if (oldItem == null)
+                throw new KeyNotFoundException($"Item with ID {id} not found.");
 
             // Code for review
             oldItem.Description = model.Description;
