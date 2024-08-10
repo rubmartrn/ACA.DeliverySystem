@@ -44,6 +44,8 @@ namespace ACA.DeliverySystem.Business.Services
         {
             var oldUser = await _uow.UserRepository.GetById(id, token);
 
+            if (oldUser == null)
+                throw new KeyNotFoundException($"Item with ID {id} not found.");
 
             oldUser.Name = model.Name;
             oldUser.SureName = model.SureName;
