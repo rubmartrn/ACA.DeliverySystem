@@ -2,12 +2,16 @@
 {
     public class Order
     {
+        public Order()
+        {
+            Date = DateOnly.FromDateTime(DateTime.Now);
+        }
 
         public int Id { get; set; }
 
         public int? UserId { get; set; }
         public int? ItemId { get; set; }
-        public DateOnly Date { get; set; }
+        public DateOnly Date { get; private set; }
 
         public decimal PaidAmount { get; set; }
 
