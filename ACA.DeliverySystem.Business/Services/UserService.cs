@@ -16,9 +16,10 @@ namespace ACA.DeliverySystem.Business.Services
             _mapper = mapper;
         }
 
-        public async Task Create(User user, CancellationToken token)
+        public async Task Create(UserAddModel user, CancellationToken token)
         {
-            await _uow.UserRepository.Add(user, token);
+            var mappedUser = _mapper.Map<User>(user);
+            await _uow.UserRepository.Add(mappedUser, token);
             await _uow.Save(token);
         }
         public async Task Delete(int id, CancellationToken token)
@@ -27,22 +28,26 @@ namespace ACA.DeliverySystem.Business.Services
             await _uow.Save(token);
         }
 
-        public async Task<IEnumerable<User>> GetAll(CancellationToken token)
+        public async Task<IEnumerable<UserViewModel>> GetAll(CancellationToken token)
         {
-            return await _uow.UserRepository.GetAll(token);
+            var users = await _uow.UserRepository.GetAll(token);
+            return _mapper.Map<IEnumerable<UserViewModel>>(users);
         }
 
-        public async Task<User> GetById(int id, CancellationToken token)
+        public async Task<UserViewModel> GetById(int id, CancellationToken token)
         {
-            return await _uow.UserRepository.GetById(id, token);
+            var user = await _uow.UserRepository.GetById(id, token);
+            return _mapper.Map<UserViewModel>(user);
         }
 
         public async Task Update(int id, UserUpdateModel model, CancellationToken token)
         {
-            var oldUser = await GetById(id, token);
-            //oldUser = _mapper.Map<User>(model);
+            var oldUser = await _uow.UserRepository.GetById(id, token);
+
+
             oldUser.Name = model.Name;
             oldUser.SureName = model.SureName;
+
             await _uow.UserRepository.Update(oldUser, token);
             await _uow.Save(token);
         }

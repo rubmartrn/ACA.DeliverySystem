@@ -1,16 +1,24 @@
-﻿using ACA.DeliverySystem.Data;
+﻿using ACA.DeliverySystem.Business.Models;
+using ACA.DeliverySystem.Data;
 using ACA.DeliverySystem.Data.Models;
+using AutoMapper;
 
 namespace ACA.DeliverySystem.Business.Services
 {
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
 
-        public OrderService(IUnitOfWork uow) => _uow = uow;
-
-        public async Task<Order> CreateOrder(Order order, CancellationToken token)
+        public OrderService(IUnitOfWork uow, IMapper mapper)
         {
+            _uow = uow;
+            _mapper = mapper;
+        }
+
+        public async Task<Order> CreateOrder(OrderAddModel model, CancellationToken token)
+        {
+            var order = _mapper.Map<Order>(model);
             _uow.OrderRepository.Add(order);
             await _uow.Save(token);
             return order;
@@ -22,14 +30,16 @@ namespace ACA.DeliverySystem.Business.Services
             await _uow.Save(token);
         }
 
-        public async Task<IEnumerable<Order>> GetAll(CancellationToken token)
+        public async Task<IEnumerable<OrderViewModel>> GetAll(CancellationToken token)
         {
-            return await _uow.OrderRepository.GetAll(token);
+            var orders = await _uow.OrderRepository.GetAll(token);
+            return orders.Select(x => _mapper.Map<OrderViewModel>(x));
         }
 
-        public async Task<Order> Get(int id, CancellationToken token)
+        public async Task<OrderViewModel> Get(int id, CancellationToken token)
         {
-            return await _uow.OrderRepository.GetById(id, token);
+            var order = await _uow.OrderRepository.GetById(id, token);
+            return _mapper.Map<OrderViewModel>(order);
         }
 
         public async Task<bool> Update(int id, Order model, CancellationToken token)
