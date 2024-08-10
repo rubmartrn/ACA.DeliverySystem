@@ -1,6 +1,5 @@
 ﻿using ACA.DeliverySystem.Business.Models;
 using ACA.DeliverySystem.Business.Services;
-using ACA.DeliverySystem.Data.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,12 +20,10 @@ namespace ACA.DeliverySystem_Api.Controllers
 
 
         [HttpGet]
-        public async Task<IEnumerable<ItemViewModel>> GetAll(CancellationToken token)
+        public async Task<IEnumerable<ItemViewModelDTO>> GetAll(CancellationToken token)
         {
-
             var items = await _itemService.GetAll(token);
-
-            return items.Select(x => _mapper.Map<ItemViewModel>(x));
+            return items.Select(x => _mapper.Map<ItemViewModelDTO>(x));
         }
 
         [HttpDelete]
@@ -44,15 +41,15 @@ namespace ACA.DeliverySystem_Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ItemAddModel model, CancellationToken token)
+        public async Task<IActionResult> Create([FromBody] ItemAddModelDTO model, CancellationToken token)
         {
-            var item = _mapper.Map<Item>(model);
+            var item = _mapper.Map<ItemAddModel>(model);
             await _itemService.CreateItem(item, token);
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromQuery] int id, [FromBody] ItemUpdateModel model, CancellationToken token)
+        public async Task<IActionResult> Update([FromQuery] int id, [FromBody] ItemUpdateModelDTO model, CancellationToken token)
         {
 
             var item = await _itemService.GetById(id, token);
@@ -61,9 +58,8 @@ namespace ACA.DeliverySystem_Api.Controllers
             {
                 return NotFound();
             }
-
-            await _itemService.Update(item.Id, model, token);
-
+            var mappedModel = _mapper.Map<ItemUpdateModel>(model);
+            await _itemService.Update(item.Id, mappedModel, token);
             return Ok();
         }
     }
