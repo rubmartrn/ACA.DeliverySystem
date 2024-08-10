@@ -53,5 +53,12 @@ namespace ACA.DeliverySystem.Business.Services
             await _uow.UserRepository.Update(oldUser, token);
             await _uow.Save(token);
         }
+
+        public async Task<IEnumerable<OrderViewModel>> GetOrdersByUserId(int userId, CancellationToken token)
+        {
+            var orders = await _uow.OrderRepository.GetOrdersByUserId(userId, token);
+            return orders.Select(x => _mapper.Map<OrderViewModel>(x));
+
+        }
     }
 }

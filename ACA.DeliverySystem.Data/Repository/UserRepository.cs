@@ -36,5 +36,7 @@ namespace ACA.DeliverySystem.Data.Repository
             var user = await _context.Users.SingleAsync(e => e.Id == id, token);
             _context.Users.Remove(user);
         }
+
+
     }
 }

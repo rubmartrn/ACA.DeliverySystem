@@ -39,5 +39,9 @@ namespace ACA.DeliverySystem.Data.Repository
             _context.Orders.Update(order);
 
         }
+        public async Task<IEnumerable<Order>> GetOrdersByUserId(int userId, CancellationToken token)
+        {
+            return await _context.Orders.Where(o => o.UserId == userId).ToListAsync(token);
+        }
     }
 }

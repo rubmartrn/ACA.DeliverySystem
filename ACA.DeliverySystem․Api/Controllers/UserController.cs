@@ -46,6 +46,20 @@ namespace ACA.DeliverySystem_Api.Controllers
             return Ok();
         }
 
+        [HttpGet("{userId}/orders")]
+        public async Task<IActionResult> GetUserOrders(int userId, CancellationToken token)
+        {
+            var orders = await _userService.GetOrdersByUserId(userId, token);
+
+            if (orders == null || !orders.Any())
+            {
+                return NotFound();
+            }
+
+            var orderViewModels = orders.Select(order => _mapper.Map<OrderViewModelDTO>(order));
+            return Ok(orderViewModels);
+        }
+
 
     }
 }
