@@ -10,31 +10,32 @@ namespace ACA.DeliverySystem.Data
             _context = context;
         }
 
-        private IItemRepository? itemRepository;
-        private IUserRepository? userRepository;
+        private IItemRepository? _itemRepository;
+        private IUserRepository? _userRepository;
+        private IOrderRepository? _orderRepository;
+
 
         public IItemRepository ItemRepository
         {
             get
             {
-                if (itemRepository is null)
+                if (_itemRepository is null)
                 {
-                    itemRepository = new ItemRepository(_context);
+                    _itemRepository = new ItemRepository(_context);
                 }
 
-                return itemRepository;
+                return _itemRepository;
             }
-            set => itemRepository = value;
+            set => _itemRepository = value;
         }
 
-        private IOrderRepository? _orderRepository;
         public IOrderRepository OrderRepository
         {
             get
             {
-                if (itemRepository is null)
+                if (_orderRepository is null)
                 {
-                    itemRepository = new ItemRepository(_context);
+                    _orderRepository = new OrderRepository(_context);
                 }
 
                 return _orderRepository;
@@ -47,13 +48,13 @@ namespace ACA.DeliverySystem.Data
         {
             get
             {
-                if(userRepository is null)
+                if (_userRepository is null)
                 {
-                    userRepository = new UserRepository(_context);
+                    _userRepository = new UserRepository(_context);
                 }
-                return userRepository;
+                return _userRepository;
             }
-            set => userRepository = value;
+            set => _userRepository = value;
         }
 
 
