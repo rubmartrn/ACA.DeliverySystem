@@ -10,14 +10,16 @@ namespace ACA.DeliverySystem.Data.Configurations
         {
             builder.HasKey(x => x.Id);
 
-            builder.HasMany(x => x.Users)
-                .WithOne(x => x.Order)
-                .HasForeignKey(x => x.OrderId);
-
-
             builder.HasMany(x => x.Items)
                 .WithOne(x => x.Order)
                 .HasForeignKey(x => x.OrderId);
+
+            builder.HasOne(x => x.User)
+                .WithMany(x => x.Orders)
+                .HasForeignKey(x => x.UserId);
+
+            //     builder.Property(x => x.Date)
+            //.HasDefaultValueSql("CURRENT_DATE");
         }
     }
 }
