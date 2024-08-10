@@ -23,10 +23,6 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                 .ForMember(d => d.Email, d => d.MapFrom(s => s.Email))
                 .PreserveReferences();
 
-            CreateMap<UserUpdateModel, User>()
-                .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
-                .ForMember(d => d.SureName, d => d.MapFrom(s => s.SureName));
-
         }
     }
 }

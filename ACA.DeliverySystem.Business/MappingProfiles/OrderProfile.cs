@@ -22,11 +22,7 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                 .ForMember(d => d.ItemId, d => d.MapFrom(s => s.ItemId))
                 .PreserveReferences();
 
-            CreateMap<OrderUpdateModel, Order>()
-                .ForMember(d => d.UserId, d => d.MapFrom(s => s.UserId))
-                .ForMember(d => d.ItemId, d => d.MapFrom(s => s.ItemId))
-                .ForMember(d => d.ProgressEnum, d => d.MapFrom(s => s.ProgressEnum))
-                .PreserveReferences();
+
 
         }
     }
