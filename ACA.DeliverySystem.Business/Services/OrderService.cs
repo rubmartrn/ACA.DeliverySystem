@@ -19,7 +19,7 @@ namespace ACA.DeliverySystem.Business.Services
         public async Task<Order> CreateOrder(OrderAddModel model, CancellationToken token)
         {
             var order = _mapper.Map<Order>(model);
-            _uow.OrderRepository.Add(order);
+            await _uow.OrderRepository.Add(order, token);
             await _uow.Save(token);
             return order;
         }

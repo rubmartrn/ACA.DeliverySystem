@@ -45,7 +45,7 @@ namespace ACA.DeliverySystem.Business.Services
             var oldUser = await _uow.UserRepository.GetById(id, token);
 
             if (oldUser == null)
-                throw new KeyNotFoundException($"Item with ID {id} not found.");
+                throw new KeyNotFoundException($"User with ID {id} not found.");
 
             oldUser.Name = model.Name;
             oldUser.SureName = model.SureName;
@@ -58,6 +58,20 @@ namespace ACA.DeliverySystem.Business.Services
         {
             var orders = await _uow.OrderRepository.GetOrdersByUserId(userId, token);
             return orders.Select(x => _mapper.Map<OrderViewModel>(x));
+
+        }
+
+        public async Task AddOrderInUser(int userId, OrderAddModel model, CancellationToken token)
+        {
+            var user = await GetById(userId, token);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"User with ID {userId} not found.");
+            }
+            var mappedOrder = _mapper.Map<Order>(model);
+            var order = await _uow.OrderRepository.Add(mappedOrder, token);
+            await _uow.UserRepository.AddOrderInUser(userId, order, token);
+            await _uow.Save(token);
 
         }
     }

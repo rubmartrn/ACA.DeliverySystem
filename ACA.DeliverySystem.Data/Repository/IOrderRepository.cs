@@ -4,7 +4,7 @@ namespace ACA.DeliverySystem.Data.Repository
 {
     public interface IOrderRepository
     {
-        void Add(Order order);
+        Task<Order> Add(Order order, CancellationToken token);
         Task Delete(int id, CancellationToken token);
         Task<IEnumerable<Order>> GetAll(CancellationToken token);
 

@@ -22,9 +22,10 @@ namespace ACA.DeliverySystem.Data.Repository
             return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, token);
         }
 
-        public void Add(Order model)
+        public async Task<Order> Add(Order model, CancellationToken token)
         {
             _context.Orders.Add(model);
+            return model;
         }
 
         public async Task Delete(int id, CancellationToken token)

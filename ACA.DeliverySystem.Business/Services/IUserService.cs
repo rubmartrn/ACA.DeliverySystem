@@ -4,6 +4,7 @@ namespace ACA.DeliverySystem.Business.Services
 {
     public interface IUserService
     {
+        Task AddOrderInUser(int userId, OrderAddModel model, CancellationToken token);
         Task Create(UserAddModel user, CancellationToken token);
         Task Delete(int id, CancellationToken token);
         Task<IEnumerable<UserViewModel>> GetAll(CancellationToken token);

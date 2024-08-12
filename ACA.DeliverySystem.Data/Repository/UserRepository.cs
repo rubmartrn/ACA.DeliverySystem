@@ -37,6 +37,12 @@ namespace ACA.DeliverySystem.Data.Repository
             _context.Users.Remove(user);
         }
 
+        public async Task AddOrderInUser(int userId, Order order, CancellationToken token)
+        {
+            var user = await _context.Users.SingleAsync(e => e.Id == userId, token);
+            user.Orders.Add(order);
+
+        }
 
     }
 }
