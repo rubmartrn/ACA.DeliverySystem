@@ -1,5 +1,4 @@
-﻿using ACA.DeliverySystem.Data.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ACA.DeliverySystem.Business.Models
 {
@@ -13,7 +12,6 @@ namespace ACA.DeliverySystem.Business.Models
 
         public string? SureName { get; set; }
 
-        public List<Order> Orders { get; set; } = null!;
 
         [EmailAddress]
         public string? Email { get; set; }

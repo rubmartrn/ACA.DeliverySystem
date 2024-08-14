@@ -11,13 +11,13 @@ namespace ACA.DeliverySystem_Api.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IOrderService _orderService;
 
-
-
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, IMapper mapper, IOrderService orderService)
         {
             _userService = userService;
             _mapper = mapper;
+            _orderService = orderService;
         }
 
         [HttpGet]
@@ -46,18 +46,19 @@ namespace ACA.DeliverySystem_Api.Controllers
             return Ok();
         }
 
-        [HttpGet("{userId}/orders")]
-        public async Task<IActionResult> GetUserOrders(int userId, CancellationToken token)
+
+        [HttpDelete]
+        public async Task Delete([FromQuery] int id, CancellationToken token)
         {
-            var orders = await _userService.GetOrdersByUserId(userId, token);
+            await _userService.Delete(id, token);
+        }
 
-            if (orders == null || !orders.Any())
-            {
-                return NotFound();
-            }
+        [HttpGet("{userId}/orders")]
+        public async Task<IEnumerable<OrderViewModelDTO>> GetUserOrders(int userId, CancellationToken token)
+        {
+            var orders = await _userService.GetUserOrders(userId, token);
+            return orders.Select(o => _mapper.Map<OrderViewModelDTO>(o));
 
-            var orderViewModels = orders.Select(order => _mapper.Map<OrderViewModelDTO>(order));
-            return Ok(orderViewModels);
         }
 
         [HttpPost("/addOrder")]

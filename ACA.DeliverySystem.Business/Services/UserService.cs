@@ -24,6 +24,11 @@ namespace ACA.DeliverySystem.Business.Services
         }
         public async Task Delete(int id, CancellationToken token)
         {
+            var user = await _uow.UserRepository.GetById(id, token);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"User with ID {id} not found.");
+            }
             await _uow.UserRepository.Delete(id, token);
             await _uow.Save(token);
         }
@@ -54,16 +59,21 @@ namespace ACA.DeliverySystem.Business.Services
             await _uow.Save(token);
         }
 
-        public async Task<IEnumerable<OrderViewModel>> GetOrdersByUserId(int userId, CancellationToken token)
+        public async Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId, CancellationToken token)
         {
-            var orders = await _uow.OrderRepository.GetOrdersByUserId(userId, token);
-            return orders.Select(x => _mapper.Map<OrderViewModel>(x));
+            var user = await _uow.UserRepository.GetById(userId, token);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"User with Id {userId} not found");
+            }
+            var orders = await _uow.UserRepository.GetUserOrders(userId, token);
+            return orders.Select(o => _mapper.Map<OrderViewModel>(o));
 
         }
 
         public async Task AddOrderInUser(int userId, OrderAddModel model, CancellationToken token)
         {
-            var user = await GetById(userId, token);
+            var user = await _uow.UserRepository.GetById(userId, token);
             if (user == null)
             {
                 throw new KeyNotFoundException($"User with ID {userId} not found.");

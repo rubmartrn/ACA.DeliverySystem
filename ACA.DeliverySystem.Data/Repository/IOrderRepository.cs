@@ -9,7 +9,6 @@ namespace ACA.DeliverySystem.Data.Repository
         Task<IEnumerable<Order>> GetAll(CancellationToken token);
 
         Task<Order> GetById(int id, CancellationToken token);
-        Task<IEnumerable<Order>> GetOrdersByUserId(int userId, CancellationToken token);
         Task Update(Order order, CancellationToken token);
     }
 }

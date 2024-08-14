@@ -27,6 +27,13 @@ namespace ACA.DeliverySystem_Api.Controllers
             return orders.Select(x => _mapper.Map<OrderViewModelDTO>(x));
         }
 
+        [HttpDelete]
+
+        public async Task Delete([FromQuery] int id, CancellationToken token)
+        {
+            await _orderService.Delete(id, token);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(OrderAddModelDTO model, CancellationToken token)
         {

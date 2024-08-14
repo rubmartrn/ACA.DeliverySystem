@@ -26,6 +26,11 @@ namespace ACA.DeliverySystem.Business.Services
 
         public async Task Delete(int id, CancellationToken token)
         {
+            var order = await _uow.OrderRepository.GetById(id, token);
+            if (order == null)
+            {
+                throw new KeyNotFoundException("Order with ID {id} not found.");
+            }
             await _uow.OrderRepository.Delete(id, token);
             await _uow.Save(token);
         }
