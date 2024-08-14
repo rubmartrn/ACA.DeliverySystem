@@ -4,7 +4,7 @@ namespace ACA.DeliverySystem.Data.Repository
 {
     public interface IItemRepository
     {
-        Task Add(Item item, CancellationToken token);
+        Task<Item> Add(Item item, CancellationToken token);
         Task Delete(int id, CancellationToken token);
         Task<IEnumerable<Item>> GetAll(CancellationToken token);
         Task<Item> GetById(int id, CancellationToken token);

@@ -42,6 +42,13 @@ namespace ACA.DeliverySystem_Api.Controllers
             return Ok(order);
         }
 
+        [HttpPost("{orderId}/addItemInOrder")]
+        public async Task<IActionResult> AddItemInOrder(int orderId, ItemAddModelDTO model, CancellationToken token)
+        {
+            var mappedModel = _mapper.Map<ItemAddModel>(model);
+            await _orderService.AddItemInOrder(orderId, mappedModel, token);
+            return Ok();
+        }
 
 
     }

@@ -59,5 +59,18 @@ namespace ACA.DeliverySystem.Business.Services
             await _uow.Save(token);
             return true;
         }
+
+        public async Task AddItemInOrder(int orderId, ItemAddModel model, CancellationToken token)
+        {
+            var order = await _uow.OrderRepository.GetById(orderId, token);
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order with ID {order} not found.");
+            }
+            var mappedItem = _mapper.Map<Item>(model);
+            var item = await _uow.ItemRepository.Add(mappedItem, token);
+            await _uow.OrderRepository.AddItemInOrder(orderId, item, token);
+            await _uow.Save(token);
+        }
     }
 }
