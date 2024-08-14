@@ -1,6 +1,13 @@
-﻿public enum ProgressEnum
+﻿using System.Runtime.Serialization;
+
+public enum ProgressEnum
 {
-    Created,
-    InProgress,
-    Done
+    [EnumMember(Value = "Created")]
+    Created = 0,
+
+    [EnumMember(Value = "InProgress")]
+    InProgress = 1,
+
+    [EnumMember(Value = "Completed")]
+    Completed = 2
 }

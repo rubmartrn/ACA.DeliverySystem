@@ -15,7 +15,7 @@
 
         public decimal PaidAmount { get; set; }
 
-        public ProgressEnum ProgressEnum { get; set; }
+        public ProgressEnum ProgressEnum { get; set; } = ProgressEnum.Created;
 
         public User User { get; set; }
         public List<Item> Items { get; set; } = new List<Item>();
