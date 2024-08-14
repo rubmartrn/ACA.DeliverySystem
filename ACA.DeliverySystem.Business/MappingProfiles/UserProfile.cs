@@ -12,7 +12,6 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .ForMember(d => d.SureName, d => d.MapFrom(s => s.SureName))
                 .ForMember(d => d.Email, d => d.MapFrom(s => s.Email))
-                .ForMember(d => d.OrderId, d => d.MapFrom(s => s.OrderId))
                 .ForMember(d => d.Id, d => d.MapFrom(s => s.Id))
                 .PreserveReferences();
 
