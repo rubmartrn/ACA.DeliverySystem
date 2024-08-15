@@ -1,4 +1,5 @@
-﻿using ACA.DeliverySystem.Data.Models;
+﻿using ACA.DeliverySystem.Business.Models;
+using ACA.DeliverySystem.Data.Models;
 
 namespace ACA.DeliverySystem.Business.Services
 {
@@ -8,6 +9,6 @@ namespace ACA.DeliverySystem.Business.Services
         Task Delete(int id, CancellationToken token);
         Task<IEnumerable<Item>> GetAll(CancellationToken token);
         Task<Item> GetById(int id, CancellationToken token);
-        Task Update(Item item, CancellationToken token);
+        Task Update(int id, ItemUpdateModel model, CancellationToken token);
     }
 }

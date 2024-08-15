@@ -39,7 +39,7 @@ namespace ACA.DeliverySystem_Api.Controllers
             {
                 return NotFound();
             }
-            _itemService.Delete(item.Id, token);
+            await _itemService.Delete(item.Id, token);
             return Ok();
         }
 
@@ -61,9 +61,8 @@ namespace ACA.DeliverySystem_Api.Controllers
             {
                 return NotFound();
             }
-            item = _mapper.Map<Item>(model);
 
-            await _itemService.Update(item, token);
+            await _itemService.Update(item.Id, model, token);
 
             return Ok();
         }
