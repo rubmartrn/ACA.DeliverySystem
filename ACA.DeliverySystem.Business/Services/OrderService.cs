@@ -98,19 +98,15 @@ namespace ACA.DeliverySystem.Business.Services
 
         }
 
-        public async Task OrderCompleted(int orderId, CancellationToken token)
+        public async Task<OperationResult> OrderCompleted(int orderId, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.GetById(orderId, token);
-            if (order == null)
+            var result = await _uow.OrderRepository.OrderCompleted(orderId, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+                return result;
             }
-            else if (order.ProgressEnum != ProgressEnum.InProgress)
-            {
-                throw new Exception("Order must be in progress.");
-            }
-            await _uow.OrderRepository.OrderCompleted(orderId, token);
             await _uow.Save(token);
+            return result;
         }
 
         public async Task CancelOrder(int orderId, CancellationToken token)

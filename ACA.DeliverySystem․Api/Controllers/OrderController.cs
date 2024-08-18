@@ -113,7 +113,15 @@ namespace ACA.DeliverySystem_Api.Controllers
 
         public async Task<IActionResult> OrderCompleted([FromQuery] int orderId, CancellationToken token)
         {
-            await _orderService.OrderCompleted(orderId, token);
+            var result = await _orderService.OrderCompleted(orderId, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
 

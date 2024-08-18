@@ -118,10 +118,19 @@ namespace ACA.DeliverySystem.Data.Repository
             return OperationResult.Ok();
         }
 
-        public async Task OrderCompleted(int orderId, CancellationToken token)
+        public async Task<OperationResult> OrderCompleted(int orderId, CancellationToken token)
         {
             var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
+            if (order == null)
+            {
+                return OperationResult.Error($"Order with id {orderId} not found", ErrorType.NotFound);
+            }
+            if (order.ProgressEnum != ProgressEnum.InProgress)
+            {
+                return OperationResult.Error("Order must be in progress.", ErrorType.BadRequest);
+            }
             order.ProgressEnum = ProgressEnum.Completed;
+            return OperationResult.Ok();
         }
 
 
