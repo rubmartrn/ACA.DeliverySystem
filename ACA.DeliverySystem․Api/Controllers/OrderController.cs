@@ -27,6 +27,15 @@ namespace ACA.DeliverySystem_Api.Controllers
             return orders.Select(x => _mapper.Map<OrderViewModelDTO>(x));
         }
 
+        [HttpGet("{orderId}")]
+
+        public async Task<OrderViewModelDTO> GetById(int orderId, CancellationToken token)
+        {
+            var order = await _orderService.Get(orderId, token);
+            return _mapper.Map<OrderViewModelDTO>(order);
+        }
+
+
         [HttpDelete]
 
         public async Task Delete([FromQuery] int id, CancellationToken token)

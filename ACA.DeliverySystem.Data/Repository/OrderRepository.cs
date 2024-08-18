@@ -19,7 +19,8 @@ namespace ACA.DeliverySystem.Data.Repository
 
         public async Task<Order> GetById(int id, CancellationToken token)
         {
-            return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, token);
+            return await _context.Orders.Include(x => x.Items).FirstOrDefaultAsync(x => x.Id == id, token);
+
         }
 
         public async Task<Order> Add(Order order, CancellationToken token)
