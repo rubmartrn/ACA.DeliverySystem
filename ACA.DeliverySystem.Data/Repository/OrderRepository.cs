@@ -41,12 +41,12 @@ namespace ACA.DeliverySystem.Data.Repository
 
         }
 
-        public async Task<Item> AddItemInOrder(int orderId, Item item, CancellationToken token)
+        public async Task<Item> AddItemInOrder(int orderId, int itemId, CancellationToken token)
         {
+            var item = await _context.Items.SingleOrDefaultAsync(x => x.Id == itemId);
             var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
             order.Items.Add(item);
             return item;
-
         }
 
     }
