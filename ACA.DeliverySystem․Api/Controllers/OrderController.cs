@@ -64,5 +64,21 @@ namespace ACA.DeliverySystem_Api.Controllers
             await _orderService.RemoveItemFromOrder(orderId, itemId, token);
             return Ok();
         }
+
+        [HttpGet("/payment")]
+
+        public async Task<IActionResult> Pay([FromQuery] int orderId, [FromQuery] decimal amount, CancellationToken token)
+        {
+            await _orderService.PayForOrder(orderId, amount, token);
+            return Ok();
+        }
+
+        [HttpPost("/orderCompleted")]
+
+        public async Task<IActionResult> OrderCompleted([FromQuery] int orderId, CancellationToken token)
+        {
+            await _orderService.OrderCompleted(orderId, token);
+            return Ok();
+        }
     }
 }

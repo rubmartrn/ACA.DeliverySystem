@@ -57,5 +57,19 @@ namespace ACA.DeliverySystem.Data.Repository
             order.Items.Remove(item);
         }
 
+        public async Task PayForOrder(int orderId, decimal amount, CancellationToken token)
+        {
+            var order = await _context.Orders.Include(x => x.Items).SingleOrDefaultAsync(x => x.Id == orderId);
+            var amountToPay = order.Items.Sum(x => x.Price);
+            order.PaidAmount = amountToPay;
+            order.ProgressEnum = ProgressEnum.InProgress;
+        }
+
+        public async Task OrderCompleted(int orderId, CancellationToken token)
+        {
+            var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
+            order.ProgressEnum = ProgressEnum.Completed;
+        }
+
     }
 }

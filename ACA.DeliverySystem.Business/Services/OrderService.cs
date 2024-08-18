@@ -84,5 +84,41 @@ namespace ACA.DeliverySystem.Business.Services
             await _uow.OrderRepository.RemoveItemFromOrder(order.Id, item.Id, token);
             await _uow.Save(token);
         }
+
+        public async Task PayForOrder(int orderId, decimal amount, CancellationToken token)
+        {
+            var order = await _uow.OrderRepository.GetById(orderId, token);
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+            }
+            var amountToPay = order.Items.Sum(x => x.Price);
+            if (amount != amountToPay)
+            {
+                throw new Exception($"You must pay {amountToPay}");
+            }
+            else if (order.PaidAmount == amount)
+            {
+                throw new Exception("The order has already been paid.");
+            }
+            await _uow.OrderRepository.PayForOrder(orderId, amount, token);
+            await _uow.Save(token);
+
+        }
+
+        public async Task OrderCompleted(int orderId, CancellationToken token)
+        {
+            var order = await _uow.OrderRepository.GetById(orderId, token);
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+            }
+            else if (order.ProgressEnum != ProgressEnum.InProgress)
+            {
+                throw new Exception("Order must be in progress.");
+            }
+            await _uow.OrderRepository.OrderCompleted(orderId, token);
+            await _uow.Save(token);
+        }
     }
 }
