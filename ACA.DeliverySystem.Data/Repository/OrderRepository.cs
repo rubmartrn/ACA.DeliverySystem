@@ -71,5 +71,13 @@ namespace ACA.DeliverySystem.Data.Repository
             order.ProgressEnum = ProgressEnum.Completed;
         }
 
+
+        public async Task CancelOrder(int orderId, CancellationToken token)
+        {
+            var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
+            order.ProgressEnum = ProgressEnum.Canceled;
+        }
+
+
     }
 }

@@ -80,5 +80,15 @@ namespace ACA.DeliverySystem_Api.Controllers
             await _orderService.OrderCompleted(orderId, token);
             return Ok();
         }
+
+
+        [HttpPost("/cancelOrder")]
+
+        public async Task<IActionResult> CancelOrder([FromQuery] int orderId, CancellationToken token)
+        {
+            await _orderService.CancelOrder(orderId, token);
+            return Ok();
+        }
+
     }
 }
