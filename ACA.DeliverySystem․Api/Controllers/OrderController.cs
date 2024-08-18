@@ -38,9 +38,18 @@ namespace ACA.DeliverySystem_Api.Controllers
 
         [HttpDelete]
 
-        public async Task Delete([FromQuery] int id, CancellationToken token)
+        public async Task<IActionResult> Delete([FromQuery] int id, CancellationToken token)
         {
-            await _orderService.Delete(id, token);
+            var result = await _orderService.Delete(id, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == DeliverySystem.Data.ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
+            return Ok();
         }
 
         [HttpPost]

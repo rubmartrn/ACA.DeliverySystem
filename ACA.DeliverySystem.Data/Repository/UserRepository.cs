@@ -31,10 +31,15 @@ namespace ACA.DeliverySystem.Data.Repository
 
         }
 
-        public async Task Delete(int id, CancellationToken token)
+        public async Task<OperationResult> Delete(int id, CancellationToken token)
         {
-            var user = await _context.Users.SingleAsync(e => e.Id == id, token);
+            var user = await _context.Users.SingleOrDefaultAsync(e => e.Id == id, token);
+            if (user == null)
+            {
+                return OperationResult.Error($"User with id {id} not found.", ErrorType.NotFound);
+            }
             _context.Users.Remove(user);
+            return OperationResult.Ok();
         }
 
         public async Task<IEnumerable<Order>> GetUserOrders(int id, CancellationToken token)

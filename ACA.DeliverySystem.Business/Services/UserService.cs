@@ -22,15 +22,15 @@ namespace ACA.DeliverySystem.Business.Services
             await _uow.UserRepository.Add(mappedUser, token);
             await _uow.Save(token);
         }
-        public async Task Delete(int id, CancellationToken token)
+        public async Task<OperationResult> Delete(int id, CancellationToken token)
         {
-            var user = await _uow.UserRepository.GetById(id, token);
-            if (user == null)
+            var result = await _uow.UserRepository.Delete(id, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException($"User with ID {id} not found.");
+                return result;
             }
-            await _uow.UserRepository.Delete(id, token);
             await _uow.Save(token);
+            return result;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetAll(CancellationToken token)

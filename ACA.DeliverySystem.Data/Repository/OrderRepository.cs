@@ -29,10 +29,16 @@ namespace ACA.DeliverySystem.Data.Repository
             return order;
         }
 
-        public async Task Delete(int id, CancellationToken token)
+        public async Task<OperationResult> Delete(int id, CancellationToken token)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, token);
+            var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == id, token);
+
+            if (order == null)
+            {
+                return OperationResult.Error($"Order with id {id} not found.", ErrorType.NotFound);
+            }
             _context.Orders.Remove(order);
+            return OperationResult.Ok();
         }
 
 
