@@ -36,5 +36,21 @@ namespace ACA.DeliverySystem.Data.Repository
             var user = await _context.Users.SingleAsync(e => e.Id == id, token);
             _context.Users.Remove(user);
         }
+
+        public async Task<IEnumerable<Order>> GetUserOrders(int id, CancellationToken token)
+        {
+            var user = await _context.Users.Include(x => x.Orders).SingleOrDefaultAsync(x => x.Id == id, token);
+            return user.Orders;
+        }
+
+        public async Task<Order> AddOrderInUser(int userId, Order order, CancellationToken token)
+        {
+            var user = await _context.Users.Include(u => u.Orders).SingleAsync(e => e.Id == userId, token);
+            user.Orders.Add(order);
+            return order;
+
+        }
+
+
     }
 }

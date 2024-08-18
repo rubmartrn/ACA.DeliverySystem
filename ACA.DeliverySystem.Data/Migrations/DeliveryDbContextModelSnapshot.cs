@@ -65,6 +65,10 @@ namespace ACA.DeliverySystem.Data.Migrations
                     b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("PaidAmount")
                         .HasColumnType("decimal(18,2)");
 
@@ -75,6 +79,8 @@ namespace ACA.DeliverySystem.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -104,8 +110,6 @@ namespace ACA.DeliverySystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
-
                     b.ToTable("Users");
                 });
 
@@ -118,20 +122,23 @@ namespace ACA.DeliverySystem.Data.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("ACA.DeliverySystem.Data.Models.User", b =>
+            modelBuilder.Entity("ACA.DeliverySystem.Data.Models.Order", b =>
                 {
-                    b.HasOne("ACA.DeliverySystem.Data.Models.Order", "Order")
-                        .WithMany("Users")
-                        .HasForeignKey("OrderId");
+                    b.HasOne("ACA.DeliverySystem.Data.Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Order");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ACA.DeliverySystem.Data.Models.Order", b =>
                 {
                     b.Navigation("Items");
+                });
 
-                    b.Navigation("Users");
+            modelBuilder.Entity("ACA.DeliverySystem.Data.Models.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

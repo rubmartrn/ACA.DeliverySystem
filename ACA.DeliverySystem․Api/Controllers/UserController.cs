@@ -1,6 +1,5 @@
 ﻿using ACA.DeliverySystem.Business.Models;
 using ACA.DeliverySystem.Business.Services;
-using ACA.DeliverySystem.Data.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,31 +11,63 @@ namespace ACA.DeliverySystem_Api.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IOrderService _orderService;
 
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, IMapper mapper, IOrderService orderService)
         {
             _userService = userService;
             _mapper = mapper;
+            _orderService = orderService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] UserAddModel model, CancellationToken token)
+        [HttpGet]
+        public async Task<IEnumerable<UserViewModelDTO>> GetAll(CancellationToken token)
         {
-            var user = _mapper.Map<User>(model);
+            var users = await _userService.GetAll(token);
+            return users.Select(x => _mapper.Map<UserViewModelDTO>(x));
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] UserAddModelDTO model, CancellationToken token)
+        {
+            var user = _mapper.Map<UserAddModel>(model);
             await _userService.Create(user, token);
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromQuery] int id, [FromBody] UserUpdateModel model, CancellationToken token)
+        public async Task<IActionResult> Update([FromQuery] int id, [FromBody] UserUpdateModelDTO model, CancellationToken token)
         {
-            var user = await _userService.GetById(id, token);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            await _userService.Update(user.Id, model, token);
+
+            var mappedModel = _mapper.Map<UserUpdateModel>(model);
+            await _userService.Update(id, mappedModel, token);
             return Ok();
         }
+
+
+        [HttpDelete]
+        public async Task Delete([FromQuery] int id, CancellationToken token)
+        {
+            await _userService.Delete(id, token);
+        }
+
+        [HttpGet("{userId}/orders")]
+        public async Task<IEnumerable<OrderViewModelDTO>> GetUserOrders(int userId, CancellationToken token)
+        {
+            var orders = await _userService.GetUserOrders(userId, token);
+            return orders.Select(o => _mapper.Map<OrderViewModelDTO>(o));
+
+        }
+
+        [HttpPost("/addOrder")]
+        public async Task<IActionResult> AddOrderInUser([FromQuery] int userId, [FromBody] OrderAddModelDTO model, CancellationToken token)
+        {
+            var mappedOrder = _mapper.Map<OrderAddModel>(model);
+            await _userService.AddOrderInUser(userId, mappedOrder, token);
+            return Ok();
+        }
+
     }
 }

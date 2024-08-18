@@ -2,15 +2,11 @@
 
 namespace ACA.DeliverySystem.Business.Models
 {
-    public class UserViewModel
+    public class UserAddModelDTO
     {
-        public int Id { get; set; }
-
-
         public string? Name { get; set; }
 
         public string? SureName { get; set; }
-
 
         [EmailAddress]
         public string? Email { get; set; }

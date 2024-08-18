@@ -2,7 +2,7 @@
 
 namespace ACA.DeliverySystem.Business.Models
 {
-    public class UserViewModel
+    public class UserViewModelDTO
     {
         public int Id { get; set; }
 

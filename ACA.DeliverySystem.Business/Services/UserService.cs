@@ -16,35 +16,75 @@ namespace ACA.DeliverySystem.Business.Services
             _mapper = mapper;
         }
 
-        public async Task Create(User user, CancellationToken token)
+        public async Task Create(UserAddModel user, CancellationToken token)
         {
-            await _uow.UserRepository.Add(user, token);
+            var mappedUser = _mapper.Map<User>(user);
+            await _uow.UserRepository.Add(mappedUser, token);
             await _uow.Save(token);
         }
         public async Task Delete(int id, CancellationToken token)
         {
+            var user = await _uow.UserRepository.GetById(id, token);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"User with ID {id} not found.");
+            }
             await _uow.UserRepository.Delete(id, token);
             await _uow.Save(token);
         }
 
-        public async Task<IEnumerable<User>> GetAll(CancellationToken token)
+        public async Task<IEnumerable<UserViewModel>> GetAll(CancellationToken token)
         {
-            return await _uow.UserRepository.GetAll(token);
+            var users = await _uow.UserRepository.GetAll(token);
+            return _mapper.Map<IEnumerable<UserViewModel>>(users);
         }
 
-        public async Task<User> GetById(int id, CancellationToken token)
+        public async Task<UserViewModel> GetById(int id, CancellationToken token)
         {
-            return await _uow.UserRepository.GetById(id, token);
+            var user = await _uow.UserRepository.GetById(id, token);
+            return _mapper.Map<UserViewModel>(user);
         }
 
         public async Task Update(int id, UserUpdateModel model, CancellationToken token)
         {
-            var oldUser = await GetById(id, token);
-            //oldUser = _mapper.Map<User>(model);
+            var oldUser = await _uow.UserRepository.GetById(id, token);
+
+            if (oldUser == null)
+                throw new KeyNotFoundException($"User with ID {id} not found.");
+
             oldUser.Name = model.Name;
             oldUser.SureName = model.SureName;
+
             await _uow.UserRepository.Update(oldUser, token);
             await _uow.Save(token);
         }
+
+        public async Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId, CancellationToken token)
+        {
+            var user = await _uow.UserRepository.GetById(userId, token);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"User with Id {userId} not found");
+            }
+            var orders = await _uow.UserRepository.GetUserOrders(userId, token);
+            return orders.Select(o => _mapper.Map<OrderViewModel>(o));
+
+        }
+
+        public async Task AddOrderInUser(int userId, OrderAddModel model, CancellationToken token)
+        {
+            var user = await _uow.UserRepository.GetById(userId, token);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"User with ID {userId} not found.");
+            }
+            var mappedOrder = _mapper.Map<Order>(model);
+            var order = await _uow.OrderRepository.Add(mappedOrder, token);
+            await _uow.UserRepository.AddOrderInUser(userId, order, token);
+            await _uow.Save(token);
+
+        }
+
+
     }
 }

@@ -21,10 +21,10 @@ namespace ACA.DeliverySystem.Data.Repository
             return await _context.Items.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task Add(Item item, CancellationToken token)
+        public async Task<Item> Add(Item item, CancellationToken token)
         {
             _context.Items.Add(item);
-            await _context.SaveChangesAsync();
+            return item;
         }
 
         public async Task Update(Item item, CancellationToken token)

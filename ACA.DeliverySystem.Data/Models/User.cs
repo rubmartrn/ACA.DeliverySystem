@@ -13,7 +13,7 @@ namespace ACA.DeliverySystem.Data.Models
 
         public string? SureName { get; set; }
 
-        public Order Order { get; set; } = null!;
+        public List<Order> Orders { get; set; } = null!;
 
         [EmailAddress]
         public string? Email { get; set; }

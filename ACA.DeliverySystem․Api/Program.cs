@@ -5,6 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -19,9 +25,8 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddDbContext<DeliveryDbContext>(
 options => options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=ACA.DS"));
 
+builder.Services.AddAutoMapper(typeof(ItemProfileDTO).Assembly);
 builder.Services.AddAutoMapper(typeof(ItemProfile).Assembly);
-//builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
-//builder.Services.AddAutoMapper(typeof(OrderProfile).Assembly);
 
 
 var app = builder.Build();

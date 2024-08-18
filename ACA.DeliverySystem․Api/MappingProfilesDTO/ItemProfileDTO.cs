@@ -1,14 +1,13 @@
 ﻿using ACA.DeliverySystem.Business.Models;
-using ACA.DeliverySystem.Data.Models;
 using AutoMapper;
 
 namespace ACA.DeliverySystem.Business.MappingProfiles
 {
-    public class ItemProfile : Profile
+    public class ItemProfileDTO : Profile
     {
-        public ItemProfile()
+        public ItemProfileDTO()
         {
-            CreateMap<Item, ItemViewModel>()
+            CreateMap<ItemViewModel, ItemViewModelDTO>()
                 .ForMember(d => d.Id, d => d.MapFrom(s => s.Id))
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .ForMember(d => d.Price, d => d.MapFrom(s => s.Price))
@@ -17,16 +16,17 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                 .PreserveReferences();
 
 
-
-            CreateMap<ItemAddModel, Item>()
+            CreateMap<ItemAddModelDTO, ItemAddModel>()
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .ForMember(d => d.Description, d => d.MapFrom(s => s.Description))
                 .ForMember(d => d.Price, d => d.MapFrom(s => s.Price))
                 .PreserveReferences();
 
-
-
-
+            CreateMap<ItemUpdateModelDTO, ItemUpdateModel>()
+                .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
+                .ForMember(d => d.Price, d => d.MapFrom(s => s.Price))
+                .ForMember(d => d.Description, d => d.MapFrom(s => s.Description))
+                .PreserveReferences();
 
         }
     }

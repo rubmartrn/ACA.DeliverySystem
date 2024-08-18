@@ -1,24 +1,28 @@
 ﻿using ACA.DeliverySystem.Business.Models;
-using ACA.DeliverySystem.Data.Models;
 using AutoMapper;
 
 namespace ACA.DeliverySystem.Business.MappingProfiles
 {
-    public class UserProfile : Profile
+    public class UserProfileDTO : Profile
     {
-        public UserProfile()
+        public UserProfileDTO()
         {
-            CreateMap<User, UserViewModel>()
+            CreateMap<UserViewModel, UserViewModelDTO>()
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .ForMember(d => d.SureName, d => d.MapFrom(s => s.SureName))
                 .ForMember(d => d.Email, d => d.MapFrom(s => s.Email))
                 .ForMember(d => d.Id, d => d.MapFrom(s => s.Id))
                 .PreserveReferences();
 
-            CreateMap<UserAddModel, User>()
+            CreateMap<UserAddModelDTO, UserAddModel>()
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .ForMember(d => d.SureName, d => d.MapFrom(s => s.SureName))
                 .ForMember(d => d.Email, d => d.MapFrom(s => s.Email))
+                .PreserveReferences();
+
+            CreateMap<UserUpdateModelDTO, UserUpdateModel>()
+                .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
+                .ForMember(d => d.SureName, d => d.MapFrom(s => s.SureName))
                 .PreserveReferences();
 
         }
