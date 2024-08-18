@@ -43,7 +43,7 @@ namespace ACA.DeliverySystem_Api.Controllers
             var result = await _orderService.Delete(id, token);
             if (!result.Success)
             {
-                if (result.ErrorType == DeliverySystem.Data.ErrorType.NotFound)
+                if (result.ErrorType == ErrorType.NotFound)
                 {
                     return NotFound(result.ErrorMessage);
                 }

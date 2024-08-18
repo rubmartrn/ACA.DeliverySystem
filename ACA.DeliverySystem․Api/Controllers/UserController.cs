@@ -44,7 +44,7 @@ namespace ACA.DeliverySystem_Api.Controllers
             var result = await _userService.Update(id, mappedModel, token);
             if (!result.Success)
             {
-                if (result.ErrorType == DeliverySystem.Data.ErrorType.NotFound)
+                if (result.ErrorType == ErrorType.NotFound)
                 {
                     return NotFound(result.ErrorMessage);
                 }
@@ -60,7 +60,7 @@ namespace ACA.DeliverySystem_Api.Controllers
             var result = await _userService.Delete(id, token);
             if (!result.Success)
             {
-                if (result.ErrorType == DeliverySystem.Data.ErrorType.NotFound)
+                if (result.ErrorType == ErrorType.NotFound)
                 {
                     return NotFound(result.ErrorMessage);
                 }
