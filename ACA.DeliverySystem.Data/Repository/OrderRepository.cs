@@ -62,17 +62,35 @@ namespace ACA.DeliverySystem.Data.Repository
             }
             if (order.ProgressEnum != ProgressEnum.Created)
             {
-                return OperationResult.Error("You can't add item from order.", ErrorType.Forbidden);
+                return OperationResult.Error("You can't add item from order.", ErrorType.BadRequest);
             }
             order.Items.Add(item);
             return OperationResult.Ok();
         }
 
-        public async Task RemoveItemFromOrder(int orderId, int itemId, CancellationToken token)
+        public async Task<OperationResult> RemoveItemFromOrder(int orderId, int itemId, CancellationToken token)
         {
             var item = await _context.Items.SingleOrDefaultAsync(x => x.Id == itemId);
             var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
+            if (item == null)
+            {
+                return OperationResult.Error($"Item with id {itemId} not found.", ErrorType.NotFound);
+            }
+
+            if (order == null)
+            {
+                return OperationResult.Error($"Order with id {itemId} not found.", ErrorType.NotFound);
+            }
+            if (!order.Items.Contains(item))
+            {
+                return OperationResult.Error($"You do not have that item in your list.", ErrorType.NotFound);
+            }
+            if (order.ProgressEnum != ProgressEnum.Created)
+            {
+                return OperationResult.Error("You can't remove item from order.", ErrorType.BadRequest);
+            }
             order.Items.Remove(item);
+            return OperationResult.Ok();
         }
 
         public async Task PayForOrder(int orderId, decimal amount, CancellationToken token)

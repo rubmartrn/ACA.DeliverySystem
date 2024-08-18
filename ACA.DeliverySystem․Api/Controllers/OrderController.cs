@@ -79,7 +79,15 @@ namespace ACA.DeliverySystem_Api.Controllers
         [HttpDelete("/removeItemFromOrder")]
         public async Task<IActionResult> RemoveItemFromOrder([FromQuery] int orderId, [FromQuery] int itemId, CancellationToken token)
         {
-            await _orderService.RemoveItemFromOrder(orderId, itemId, token);
+            var result = await _orderService.RemoveItemFromOrder(orderId, itemId, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
 
