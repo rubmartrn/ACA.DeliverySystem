@@ -95,9 +95,19 @@ namespace ACA.DeliverySystem_Api.Controllers
 
         public async Task<IActionResult> Pay([FromQuery] int orderId, [FromQuery] decimal amount, CancellationToken token)
         {
-            await _orderService.PayForOrder(orderId, amount, token);
+            var result = await _orderService.PayForOrder(orderId, amount, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+
+                }
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
+
 
         [HttpPost("/orderCompleted")]
 

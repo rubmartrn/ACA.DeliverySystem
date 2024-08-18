@@ -93,12 +93,29 @@ namespace ACA.DeliverySystem.Data.Repository
             return OperationResult.Ok();
         }
 
-        public async Task PayForOrder(int orderId, decimal amount, CancellationToken token)
+        public async Task<OperationResult> PayForOrder(int orderId, decimal amount, CancellationToken token)
         {
             var order = await _context.Orders.Include(x => x.Items).SingleOrDefaultAsync(x => x.Id == orderId);
+            if (order == null)
+            {
+                return OperationResult.Error($"Order with id {orderId} not found", ErrorType.NotFound);
+            }
             var amountToPay = order.Items.Sum(x => x.Price);
+            if (amountToPay == 0)
+            {
+                return OperationResult.Error("You do not have items in your order.", ErrorType.BadRequest);
+            }
+            if (amount != amountToPay)
+            {
+                return OperationResult.Error($"You must pay {amountToPay}.", ErrorType.BadRequest);
+            }
+            if (order.ProgressEnum != ProgressEnum.Created)
+            {
+                return OperationResult.Error("The order is in progress or canceled.", ErrorType.BadRequest);
+            }
             order.PaidAmount = amountToPay;
             order.ProgressEnum = ProgressEnum.InProgress;
+            return OperationResult.Ok();
         }
 
         public async Task OrderCompleted(int orderId, CancellationToken token)

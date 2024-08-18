@@ -86,27 +86,15 @@ namespace ACA.DeliverySystem.Business.Services
             return result;
         }
 
-        public async Task PayForOrder(int orderId, decimal amount, CancellationToken token)
+        public async Task<OperationResult> PayForOrder(int orderId, decimal amount, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.GetById(orderId, token);
-            if (order == null)
+            var result = await _uow.OrderRepository.PayForOrder(orderId, amount, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+                return result;
             }
-            if (order.ProgressEnum != ProgressEnum.Created)
-            {
-                throw new Exception("The order is in progress or canceled.");
-            }
-
-            var amountToPay = order.Items.Sum(x => x.Price);
-
-            if (amount != amountToPay)
-            {
-                throw new Exception($"You must pay {amountToPay}");
-            }
-
-            await _uow.OrderRepository.PayForOrder(orderId, amount, token);
             await _uow.Save(token);
+            return result;
 
         }
 
