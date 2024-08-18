@@ -48,12 +48,24 @@ namespace ACA.DeliverySystem.Data.Repository
 
         }
 
-        public async Task<Item> AddItemInOrder(int orderId, int itemId, CancellationToken token)
+        public async Task<OperationResult> AddItemInOrder(int orderId, int itemId, CancellationToken token)
         {
             var item = await _context.Items.SingleOrDefaultAsync(x => x.Id == itemId);
             var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
+            if (item == null)
+            {
+                return OperationResult.Error($"Item with id {itemId} not found.", ErrorType.NotFound);
+            }
+            if (order == null)
+            {
+                return OperationResult.Error($"Order with id {itemId} not found.", ErrorType.NotFound);
+            }
+            if (order.ProgressEnum != ProgressEnum.Created)
+            {
+                return OperationResult.Error("You can't add item from order.", ErrorType.Forbidden);
+            }
             order.Items.Add(item);
-            return item;
+            return OperationResult.Ok();
         }
 
         public async Task RemoveItemFromOrder(int orderId, int itemId, CancellationToken token)

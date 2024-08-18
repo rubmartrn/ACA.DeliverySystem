@@ -63,7 +63,16 @@ namespace ACA.DeliverySystem_Api.Controllers
         [HttpPost("/addItemInOrder")]
         public async Task<IActionResult> AddItemInOrder([FromQuery] int orderId, [FromQuery] int itemId, CancellationToken token)
         {
-            await _orderService.AddItemInOrder(orderId, itemId, token);
+            var result = await _orderService.AddItemInOrder(orderId, itemId, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
 

@@ -64,20 +64,15 @@ namespace ACA.DeliverySystem.Business.Services
             return true;
         }
 
-        public async Task AddItemInOrder(int orderId, int itemId, CancellationToken token)
+        public async Task<OperationResult> AddItemInOrder(int orderId, int itemId, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.GetById(orderId, token);
-            var item = await _uow.ItemRepository.GetById(itemId, token);
-            if (order == null || item == null)
+            var result = await _uow.OrderRepository.AddItemInOrder(orderId, itemId, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+                return result;
             }
-            if (order.ProgressEnum != ProgressEnum.Created)
-            {
-                throw new Exception("You can't add item from order.");
-            }
-            await _uow.OrderRepository.AddItemInOrder(order.Id, item.Id, token);
             await _uow.Save(token);
+            return result;
         }
 
         public async Task RemoveItemFromOrder(int orderId, int itemId, CancellationToken token)
