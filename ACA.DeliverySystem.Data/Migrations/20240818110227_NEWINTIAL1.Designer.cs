@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACA.DeliverySystem.Data.Migrations
 {
     [DbContext(typeof(DeliveryDbContext))]
-    [Migration("20240810201455_Update_New2")]
-    partial class Update_New2
+    [Migration("20240818110227_NEWINTIAL1")]
+    partial class NEWINTIAL1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,10 @@ namespace ACA.DeliverySystem.Data.Migrations
 
                     b.Property<int?>("ItemId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PaidAmount")
                         .HasColumnType("decimal(18,2)");

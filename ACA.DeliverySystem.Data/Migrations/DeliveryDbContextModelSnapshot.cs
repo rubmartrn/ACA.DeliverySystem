@@ -65,6 +65,10 @@ namespace ACA.DeliverySystem.Data.Migrations
                     b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("PaidAmount")
                         .HasColumnType("decimal(18,2)");
 

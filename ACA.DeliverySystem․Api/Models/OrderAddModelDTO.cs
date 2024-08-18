@@ -2,7 +2,6 @@
 {
     public class OrderAddModelDTO
     {
-        public int ItemId { get; set; }
-
+        public string Name { get; set; }
     }
 }

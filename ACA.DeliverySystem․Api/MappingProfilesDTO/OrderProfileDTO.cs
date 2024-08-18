@@ -17,7 +17,7 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                  .PreserveReferences();
 
             CreateMap<OrderAddModelDTO, OrderAddModel>()
-                .ForMember(d => d.ItemId, d => d.MapFrom(s => s.ItemId))
+                .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .PreserveReferences();
 
 

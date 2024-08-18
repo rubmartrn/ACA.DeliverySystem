@@ -2,7 +2,7 @@
 {
     public class OrderAddModel
     {
-        public int ItemId { get; set; }
+        public string Name { get; set; }
 
     }
 }
