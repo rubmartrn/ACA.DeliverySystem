@@ -40,9 +40,16 @@ namespace ACA.DeliverySystem_Api.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromQuery] int id, [FromBody] UserUpdateModelDTO model, CancellationToken token)
         {
-
             var mappedModel = _mapper.Map<UserUpdateModel>(model);
-            await _userService.Update(id, mappedModel, token);
+            var result = await _userService.Update(id, mappedModel, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == DeliverySystem.Data.ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
 

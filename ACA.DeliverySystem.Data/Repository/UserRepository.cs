@@ -17,7 +17,7 @@ namespace ACA.DeliverySystem.Data.Repository
 
         public async Task<User> GetById(int id, CancellationToken token)
         {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Add(User user, CancellationToken token)
@@ -28,7 +28,6 @@ namespace ACA.DeliverySystem.Data.Repository
         public async Task Update(User user, CancellationToken token)
         {
             _context.Users.Update(user);
-
         }
 
         public async Task<OperationResult> Delete(int id, CancellationToken token)

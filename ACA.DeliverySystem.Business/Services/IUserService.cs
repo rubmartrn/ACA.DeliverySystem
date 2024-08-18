@@ -11,6 +11,6 @@ namespace ACA.DeliverySystem.Business.Services
         Task<IEnumerable<UserViewModel>> GetAll(CancellationToken token);
         Task<UserViewModel> GetById(int id, CancellationToken token);
         Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId, CancellationToken token);
-        Task Update(int id, UserUpdateModel model, CancellationToken token);
+        Task<OperationResult> Update(int id, UserUpdateModel model, CancellationToken token);
     }
 }

@@ -45,18 +45,18 @@ namespace ACA.DeliverySystem.Business.Services
             return _mapper.Map<UserViewModel>(user);
         }
 
-        public async Task Update(int id, UserUpdateModel model, CancellationToken token)
+        public async Task<OperationResult> Update(int id, UserUpdateModel model, CancellationToken token)
         {
             var oldUser = await _uow.UserRepository.GetById(id, token);
-
             if (oldUser == null)
-                throw new KeyNotFoundException($"User with ID {id} not found.");
-
+            {
+                return OperationResult.Error($"User with id {id} not found.", ErrorType.NotFound);
+            }
             oldUser.Name = model.Name;
             oldUser.SureName = model.SureName;
-
             await _uow.UserRepository.Update(oldUser, token);
             await _uow.Save(token);
+            return OperationResult.Ok();
         }
 
         public async Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId, CancellationToken token)
