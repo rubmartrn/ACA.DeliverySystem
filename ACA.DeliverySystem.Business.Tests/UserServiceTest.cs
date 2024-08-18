@@ -1,13 +1,8 @@
 ﻿using ACA.DeliverySystem.Business.Services;
-using ACA.DeliverySystem.Data.Repository;
 using ACA.DeliverySystem.Data;
 using ACA.DeliverySystem.Data.Models;
+using ACA.DeliverySystem.Data.Repository;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ACA.DeliverySystem.Business.Tests
 {
@@ -23,7 +18,7 @@ namespace ACA.DeliverySystem.Business.Tests
         {
             //Arrange
             var users = new List<User>();
-            var user = new User { Id = 1, OrderId = 1, Name = "Artur", SureName = "Nikoxosyan", Order = _mockOrder.Object, Email="art56@gmail.com" };
+            var user = new User { Id = 1, OrderId = 1, Name = "Artur", SureName = "Nikoxosyan", Order = _mockOrder.Object, Email = "art56@gmail.com" };
             _iUserRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(users);
             _uowMock.Setup(u => u.UserRepository).Returns(_iUserRepositoryMock.Object);
             //Act

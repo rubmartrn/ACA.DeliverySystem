@@ -45,6 +45,11 @@ namespace ACA.DeliverySystem.Business.Services
         public async Task<ItemViewModel> GetById(int id, CancellationToken token)
         {
             var item = await _uow.ItemRepository.GetById(id, token);
+
+            if (item == null)
+            {
+                throw new KeyNotFoundException($"Item with ID {id} not found.");
+            }
             return _mapper.Map<ItemViewModel>(item);
         }
 
