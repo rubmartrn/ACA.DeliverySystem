@@ -130,7 +130,15 @@ namespace ACA.DeliverySystem_Api.Controllers
 
         public async Task<IActionResult> CancelOrder([FromQuery] int orderId, CancellationToken token)
         {
-            await _orderService.CancelOrder(orderId, token);
+            var result = await _orderService.CancelOrder(orderId, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
 

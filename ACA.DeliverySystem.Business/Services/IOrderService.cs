@@ -7,7 +7,7 @@ namespace ACA.DeliverySystem.Business.Services
     public interface IOrderService
     {
         Task<OperationResult> AddItemInOrder(int orderId, int itemId, CancellationToken token);
-        Task CancelOrder(int orderId, CancellationToken token);
+        Task<OperationResult> CancelOrder(int orderId, CancellationToken token);
         Task<Order> CreateOrder(OrderAddModel order, CancellationToken token);
         Task<OperationResult> Delete(int id, CancellationToken token);
         Task<OrderViewModel> Get(int id, CancellationToken token);

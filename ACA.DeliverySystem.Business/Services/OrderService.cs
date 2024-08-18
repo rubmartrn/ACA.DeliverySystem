@@ -109,23 +109,15 @@ namespace ACA.DeliverySystem.Business.Services
             return result;
         }
 
-        public async Task CancelOrder(int orderId, CancellationToken token)
+        public async Task<OperationResult> CancelOrder(int orderId, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.GetById(orderId, token);
-            if (order == null)
+            var result = await _uow.OrderRepository.CancelOrder(orderId, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+                return result;
             }
-            if (order.ProgressEnum == ProgressEnum.Completed)
-            {
-                throw new Exception("You can't cancel completed order.");
-            }
-            if (order.ProgressEnum == ProgressEnum.Canceled)
-            {
-                throw new Exception("It's already canceled.");
-            }
-            await _uow.OrderRepository.CancelOrder(orderId, token);
             await _uow.Save(token);
+            return result;
         }
     }
 }

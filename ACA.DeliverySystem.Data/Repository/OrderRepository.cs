@@ -134,10 +134,24 @@ namespace ACA.DeliverySystem.Data.Repository
         }
 
 
-        public async Task CancelOrder(int orderId, CancellationToken token)
+        public async Task<OperationResult> CancelOrder(int orderId, CancellationToken token)
         {
             var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
+            if (order == null)
+            {
+                return OperationResult.Error($"Order with id {orderId} not found.", ErrorType.NotFound);
+            }
+            if (order.ProgressEnum == ProgressEnum.Completed)
+            {
+                return OperationResult.Error("You can't cancel completed order.", ErrorType.BadRequest);
+            }
+            if (order.ProgressEnum == ProgressEnum.Canceled)
+            {
+                return OperationResult.Error("It's already canceled.", ErrorType.BadRequest);
+            }
             order.ProgressEnum = ProgressEnum.Canceled;
+            return OperationResult.Ok();
+
         }
 
 
