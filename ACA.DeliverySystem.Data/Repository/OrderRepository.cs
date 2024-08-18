@@ -50,5 +50,12 @@ namespace ACA.DeliverySystem.Data.Repository
             return item;
         }
 
+        public async Task RemoveItemFromOrder(int orderId, int itemId, CancellationToken token)
+        {
+            var item = await _context.Items.SingleOrDefaultAsync(x => x.Id == itemId);
+            var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
+            order.Items.Remove(item);
+        }
+
     }
 }

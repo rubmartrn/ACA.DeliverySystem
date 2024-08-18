@@ -10,6 +10,7 @@ namespace ACA.DeliverySystem.Business.Services
         Task Delete(int id, CancellationToken token);
         Task<OrderViewModel> Get(int id, CancellationToken token);
         Task<IEnumerable<OrderViewModel>> GetAll(CancellationToken token);
+        Task RemoveItemFromOrder(int orderId, int itemId, CancellationToken token);
         Task<bool> Update(int id, Order model, CancellationToken token);
     }
 }

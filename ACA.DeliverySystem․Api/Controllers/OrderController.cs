@@ -58,6 +58,11 @@ namespace ACA.DeliverySystem_Api.Controllers
             return Ok();
         }
 
-
+        [HttpDelete("/removeItemFromOrder")]
+        public async Task<IActionResult> RemoveItemFromOrder([FromQuery] int orderId, [FromQuery] int itemId, CancellationToken token)
+        {
+            await _orderService.RemoveItemFromOrder(orderId, itemId, token);
+            return Ok();
+        }
     }
 }
