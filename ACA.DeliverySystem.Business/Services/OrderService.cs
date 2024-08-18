@@ -92,15 +92,18 @@ namespace ACA.DeliverySystem.Business.Services
             {
                 throw new KeyNotFoundException($"Order or item with ID {order} not found.");
             }
+            if (order.ProgressEnum != ProgressEnum.Created)
+            {
+                throw new Exception("The order is in progress or canceled.");
+            }
+
             var amountToPay = order.Items.Sum(x => x.Price);
+
             if (amount != amountToPay)
             {
                 throw new Exception($"You must pay {amountToPay}");
             }
-            else if (order.PaidAmount == amount)
-            {
-                throw new Exception("The order has already been paid.");
-            }
+
             await _uow.OrderRepository.PayForOrder(orderId, amount, token);
             await _uow.Save(token);
 
