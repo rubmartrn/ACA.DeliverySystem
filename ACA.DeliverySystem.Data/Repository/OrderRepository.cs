@@ -19,7 +19,8 @@ namespace ACA.DeliverySystem.Data.Repository
 
         public async Task<Order> GetById(int id, CancellationToken token)
         {
-            return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, token);
+            return await _context.Orders.Include(x => x.Items).FirstOrDefaultAsync(x => x.Id == id, token);
+
         }
 
         public async Task<Order> Add(Order order, CancellationToken token)
@@ -47,6 +48,27 @@ namespace ACA.DeliverySystem.Data.Repository
             var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
             order.Items.Add(item);
             return item;
+        }
+
+        public async Task RemoveItemFromOrder(int orderId, int itemId, CancellationToken token)
+        {
+            var item = await _context.Items.SingleOrDefaultAsync(x => x.Id == itemId);
+            var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
+            order.Items.Remove(item);
+        }
+
+        public async Task PayForOrder(int orderId, decimal amount, CancellationToken token)
+        {
+            var order = await _context.Orders.Include(x => x.Items).SingleOrDefaultAsync(x => x.Id == orderId);
+            var amountToPay = order.Items.Sum(x => x.Price);
+            order.PaidAmount = amountToPay;
+            order.ProgressEnum = ProgressEnum.InProgress;
+        }
+
+        public async Task OrderCompleted(int orderId, CancellationToken token)
+        {
+            var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
+            order.ProgressEnum = ProgressEnum.Completed;
         }
 
     }

@@ -71,5 +71,57 @@ namespace ACA.DeliverySystem.Business.Services
             await _uow.OrderRepository.AddItemInOrder(order.Id, item.Id, token);
             await _uow.Save(token);
         }
+
+        public async Task RemoveItemFromOrder(int orderId, int itemId, CancellationToken token)
+        {
+            var order = await _uow.OrderRepository.GetById(orderId, token);
+            var item = await _uow.ItemRepository.GetById(itemId, token);
+            if (order == null || item == null)
+            {
+                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+            }
+
+            await _uow.OrderRepository.RemoveItemFromOrder(order.Id, item.Id, token);
+            await _uow.Save(token);
+        }
+
+        public async Task PayForOrder(int orderId, decimal amount, CancellationToken token)
+        {
+            var order = await _uow.OrderRepository.GetById(orderId, token);
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+            }
+            if (order.ProgressEnum != ProgressEnum.Created)
+            {
+                throw new Exception("The order is in progress or canceled.");
+            }
+
+            var amountToPay = order.Items.Sum(x => x.Price);
+
+            if (amount != amountToPay)
+            {
+                throw new Exception($"You must pay {amountToPay}");
+            }
+
+            await _uow.OrderRepository.PayForOrder(orderId, amount, token);
+            await _uow.Save(token);
+
+        }
+
+        public async Task OrderCompleted(int orderId, CancellationToken token)
+        {
+            var order = await _uow.OrderRepository.GetById(orderId, token);
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+            }
+            else if (order.ProgressEnum != ProgressEnum.InProgress)
+            {
+                throw new Exception("Order must be in progress.");
+            }
+            await _uow.OrderRepository.OrderCompleted(orderId, token);
+            await _uow.Save(token);
+        }
     }
 }

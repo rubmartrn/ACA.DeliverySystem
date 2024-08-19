@@ -27,6 +27,15 @@ namespace ACA.DeliverySystem_Api.Controllers
             return orders.Select(x => _mapper.Map<OrderViewModelDTO>(x));
         }
 
+        [HttpGet("{orderId}")]
+
+        public async Task<OrderViewModelDTO> GetById(int orderId, CancellationToken token)
+        {
+            var order = await _orderService.Get(orderId, token);
+            return _mapper.Map<OrderViewModelDTO>(order);
+        }
+
+
         [HttpDelete]
 
         public async Task Delete([FromQuery] int id, CancellationToken token)
@@ -49,6 +58,27 @@ namespace ACA.DeliverySystem_Api.Controllers
             return Ok();
         }
 
+        [HttpDelete("/removeItemFromOrder")]
+        public async Task<IActionResult> RemoveItemFromOrder([FromQuery] int orderId, [FromQuery] int itemId, CancellationToken token)
+        {
+            await _orderService.RemoveItemFromOrder(orderId, itemId, token);
+            return Ok();
+        }
 
+        [HttpGet("/payment")]
+
+        public async Task<IActionResult> Pay([FromQuery] int orderId, [FromQuery] decimal amount, CancellationToken token)
+        {
+            await _orderService.PayForOrder(orderId, amount, token);
+            return Ok();
+        }
+
+        [HttpPost("/orderCompleted")]
+
+        public async Task<IActionResult> OrderCompleted([FromQuery] int orderId, CancellationToken token)
+        {
+            await _orderService.OrderCompleted(orderId, token);
+            return Ok();
+        }
     }
 }
