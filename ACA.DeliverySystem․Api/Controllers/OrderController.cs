@@ -38,9 +38,18 @@ namespace ACA.DeliverySystem_Api.Controllers
 
         [HttpDelete]
 
-        public async Task Delete([FromQuery] int id, CancellationToken token)
+        public async Task<IActionResult> Delete([FromQuery] int id, CancellationToken token)
         {
-            await _orderService.Delete(id, token);
+            var result = await _orderService.Delete(id, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
+            return Ok();
         }
 
         [HttpPost]
@@ -54,14 +63,31 @@ namespace ACA.DeliverySystem_Api.Controllers
         [HttpPost("/addItemInOrder")]
         public async Task<IActionResult> AddItemInOrder([FromQuery] int orderId, [FromQuery] int itemId, CancellationToken token)
         {
-            await _orderService.AddItemInOrder(orderId, itemId, token);
+            var result = await _orderService.AddItemInOrder(orderId, itemId, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
 
         [HttpDelete("/removeItemFromOrder")]
         public async Task<IActionResult> RemoveItemFromOrder([FromQuery] int orderId, [FromQuery] int itemId, CancellationToken token)
         {
-            await _orderService.RemoveItemFromOrder(orderId, itemId, token);
+            var result = await _orderService.RemoveItemFromOrder(orderId, itemId, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
 
@@ -69,15 +95,33 @@ namespace ACA.DeliverySystem_Api.Controllers
 
         public async Task<IActionResult> Pay([FromQuery] int orderId, [FromQuery] decimal amount, CancellationToken token)
         {
-            await _orderService.PayForOrder(orderId, amount, token);
+            var result = await _orderService.PayForOrder(orderId, amount, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+
+                }
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
+
 
         [HttpPost("/orderCompleted")]
 
         public async Task<IActionResult> OrderCompleted([FromQuery] int orderId, CancellationToken token)
         {
-            await _orderService.OrderCompleted(orderId, token);
+            var result = await _orderService.OrderCompleted(orderId, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
 
@@ -86,7 +130,15 @@ namespace ACA.DeliverySystem_Api.Controllers
 
         public async Task<IActionResult> CancelOrder([FromQuery] int orderId, CancellationToken token)
         {
-            await _orderService.CancelOrder(orderId, token);
+            var result = await _orderService.CancelOrder(orderId, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
 

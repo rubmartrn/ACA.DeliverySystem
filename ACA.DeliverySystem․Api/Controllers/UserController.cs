@@ -40,17 +40,33 @@ namespace ACA.DeliverySystem_Api.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromQuery] int id, [FromBody] UserUpdateModelDTO model, CancellationToken token)
         {
-
             var mappedModel = _mapper.Map<UserUpdateModel>(model);
-            await _userService.Update(id, mappedModel, token);
+            var result = await _userService.Update(id, mappedModel, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
             return Ok();
         }
 
 
         [HttpDelete]
-        public async Task Delete([FromQuery] int id, CancellationToken token)
+        public async Task<IActionResult> Delete([FromQuery] int id, CancellationToken token)
         {
-            await _userService.Delete(id, token);
+            var result = await _userService.Delete(id, token);
+            if (!result.Success)
+            {
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return NotFound(result.ErrorMessage);
+                }
+                return BadRequest(result.ErrorMessage);
+            }
+            return Ok();
         }
 
         [HttpGet("{userId}/orders")]

@@ -24,15 +24,15 @@ namespace ACA.DeliverySystem.Business.Services
             return order;
         }
 
-        public async Task Delete(int id, CancellationToken token)
+        public async Task<OperationResult> Delete(int id, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.GetById(id, token);
-            if (order == null)
+            var result = await _uow.OrderRepository.Delete(id, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException("Order with ID {id} not found.");
+                return result;
             }
-            await _uow.OrderRepository.Delete(id, token);
             await _uow.Save(token);
+            return result;
         }
 
         public async Task<IEnumerable<OrderViewModel>> GetAll(CancellationToken token)
@@ -64,95 +64,60 @@ namespace ACA.DeliverySystem.Business.Services
             return true;
         }
 
-        public async Task AddItemInOrder(int orderId, int itemId, CancellationToken token)
+        public async Task<OperationResult> AddItemInOrder(int orderId, int itemId, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.GetById(orderId, token);
-            var item = await _uow.ItemRepository.GetById(itemId, token);
-            if (order == null || item == null)
+            var result = await _uow.OrderRepository.AddItemInOrder(orderId, itemId, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+                return result;
             }
-            if (order.ProgressEnum != ProgressEnum.Created)
-            {
-                throw new Exception("You can't add item from order.");
-            }
-            await _uow.OrderRepository.AddItemInOrder(order.Id, item.Id, token);
             await _uow.Save(token);
+            return result;
         }
 
-        public async Task RemoveItemFromOrder(int orderId, int itemId, CancellationToken token)
+        public async Task<OperationResult> RemoveItemFromOrder(int orderId, int itemId, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.GetById(orderId, token);
-            var item = await _uow.ItemRepository.GetById(itemId, token);
-            if (order == null || item == null)
+            var result = await _uow.OrderRepository.RemoveItemFromOrder(orderId, itemId, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+                return result;
             }
-            if (order.ProgressEnum != ProgressEnum.Created)
-            {
-                throw new Exception("You can't remove item from order.");
-            }
-
-            await _uow.OrderRepository.RemoveItemFromOrder(order.Id, item.Id, token);
             await _uow.Save(token);
+            return result;
         }
 
-        public async Task PayForOrder(int orderId, decimal amount, CancellationToken token)
+        public async Task<OperationResult> PayForOrder(int orderId, decimal amount, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.GetById(orderId, token);
-            if (order == null)
+            var result = await _uow.OrderRepository.PayForOrder(orderId, amount, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+                return result;
             }
-            if (order.ProgressEnum != ProgressEnum.Created)
-            {
-                throw new Exception("The order is in progress or canceled.");
-            }
-
-            var amountToPay = order.Items.Sum(x => x.Price);
-
-            if (amount != amountToPay)
-            {
-                throw new Exception($"You must pay {amountToPay}");
-            }
-
-            await _uow.OrderRepository.PayForOrder(orderId, amount, token);
             await _uow.Save(token);
+            return result;
 
         }
 
-        public async Task OrderCompleted(int orderId, CancellationToken token)
+        public async Task<OperationResult> OrderCompleted(int orderId, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.GetById(orderId, token);
-            if (order == null)
+            var result = await _uow.OrderRepository.OrderCompleted(orderId, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+                return result;
             }
-            else if (order.ProgressEnum != ProgressEnum.InProgress)
-            {
-                throw new Exception("Order must be in progress.");
-            }
-            await _uow.OrderRepository.OrderCompleted(orderId, token);
             await _uow.Save(token);
+            return result;
         }
 
-        public async Task CancelOrder(int orderId, CancellationToken token)
+        public async Task<OperationResult> CancelOrder(int orderId, CancellationToken token)
         {
-            var order = await _uow.OrderRepository.GetById(orderId, token);
-            if (order == null)
+            var result = await _uow.OrderRepository.CancelOrder(orderId, token);
+            if (!result.Success)
             {
-                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+                return result;
             }
-            if (order.ProgressEnum == ProgressEnum.Completed)
-            {
-                throw new Exception("You can't cancel completed order.");
-            }
-            if (order.ProgressEnum == ProgressEnum.Canceled)
-            {
-                throw new Exception("It's already canceled.");
-            }
-            await _uow.OrderRepository.CancelOrder(orderId, token);
             await _uow.Save(token);
+            return result;
         }
     }
 }

@@ -24,16 +24,15 @@ namespace ACA.DeliverySystem.Business.Services
             return mappedModel;
         }
 
-        public async Task Delete(int id, CancellationToken token)
+        public async Task<OperationResult> Delete(int id, CancellationToken token)
         {
-            var item = await _uow.ItemRepository.GetById(id, token);
-
-            if (item == null)
-                throw new KeyNotFoundException($"Item with ID {id} not found.");
-
-
-            await _uow.ItemRepository.Delete(id, token);
+            var result = await _uow.ItemRepository.Delete(id, token);
+            if (!result.Success)
+            {
+                return result;
+            }
             await _uow.Save(token);
+            return result;
         }
 
         public async Task<IEnumerable<ItemViewModel>> GetAll(CancellationToken token)

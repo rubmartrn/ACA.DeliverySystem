@@ -32,10 +32,17 @@ namespace ACA.DeliverySystem.Data.Repository
             _context.Items.Update(item);
 
         }
-        public async Task Delete(int id, CancellationToken token)
+        public async Task<OperationResult> Delete(int id, CancellationToken token)
         {
-            var item = await _context.Items.FirstOrDefaultAsync(e => e.Id == id, token);
+            var item = await _context.Items.SingleOrDefaultAsync(e => e.Id == id, token);
+            if (item == null)
+            {
+                return OperationResult.Error($"Item with id {id} not found", ErrorType.NotFound);
+            }
+
             _context.Items.Remove(item);
+
+            return OperationResult.Ok();
         }
     }
 }
