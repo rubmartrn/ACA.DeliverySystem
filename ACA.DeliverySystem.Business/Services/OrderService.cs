@@ -54,6 +54,10 @@ namespace ACA.DeliverySystem.Business.Services
             {
                 return false;
             }
+            if (order.ProgressEnum != ProgressEnum.Created)
+            {
+                throw new Exception("You can't change order.");
+            }
             order = model;
             await _uow.OrderRepository.Update(order, token);
             await _uow.Save(token);
@@ -68,6 +72,10 @@ namespace ACA.DeliverySystem.Business.Services
             {
                 throw new KeyNotFoundException($"Order or item with ID {order} not found.");
             }
+            if (order.ProgressEnum != ProgressEnum.Created)
+            {
+                throw new Exception("You can't add item from order.");
+            }
             await _uow.OrderRepository.AddItemInOrder(order.Id, item.Id, token);
             await _uow.Save(token);
         }
@@ -79,6 +87,10 @@ namespace ACA.DeliverySystem.Business.Services
             if (order == null || item == null)
             {
                 throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+            }
+            if (order.ProgressEnum != ProgressEnum.Created)
+            {
+                throw new Exception("You can't remove item from order.");
             }
 
             await _uow.OrderRepository.RemoveItemFromOrder(order.Id, item.Id, token);
@@ -121,6 +133,25 @@ namespace ACA.DeliverySystem.Business.Services
                 throw new Exception("Order must be in progress.");
             }
             await _uow.OrderRepository.OrderCompleted(orderId, token);
+            await _uow.Save(token);
+        }
+
+        public async Task CancelOrder(int orderId, CancellationToken token)
+        {
+            var order = await _uow.OrderRepository.GetById(orderId, token);
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order or item with ID {order} not found.");
+            }
+            if (order.ProgressEnum == ProgressEnum.Completed)
+            {
+                throw new Exception("You can't cancel completed order.");
+            }
+            if (order.ProgressEnum == ProgressEnum.Canceled)
+            {
+                throw new Exception("It's already canceled.");
+            }
+            await _uow.OrderRepository.CancelOrder(orderId, token);
             await _uow.Save(token);
         }
     }

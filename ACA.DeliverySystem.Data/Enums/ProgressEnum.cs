@@ -8,8 +8,8 @@ public enum ProgressEnum
     [EnumMember(Value = "InProgress")]
     InProgress = 1,
 
-    [EnumMember(Value = "Cancel")]
-    Cancel = 2,
+    [EnumMember(Value = "Canceled")]
+    Canceled = 2,
 
     [EnumMember(Value = "Completed")]
     Completed = 3

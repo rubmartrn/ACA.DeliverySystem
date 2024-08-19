@@ -10,7 +10,7 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
         {
             CreateMap<Order, OrderViewModel>()
                  .ForMember(d => d.UserId, d => d.MapFrom(s => s.UserId))
-                 .ForMember(d => d.ItemId, d => d.MapFrom(s => s.ItemId))
+                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                  .ForMember(d => d.Date, d => d.MapFrom(s => s.Date))
                  .ForMember(d => d.ProgressEnum, d => d.MapFrom(s => s.ProgressEnum))
                  .ForMember(d => d.PaidAmount, d => d.MapFrom(s => s.PaidAmount))
