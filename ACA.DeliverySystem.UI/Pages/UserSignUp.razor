@@ -1,0 +1,87 @@
+﻿@page "/signup"
+
+<PageTitle>Create an Account</PageTitle>
+
+<style>
+    body {
+        background-image: url('https://static.vecteezy.com/system/resources/previews/018/998/198/original/online-delivery-service-concept-perfect-for-landing-page-delivery-website-banner-and-background-free-vector.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .form-container {
+        background-color: rgba(0, 0, 0, 0.5); 
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    input[type="text"],
+    input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 20px;
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+    .signin-link {
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+        .signin-link a {
+            color: #00bfff; 
+            text-decoration: none;
+        }
+
+            .signin-link a:hover {
+                text-decoration: underline;
+            }
+</style>
+
+<div class="form-container">
+    <h1>Create an Account</h1>
+    <form method="post">
+        <input type="text" name="name" placeholder="Name" required />
+        <input type="text" name="surname" placeholder="Surname" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <button type="submit">Sign Up</button>
+    </form>
+    <div class="signin-link">
+        <p>Already have an account? <a href="/signin">Sign in here</a>.</p>
+    </div>
+</div>
