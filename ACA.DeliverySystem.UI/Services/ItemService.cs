@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 
 namespace ACA.DeliverySystem.UI.Services
 {
+
     public class ItemService
     {
         private readonly HttpClient _client;
@@ -41,16 +42,30 @@ namespace ACA.DeliverySystem.UI.Services
 
         //Delete
 
-        public async Task Delete(int id)
+        public async Task<OperationResult> Delete(int id, CancellationToken token)
         {
-            await _client.DeleteAsync($"Item/{id}");
+            var response = await _client.DeleteAsync($"Item?id={id}", token);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<OperationResult>();
+            }
+            else
+            {
+                return new OperationResult
+                {
+                    Success = false,
+                    ErrorMessage = "Failed to delete the item."
+                };
+            }
         }
+
 
         //Update
 
         public async  Task<OperationResult> Update(int id, ItemUpdateModel model)
         {
-            var response = await _client.PutAsJsonAsync($"Item/{id}", model);
+            var response = await _client.PutAsJsonAsync($"Item?id={id}", model);
 
             if (response.IsSuccessStatusCode)
             {
