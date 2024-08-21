@@ -45,8 +45,7 @@ namespace ACA.DeliverySystem.Business.Tests
                 new Item { Id = 1, OrderId = 1, Name = "fast food", Description = "5 pies", Price = 25, Order = _mockOrder.Object },
                 new Item { Id = 2, OrderId = 1, Name = "Donar", Description = "6 pies", Price = 35, Order = _mockOrder.Object },
             };
-            var item = new Item { Id = itemId, OrderId = 1, Name = "fast food", Description = "5 pies", Price = 25, Order = _mockOrder.Object };
-
+           
             _iItemRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(items);
             _iItemRepositoryMock.Setup(e => e.Delete(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(OperationResult.Ok);
             _uowMock.Setup(u => u.ItemRepository).Returns(_iItemRepositoryMock.Object);
