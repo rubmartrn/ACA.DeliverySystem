@@ -5,7 +5,7 @@ using ACA.DeliverySystem.Data.Models;
 using ACA.DeliverySystem.Data.Repository;
 using AutoMapper;
 using Moq;
-using Xunit.Abstractions;
+
 
 
 namespace ACA.DeliverySystem.Business.Tests
@@ -33,8 +33,10 @@ namespace ACA.DeliverySystem.Business.Tests
             _iOrderRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(orders);
             _uowMock.Setup(u => u.OrderRepository).Returns(_iOrderRepositoryMock.Object);
             _mapperMock.Setup(m => m.Map<Order>(orderAddModel)).Returns(order);
+
             //Act
             await service.CreateOrder(orderAddModel, CancellationToken.None);
+
             //Assert
             _iOrderRepositoryMock.Verify(m => m.Add(It.Is<Order>(c => c == order), It.IsAny<CancellationToken>()), Times.Once);
 
@@ -56,6 +58,7 @@ namespace ACA.DeliverySystem.Business.Tests
 
             //Act
             await service.Delete(1, CancellationToken.None);
+
             //Assert
             _iOrderRepositoryMock.Verify(m => m.Delete(It.Is<int>(c => c == 1), It.IsAny<CancellationToken>()), Times.Once());
         }
@@ -78,8 +81,10 @@ namespace ACA.DeliverySystem.Business.Tests
             _iOrderRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(orders);
             _uowMock.Setup(u => u.OrderRepository).Returns(_iOrderRepositoryMock.Object);
             _mapperMock.Setup(m => m.Map<IEnumerable<OrderViewModel>>(orders)).Returns(orderViewModel);
+
             //Act
             var result = await service.GetAll(CancellationToken.None);
+
             //Assert
             Assert.Equal(orderViewModel.Count, result.Count());            
         }
@@ -93,30 +98,35 @@ namespace ACA.DeliverySystem.Business.Tests
                 new Order() { Id = 1, UserId = 1,  PaidAmount = 25, ProgressEnum = ProgressEnum.Created, Items = _mockItems.Object, User = _mockUsers.Object },
                 new Order() { Id = 2, UserId = 2,  PaidAmount = 15, ProgressEnum = ProgressEnum.Completed, Items = _mockItems.Object, User = _mockUsers.Object }
             };
+
             _iOrderRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(orders);
             _uowMock.Setup(u => u.OrderRepository).Returns(_iOrderRepositoryMock.Object);
+
             //Act
             await service.Get(1, CancellationToken.None);
+
             //Assert
             _iOrderRepositoryMock.Verify(m => m.GetById(It.Is<int>(c => c == 1), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
-        public async Task Update()
+        public async Task Update_Success()
         {
             //Arrange
             var order = new Order() { Id = 1, UserId = 1,  PaidAmount = 25, ProgressEnum = ProgressEnum.Created, Items = _mockItems.Object, User = _mockUsers.Object };
             _iOrderRepositoryMock.Setup(e => e.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(order);
             _uowMock.Setup(u => u.OrderRepository).Returns(_iOrderRepositoryMock.Object);
             var currentOrder = new Order() { Id = 3, UserId = 3, PaidAmount = 15, ProgressEnum = ProgressEnum.InProgress, Items = _mockItems.Object, User = _mockUsers.Object };
+            
             //Act
             await service.Update(2, currentOrder, CancellationToken.None);
+
             //Assert
             _iOrderRepositoryMock.Verify(m => m.Update(It.Is<Order>(c => c == currentOrder), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
-        public async Task AddItemInOrderSuccess() 
+        public async Task AddItemInOrder_Success() 
         {
             //Arrange
             var order = new Order() { Id = 1, UserId = 1, PaidAmount = 25, ProgressEnum = ProgressEnum.Created, Items = _mockItems.Object, User = _mockUsers.Object };
@@ -135,7 +145,7 @@ namespace ACA.DeliverySystem.Business.Tests
         }
 
         [Fact]
-        public async Task RemoveItemFromOrderSuccess()
+        public async Task RemoveItemFromOrder_Success()
         {
             //Arrange
             var order = new Order() { Id = 1, UserId = 1, PaidAmount = 25, ProgressEnum = ProgressEnum.Created, Items = _mockItems.Object, User = _mockUsers.Object };
@@ -154,7 +164,7 @@ namespace ACA.DeliverySystem.Business.Tests
         }
 
         [Fact]
-        public async Task PayForOrderSuccess() 
+        public async Task PayForOrder_Success() 
         {
             //Arrange
             var orderId = 1;
@@ -174,7 +184,7 @@ namespace ACA.DeliverySystem.Business.Tests
 
 
         [Fact]
-        public async Task OrderCompletedSuccess() 
+        public async Task OrderCompleted_Success() 
         {
             //Arrange
             var orderId = 1;
