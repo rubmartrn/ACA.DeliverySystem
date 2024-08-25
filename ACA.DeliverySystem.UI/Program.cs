@@ -11,6 +11,9 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 builder.Services.AddScoped<BackendService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ItemService>();
+builder.Services.AddScoped<OrderService>();
 
 builder.Services.AddMudServices();
 

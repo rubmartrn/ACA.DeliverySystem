@@ -77,7 +77,7 @@ namespace ACA.DeliverySystem_Api.Controllers
 
         }
 
-        [HttpPost("/addOrder")]
+        [HttpPost("addOrder")]
         public async Task<IActionResult> AddOrderInUser([FromQuery] int userId, [FromBody] OrderAddModelDTO model, CancellationToken token)
         {
             var mappedOrder = _mapper.Map<OrderAddModel>(model);

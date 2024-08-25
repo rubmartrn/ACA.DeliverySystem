@@ -53,7 +53,7 @@ namespace ACA.DeliverySystem.Business.Services
                 return OperationResult.Error($"User with id {id} not found.", ErrorType.NotFound);
             }
             oldUser.Name = model.Name;
-            oldUser.SureName = model.SureName;
+            oldUser.SurName = model.SurName;
             await _uow.UserRepository.Update(oldUser, token);
             await _uow.Save(token);
             return OperationResult.Ok();

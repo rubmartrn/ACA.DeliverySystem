@@ -50,7 +50,7 @@ namespace ACA.DeliverySystem.UI.Services
         }
 
 
-        public async  Task<OperationResult> Delete(int id)
+        public async Task<OperationResult> Delete(int id)
         {
             var response = await _client.DeleteAsync($"User?id={id}");
 

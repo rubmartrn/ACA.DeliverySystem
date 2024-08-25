@@ -1,4 +1,28 @@
 ﻿@page "/signup"
+@using Microsoft.AspNetCore.Components.Forms
+@using ACA.DeliverySystem.UI.Models
+@using ACA.DeliverySystem.UI.Services
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+
+@code {
+    private UserAddModel _userModel = new UserAddModel();
+    private string _errorMessage;
+
+    private async Task HandleSubmit()
+    {
+        var result = await UserService.Create(_userModel);
+        if (result.Success)
+        {
+            // Redirect to a different page or show a success message
+            NavigationManager.NavigateTo("/success"); // Example redirection
+        }
+        else
+        {
+            _errorMessage = result.ErrorMessage;
+        }
+    }
+}
 
 <PageTitle>Create an Account</PageTitle>
 
@@ -13,6 +37,7 @@
         height: 100vh;
         margin: 0;
         font-family: Arial, sans-serif;
+        
     }
 
     .form-container {
@@ -24,6 +49,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         width: 100%;
         max-width: 400px;
+
     }
 
     h1 {
@@ -75,12 +101,16 @@
 
 <div class="form-container">
     <h1>Create an Account</h1>
-    <form method="post">
-        <input type="text" name="name" placeholder="Name" required />
-        <input type="text" name="surname" placeholder="Surname" required />
-        <input type="email" name="email" placeholder="Email" required />
+    <EditForm Model="_userModel" OnValidSubmit="HandleSubmit">
+        <InputText @bind-Value="_userModel.Name" placeholder="Name" required class="form-control" />
+        <InputText @bind-Value="_userModel.SurName" placeholder="SurName" required class="form-control" />
+        <InputText @bind-Value="_userModel.Email" placeholder="Email" type="email" required class="form-control" />
         <button type="submit">Sign Up</button>
-    </form>
+    </EditForm>
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+            <p style="color: red;">@_errorMessage</p>
+    }
     <div class="signin-link">
         <p>Already have an account? <a href="/signin">Sign in here</a>.</p>
     </div>

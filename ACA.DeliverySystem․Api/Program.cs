@@ -29,6 +29,7 @@ builder.Services.AddAutoMapper(typeof(ItemProfileDTO).Assembly);
 builder.Services.AddAutoMapper(typeof(ItemProfile).Assembly);
 
 
+
 var app = builder.Build();
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
