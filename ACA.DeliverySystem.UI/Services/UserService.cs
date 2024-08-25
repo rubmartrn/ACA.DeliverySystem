@@ -1,7 +1,6 @@
 ﻿using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Pages;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace ACA.DeliverySystem.UI.Services
 {
@@ -110,20 +109,10 @@ namespace ACA.DeliverySystem.UI.Services
             }
         }
 
-        public async Task<OperationResult<UserViewModel>> GetUserById(int id)
+        public async Task<UserViewModel> GetUserById(int id)
         {
-            var response = await _client.GetAsync($"User/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var user = JsonSerializer.Deserialize<UserViewModel>(content);
-                return OperationResult<UserViewModel>.Ok(user);
-            }
-            else
-            {
-                return OperationResult<UserViewModel>.Fail("User not found");
-            }
-
+            var user = await _client.GetFromJsonAsync<UserViewModel>($"User/{id}");
+            return user;
         }
 
     }
