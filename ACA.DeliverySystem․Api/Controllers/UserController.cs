@@ -27,6 +27,12 @@ namespace ACA.DeliverySystem_Api.Controllers
             return users.Select(x => _mapper.Map<UserViewModelDTO>(x));
         }
 
+        [HttpGet("{userId}")]
+        public async Task<UserViewModelDTO> GetById(int userId, CancellationToken token)
+        {
+            var user = await _userService.GetById(userId, token);
+            return _mapper.Map<UserViewModelDTO>(user);
+        }
 
 
         [HttpPost]

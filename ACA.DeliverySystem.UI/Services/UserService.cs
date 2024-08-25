@@ -89,11 +89,34 @@ namespace ACA.DeliverySystem.UI.Services
                 return new OperationResult
                 {
                     Success = false,
-                    ErrorMessage = "Failed to delete the user."
+                    ErrorMessage = "Failed to add order."
                 };
             }
         }
 
+        public async Task<OperationResult> SignIn(string email)
+        {
+            var response = await _client.GetAsync($"User/ByEmail?email={email}");
 
+            if (response.IsSuccessStatusCode)
+            {
+                var user = await response.Content.ReadFromJsonAsync<UserViewModel>();
+                return new OperationResult
+                {
+                    Success = true,
+                    //UserId = user.Id 
+                };
+            }
+            else
+            {
+                return new OperationResult
+                {
+                    Success = false,
+                    ErrorMessage = "Failed to find the user."
+                };
+            }
+
+
+        }
     }
 }
