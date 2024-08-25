@@ -24,6 +24,8 @@
         text-align: center;
         color: white;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 400px;
     }
 
     h1 {
@@ -36,7 +38,7 @@
     input[type="email"] {
         width: 100%;
         padding: 10px;
-        margin: 10px 0;
+        margin: 20px 0;
         border: none;
         border-radius: 5px;
         font-size: 16px;
@@ -76,16 +78,40 @@
 </style>
 
 <div class="signin-container">
-    <h1>Please sign in</h1>
-    <form method="post">
-        <input type="text" name="name" placeholder="Name" required />
-        <input type="email" name="email" placeholder="Email" required />
+    <EditForm Model="@signInModel" OnValidSubmit="HandleSignIn">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputText id="email" @bind-Value="signInModel.Email" placeholder="Email" required />
         <button type="submit">Sign In</button>
-    </form>
+    </EditForm>
     <div class="create-account">
         <p>Don't have an account? <a href="/signup">Create one here</a>.</p>
     </div>
 </div>
 
+@code {
+    private SignInModel signInModel = new SignInModel();
+
+    private async Task HandleSignIn()
+    {
+        var result = await UserService.SignIn(signInModel.Email);
+        if (result.Success)
+        {
+          
+            NavigationManager.NavigateTo($"/user/{result.Data.Id}");
+        }
+        else
+        {
+            
+            Console.WriteLine(result.ErrorMessage);
+        }
+    }
+
+    public class SignInModel
+    {
+        public string Email { get; set; }
+    }
+}
 
 

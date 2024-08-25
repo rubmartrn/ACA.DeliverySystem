@@ -94,29 +94,35 @@ namespace ACA.DeliverySystem.UI.Services
             }
         }
 
-        public async Task<OperationResult> SignIn(string email)
+        public async Task<OperationResult<UserViewModel>> SignIn(string email)
         {
-            var response = await _client.GetAsync($"User/ByEmail?email={email}");
+            var response = await _client.GetAsync($"User/by-email/{email}");
 
             if (response.IsSuccessStatusCode)
             {
                 var user = await response.Content.ReadFromJsonAsync<UserViewModel>();
-                return new OperationResult
-                {
-                    Success = true,
-                    //UserId = user.Id 
-                };
+                return OperationResult<UserViewModel>.Ok(user);
             }
             else
             {
-                return new OperationResult
-                {
-                    Success = false,
-                    ErrorMessage = "Failed to find the user."
-                };
+                return OperationResult<UserViewModel>.Fail("User not found");
+            }
+        }
+
+        public async Task<OperationResult<UserViewModel>> GetUserById(int id)
+        {
+            var response = await _client.GetAsync($"User/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var user = await response.Content.ReadFromJsonAsync<UserViewModel>();
+                return OperationResult<UserViewModel>.Ok(user);
+            }
+            else
+            {
+                return OperationResult<UserViewModel>.Fail("User not found");
             }
 
-
         }
+
     }
 }

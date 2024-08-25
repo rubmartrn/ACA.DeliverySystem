@@ -14,8 +14,8 @@
         var result = await UserService.Create(_userModel);
         if (result.Success)
         {
-            // Redirect to a different page or show a success message
-            NavigationManager.NavigateTo("/success"); // Example redirection
+            
+            NavigationManager.NavigateTo("/success"); // Example redirect
         }
         else
         {
@@ -58,15 +58,16 @@
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
-    input[type="text"],
-    input[type="email"] {
+    input[type="email"],
+    input[type="text"]{
         width: 100%;
         padding: 10px;
-        margin: 10px 0;
+        margin-top: 20px;
         border: none;
         border-radius: 5px;
         font-size: 16px;
     }
+
 
     button {
         width: 100%;

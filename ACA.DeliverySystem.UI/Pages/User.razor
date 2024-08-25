@@ -1,5 +1,89 @@
-﻿<h3>User</h3>
+﻿@page "/user/{userId:int}"
+@using ACA.DeliverySystem.UI.Models
+@using ACA.DeliverySystem.UI.Services
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+
+<PageTitle>User Details</PageTitle>
 
 @code {
+    [Parameter]
+    public int userId { get; set; }
 
+    private UserViewModel _userViewModel;
+    private string _errorMessage;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var result = await UserService.GetUserById(userId);
+        if (result.Success)
+        {
+            _userViewModel = result.Data;
+        }
+        else
+        {
+            _errorMessage = "User not found.";
+        }
+    }
 }
+
+<style>
+    body {
+        background-image: url('https://static.vecteezy.com/system/resources/previews/018/998/198/original/online-delivery-service-concept-perfect-for-landing-page-delivery-website-banner-and-background-free-vector.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .details-container {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 30px;
+        border-radius: 10px;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        max-width: 400px;
+        margin: auto;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        color: #00bfff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .detail {
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+        .detail strong {
+            color: cornflowerblue;
+        }
+</style>
+
+<div class="details-container">
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <h1>@_errorMessage</h1>
+    }
+    else if (_userViewModel != null)
+    {
+        <h1>User Details</h1>
+        <div class="detail"><strong>Name:</strong> @_userViewModel.Name</div>
+        <div class="detail"><strong>Surname:</strong> @_userViewModel.SurName</div>
+        <div class="detail"><strong>Email:</strong> @_userViewModel.Email</div>
+    }
+    else
+    {
+        <h1>Loading...</h1>
+    }
+</div>
+
+
+
+
