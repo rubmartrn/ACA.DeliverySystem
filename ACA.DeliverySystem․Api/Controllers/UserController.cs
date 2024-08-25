@@ -34,6 +34,13 @@ namespace ACA.DeliverySystem_Api.Controllers
             return _mapper.Map<UserViewModelDTO>(user);
         }
 
+        [HttpGet("by-email/{userEmail}")]
+        public async Task<UserViewModelDTO> GetByEmail(string userEmail, CancellationToken token)
+        {
+            var user = await _userService.GetByEmail(userEmail, token);
+            return _mapper.Map<UserViewModelDTO>(user);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] UserAddModelDTO model, CancellationToken token)
