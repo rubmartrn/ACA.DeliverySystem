@@ -2,27 +2,10 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using ACA.DeliverySystem.UI.Models
 @using ACA.DeliverySystem.UI.Services
-@inject UserService UserService
 @inject NavigationManager NavigationManager
+@inherits UserSignUpBase
 
-@code {
-    private UserAddModel _userModel = new UserAddModel();
-    private string _errorMessage;
 
-    private async Task HandleSubmit()
-    {
-        var result = await UserService.Create(_userModel);
-        if (result.Success)
-        {
-            
-            NavigationManager.NavigateTo("/success"); // Example redirect
-        }
-        else
-        {
-            _errorMessage = result.ErrorMessage;
-        }
-    }
-}
 
 <PageTitle>Create an Account</PageTitle>
 

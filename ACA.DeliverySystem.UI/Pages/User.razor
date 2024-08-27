@@ -1,31 +1,12 @@
 ﻿@page "/user/{userId:int}"
 @using ACA.DeliverySystem.UI.Models
 @using ACA.DeliverySystem.UI.Services
-@inject UserService UserService
 @inject NavigationManager NavigationManager
+@inherits UserBase
 
 <PageTitle>User Details</PageTitle>
 
-@code {
-    [Parameter]
-    public int userId { get; set; }
 
-    private UserViewModel _userViewModel;
-    private string _errorMessage;
-
-    protected override async Task OnParametersSetAsync()
-    {
-        var result = await UserService.GetUserById(userId);
-        if (result != null)
-        {
-            _userViewModel = result;
-        }
-        else
-        {
-            _errorMessage = "User not found.";
-        }
-    }
-}
 
 <style>
     body {
@@ -72,12 +53,12 @@
     {
         <h1>@_errorMessage</h1>
     }
-    else if (_userViewModel != null)
+    else if (_userModel != null)
     {
         <h1>User Details</h1>
-        <div class="detail"><strong>Name:</strong> @_userViewModel.Name</div>
-        <div class="detail"><strong>Surname:</strong> @_userViewModel.SurName</div>
-        <div class="detail"><strong>Email:</strong> @_userViewModel.Email</div>
+        <div class="detail"><strong>Name:</strong> @_userModel.Name</div>
+        <div class="detail"><strong>Surname:</strong> @_userModel.SurName</div>
+        <div class="detail"><strong>Email:</strong> @_userModel.Email</div>
     }
     else
     {
