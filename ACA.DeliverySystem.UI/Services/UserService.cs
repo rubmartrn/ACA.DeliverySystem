@@ -111,18 +111,9 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<UserViewModel> GetUserById(int id)
         {
-            var response = await _client.GetAsync($"User/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var user = await response.Content.ReadFromJsonAsync<UserViewModel>();
-                return user;
 
-            }
-            else
-            {
-                return null;
-            }
-            //var user = await _client.GetFromJsonAsync<UserViewModel>($"User/{id}");
+            return await _client.GetFromJsonAsync<UserViewModel>($"User/{id}");
+
         }
 
     }

@@ -1,11 +1,10 @@
-﻿@page "/user/{userId:int}"
+﻿@page "/User/{userId:int}"
 @using ACA.DeliverySystem.UI.Models
 @using ACA.DeliverySystem.UI.Services
 @inject NavigationManager NavigationManager
 @inherits UserBase
 
 <PageTitle>User Details</PageTitle>
-
 
 
 <style>
@@ -52,6 +51,7 @@
     @if (!string.IsNullOrEmpty(_errorMessage))
     {
         <h1>@_errorMessage</h1>
+
     }
     else if (_userModel != null)
     {
