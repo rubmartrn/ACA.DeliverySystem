@@ -7,33 +7,31 @@
 <PageTitle>Items</PageTitle>
 
 <MudContainer>
-    <MudCard>
-        <MudCardHeader>
-            <MudText Typo="Typo.h6">Item List</MudText>
-        </MudCardHeader>
-        <MudCardContent>
-            @if (items == null)
+    <MudGrid>
+        @if (items == null)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else
+        {
+            @foreach (var item in items)
             {
-                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+                <MudItem xs="12" sm="6" md="4" lg="3">
+                    <MudCard>
+                        <MudCardMedia Image="@item.ImageUrl" Alt="Item Image" />
+                        <MudCardContent>
+                            <MudText Typo="Typo.h6">@item.Name</MudText>
+                                <MudText>@item.Description</MudText>
+                                <MudText Typo="Typo.subtitle1">@item.Price.ToString("C")</MudText>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudButton OnClick="() => OrderItem(item)" Color="Color.Success">Order Now</MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
             }
-            
-            else
-            {
-                <MudTable Items="items" Hover="true" Striped="true">
-                    <HeaderContent>
-                        <MudTh>Name</MudTh>
-                        <MudTh>Description</MudTh>
-                        <MudTh>Price</MudTh>
-                    </HeaderContent>
-                    <RowTemplate>
-                        <MudTd>@context.Name</MudTd>
-                            <MudTd>@context.Description</MudTd>
-                            <MudTd>@context.Price.ToString("C")</MudTd>
-                        </RowTemplate>
-                    </MudTable>
-            }
-        </MudCardContent>
-    </MudCard>
+        }
+    </MudGrid>
 </MudContainer>
 
 @code {
@@ -49,5 +47,14 @@
         {
             Snackbar.Add($"Error loading items: {ex.Message}", Severity.Error);
         }
+    }
+
+  
+
+    private void OrderItem(ItemViewModel item)
+    {
+
+
+        Snackbar.Add($"Ordering {item.Name}...", Severity.Success);
     }
 }
