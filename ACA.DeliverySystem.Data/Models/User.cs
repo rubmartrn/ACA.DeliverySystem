@@ -11,7 +11,7 @@ namespace ACA.DeliverySystem.Data.Models
 
         public string? Name { get; set; }
 
-        public string? SureName { get; set; }
+        public string? SurName { get; set; }
 
         public List<Order> Orders { get; set; } = null!;
 

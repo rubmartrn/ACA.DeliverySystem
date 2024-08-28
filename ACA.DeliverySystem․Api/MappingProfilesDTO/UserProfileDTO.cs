@@ -9,20 +9,20 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
         {
             CreateMap<UserViewModel, UserViewModelDTO>()
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
-                .ForMember(d => d.SureName, d => d.MapFrom(s => s.SureName))
+                .ForMember(d => d.SurName, d => d.MapFrom(s => s.SurName))
                 .ForMember(d => d.Email, d => d.MapFrom(s => s.Email))
                 .ForMember(d => d.Id, d => d.MapFrom(s => s.Id))
                 .PreserveReferences();
 
             CreateMap<UserAddModelDTO, UserAddModel>()
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
-                .ForMember(d => d.SureName, d => d.MapFrom(s => s.SureName))
+                .ForMember(d => d.SurName, d => d.MapFrom(s => s.SurName))
                 .ForMember(d => d.Email, d => d.MapFrom(s => s.Email))
                 .PreserveReferences();
 
             CreateMap<UserUpdateModelDTO, UserUpdateModel>()
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
-                .ForMember(d => d.SureName, d => d.MapFrom(s => s.SureName))
+                .ForMember(d => d.SurName, d => d.MapFrom(s => s.SurName))
                 .PreserveReferences();
 
         }

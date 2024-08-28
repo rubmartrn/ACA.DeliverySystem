@@ -1,5 +1,71 @@
-﻿<h3>User</h3>
+﻿@page "/User/{userId:int}"
+@using ACA.DeliverySystem.UI.Models
+@using ACA.DeliverySystem.UI.Services
+@inject NavigationManager NavigationManager
+@inherits UserBase
 
-@code {
+<PageTitle>User Details</PageTitle>
 
-}
+
+<style>
+    body {
+        background-image: url('https://plus.unsplash.com/premium_photo-1681488262364-8aeb1b6aac56?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .details-container {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 30px;
+        border-radius: 10px;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        max-width: 400px;
+        margin: auto;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        color: #00bfff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .detail {
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+        .detail strong {
+            color: cornflowerblue;
+        }
+</style>
+
+
+<div class="details-container">
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <h1>@_errorMessage</h1>
+
+    }
+    else if (_userModel != null)
+    {
+        <h1>User Details</h1>
+        <div class="detail"><strong>Name:</strong> @_userModel.Name</div>
+        <div class="detail"><strong>Surname:</strong> @_userModel.SurName</div>
+        <div class="detail"><strong>Email:</strong> @_userModel.Email</div>
+    }
+    else
+    {
+        <h1>Loading......</h1>
+    }
+</div>
+
+
+
+

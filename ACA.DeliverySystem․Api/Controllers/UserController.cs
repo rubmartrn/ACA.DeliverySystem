@@ -27,6 +27,19 @@ namespace ACA.DeliverySystem_Api.Controllers
             return users.Select(x => _mapper.Map<UserViewModelDTO>(x));
         }
 
+        [HttpGet("{userId}")]
+        public async Task<UserViewModelDTO> GetById(int userId, CancellationToken token)
+        {
+            var user = await _userService.GetById(userId, token);
+            return _mapper.Map<UserViewModelDTO>(user);
+        }
+
+        [HttpGet("by-email/{userEmail}")]
+        public async Task<UserViewModelDTO> GetByEmail(string userEmail, CancellationToken token)
+        {
+            var user = await _userService.GetByEmail(userEmail, token);
+            return _mapper.Map<UserViewModelDTO>(user);
+        }
 
 
         [HttpPost]
@@ -77,7 +90,7 @@ namespace ACA.DeliverySystem_Api.Controllers
 
         }
 
-        [HttpPost("/addOrder")]
+        [HttpPost("addOrder")]
         public async Task<IActionResult> AddOrderInUser([FromQuery] int userId, [FromBody] OrderAddModelDTO model, CancellationToken token)
         {
             var mappedOrder = _mapper.Map<OrderAddModel>(model);
