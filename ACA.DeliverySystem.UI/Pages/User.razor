@@ -44,6 +44,56 @@
         .detail strong {
             color: cornflowerblue;
         }
+
+    .order-form {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+    }
+
+        .order-form input, .order-form button {
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .order-form button {
+            background-color: cornflowerblue;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .order-form button:hover {
+                background-color: cornflowerblue;
+            }
+
+    .edit-button {
+        background-color: #00bfff; 
+        color: white; 
+        padding: 10px 20px; 
+        font-size: 16px;
+        font-weight: bold; 
+        border: none; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        transition: background-color 0.3s ease, transform 0.2s ease; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    }
+
+        .edit-button:hover {
+            background-color: #007acc; 
+            transform: scale(1.05); 
+        }
+
+        .edit-button:active {
+            background-color: #005f99;
+            transform: scale(1); 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+        }
+
 </style>
 
 
@@ -59,6 +109,20 @@
         <div class="detail"><strong>Name:</strong> @_userModel.Name</div>
         <div class="detail"><strong>Surname:</strong> @_userModel.SurName</div>
         <div class="detail"><strong>Email:</strong> @_userModel.Email</div>
+
+        <!-- Edit Button -->
+        <button @onclick="EditUser" class="edit-button">Edit your data</button>
+
+        <!-- Add Order Form -->
+        <div class="order-form">
+            <h2>Add Order</h2>
+            <EditForm Model="@_orderModel" OnValidSubmit="HandleAddOrder">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <InputText id="orderName" @bind-Value="_orderModel.Name" placeholder="Order Name" required />
+                <button type="submit">Add Order</button>
+            </EditForm>
+        </div>
     }
     else
     {

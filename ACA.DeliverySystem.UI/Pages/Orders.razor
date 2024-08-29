@@ -1,0 +1,71 @@
+﻿@page "/User/{userId:int}/orders"
+@inherits OrdersBase
+
+<PageTitle>User Orders</PageTitle>
+
+<style>
+    body {
+        background-image: url('https://plus.unsplash.com/premium_photo-1678281888592-8ad623bb39e9?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .orders-container {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .order-item {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-bottom: 1px solid #444;
+    }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item h4 {
+            margin: 0;
+            color: #00bfff;
+        }
+
+        .order-item p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+</style>
+
+<h3>Your Orders</h3>
+
+<div class="orders-container">
+    @if (orders == null)
+    {
+        <p>Loading orders...</p>
+    }
+    else if (orders.Count == 0)
+    {
+        <p>No orders found for this user.</p>
+    }
+    else
+    {
+        foreach (var order in orders)
+        {
+            <div class="order-item">
+                <h4>@order.Name</h4>
+                <p><strong>Date:</strong> @order.Date.ToString("d")</p>
+                <p><strong>Progress:</strong> @order.ProgressEnum.ToString()</p>
+                <p><strong>Paid Amount:</strong> @order.PaidAmount.ToString("C")</p>
+            </div>
+        }
+    }
+</div>
+
+
+

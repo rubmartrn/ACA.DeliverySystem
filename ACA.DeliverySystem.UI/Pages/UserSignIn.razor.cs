@@ -6,7 +6,12 @@ namespace ACA.DeliverySystem.UI.Pages
     public class UserSignInBase : ComponentBase
     {
         protected SignInModel signInModel = new SignInModel();
+
+        [Inject]
         protected UserService UserService { get; set; } = default!;
+
+        [Inject]
+        protected NavigationManager NavigationManager { get; set; } = default!;
 
         protected async Task HandleSignIn()
         {
@@ -14,7 +19,7 @@ namespace ACA.DeliverySystem.UI.Pages
             if (result.Success)
             {
 
-                // NavigationManager.NavigateTo($"/user/{result.Data.Id}");
+                NavigationManager.NavigateTo($"/User/{result.Data.Id}");
             }
             else
             {
