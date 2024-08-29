@@ -11,6 +11,8 @@ namespace ACA.DeliverySystem.UI.Pages
         protected UserAddModel? _userModel { get; set; }
         protected string _errorMessage;
         [Inject] protected UserService UserService { get; set; } = default!;
+        [Inject]
+        protected NavigationManager NavigationManager { get; set; } = default!;
 
 
         protected override void OnInitialized()
@@ -23,8 +25,7 @@ namespace ACA.DeliverySystem.UI.Pages
             var result = await UserService.Create(_userModel);
             if (result.Success)
             {
-
-                //  NavigationManager.NavigateTo("/success"); // Example redirect
+                NavigationManager.NavigateTo("/signin");
             }
             else
             {

@@ -1,5 +1,4 @@
 ﻿using ACA.DeliverySystem.UI.Models;
-using ACA.DeliverySystem.UI.Pages;
 using System.Net.Http.Json;
 
 namespace ACA.DeliverySystem.UI.Services
@@ -69,9 +68,9 @@ namespace ACA.DeliverySystem.UI.Services
         }
 
 
-        public async Task<IEnumerable<Order>> GetUserOrders(int userId)
+        public async Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId)
         {
-            return await _client.GetFromJsonAsync<List<Order>>($"User/{userId}/orders");
+            return await _client.GetFromJsonAsync<List<OrderViewModel>>($"User/{userId}/orders");
         }
 
 

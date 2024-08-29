@@ -10,8 +10,13 @@ namespace ACA.DeliverySystem.UI.Pages
         public int userId { get; set; }
 
         protected UserViewModel _userModel;
+        protected OrderAddModel _orderModel = new OrderAddModel();
         protected string _errorMessage;
-        [Inject] protected UserService UserService { get; set; } = default!;
+        [Inject]
+        protected UserService UserService { get; set; } = default!;
+
+        [Inject]
+        protected NavigationManager NavigationManager { get; set; } = default!;
 
         protected override void OnInitialized()
         {
@@ -33,6 +38,18 @@ namespace ACA.DeliverySystem.UI.Pages
             }
         }
 
+        protected async Task HandleAddOrder()
+        {
 
+            var result = await UserService.AddOrderInUser(userId, _orderModel);
+            if (result.Success)
+            {
+                NavigationManager.NavigateTo($"User/{userId}/orders");
+            }
+            else
+            {
+                _errorMessage = result.ErrorMessage;
+            }
+        }
     }
 }
