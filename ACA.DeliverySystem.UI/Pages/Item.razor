@@ -6,6 +6,15 @@
 
 <PageTitle>Items</PageTitle>
 
+<style>
+    body {
+        background-image: url('https://static.vecteezy.com/system/resources/previews/018/998/198/original/online-delivery-service-concept-perfect-for-landing-page-delivery-website-banner-and-background-free-vector.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+</style>
+
 <MudContainer>
     <MudGrid>
         @if (items == null)
@@ -25,6 +34,7 @@
                                 <MudText Typo="Typo.subtitle1">@item.Price.ToString("C")</MudText>
                             </MudCardContent>
                             <MudCardActions>
+                            
                                 <MudButton OnClick="() => OrderItem(item)" Color="Color.Success">Order Now</MudButton>
                             </MudCardActions>
                         </MudCard>

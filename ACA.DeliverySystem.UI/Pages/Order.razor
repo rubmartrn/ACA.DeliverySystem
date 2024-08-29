@@ -1,4 +1,9 @@
 ﻿@page "/order"
+@using ACA.DeliverySystem.UI.Models
+@using ACA.DeliverySystem.UI.Services
+@inject OrderService OrderService
+@inject ISnackbar Snackbar
+
 <h3>Order</h3>
 
 <style>
@@ -9,9 +14,62 @@
         background-position: center center;
     }
 </style>
+@* 
+<MudContainer>
+    <MudGrid>
+        @if (orders == null)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else
+        {
+            @foreach (var order in orders)
+            {
+                <MudItem xs="12" sm="6" md="4" lg="3">
+                    <MudCard>
+                        <MudCardMedia Image="@order.ImageUrl" Alt="Item Image" />
+                        <MudCardContent>
+                            <MudText Typo="Typo.h6">@order.Name</MudText>
+                                <MudText>@order.Description</MudText>
+                                <MudText Typo="Typo.subtitle1">@order.Price.ToString("C")</MudText>
+                            </MudCardContent>
+                            <MudCardActions>
+                            
+                                <MudButton OnClick="() => OrderItem(order)" Color="Color.Success">Order Now</MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+            }
+        }
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private IEnumerable<OrderViewModel> orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            orders = await OrderService.GetAll();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading items: {ex.Message}", Severity.Error);
+        }
+    }
+
+  
+
+    private void OrderItem(ItemViewModel item)
+    {
 
 
+        Snackbar.Add($"Ordering {item.Name}...", Severity.Success);
+    }
+}
 
 @code {
 
 }
+ *@
