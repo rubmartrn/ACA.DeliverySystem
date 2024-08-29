@@ -1,0 +1,76 @@
+﻿@page "/User/Edit/{userId:int}"
+@inherits UserEditBase
+
+<h3>Edit User Details</h3>
+
+<style>
+    body {
+        background-image: url('https://plus.unsplash.com/premium_photo-1721955487786-76802cbf0812?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .edit-container {
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 500px;
+        margin: auto;
+        margin-top: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+        .edit-container h3 {
+            color: #00bfff;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .edit-container input, .edit-container button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .edit-container button {
+            background-color: cornflowerblue;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .edit-container button:hover {
+                background-color: darkblue;
+            }
+</style>
+
+<div class="edit-container">
+    @if (_userModel != null)
+    {
+        <EditForm Model="@_userModel" OnValidSubmit="HandleEditUser">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div>
+                <label>Name:</label>
+                <InputText @bind-Value="_userModel.Name" class="form-control" />
+            </div>
+            <div>
+                <label>Surname:</label>
+                <InputText @bind-Value="_userModel.SurName" class="form-control" />
+            </div>
+            <button type="submit">Save Changes</button>
+        </EditForm>
+    }
+    else
+    {
+        <p>Loading user details...</p>
+    }
+</div>
+
+
+
+
+

@@ -51,5 +51,10 @@ namespace ACA.DeliverySystem.UI.Pages
                 _errorMessage = result.ErrorMessage;
             }
         }
+
+        protected void EditUser()
+        {
+            NavigationManager.NavigateTo($"/User/Edit/{userId}");
+        }
     }
 }
