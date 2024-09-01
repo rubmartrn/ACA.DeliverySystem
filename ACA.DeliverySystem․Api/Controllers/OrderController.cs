@@ -60,7 +60,7 @@ namespace ACA.DeliverySystem_Api.Controllers
             return Ok(order);
         }
 
-        [HttpPost("/addItemInOrder")]
+        [HttpPost("addItemInOrder")]
         public async Task<IActionResult> AddItemInOrder([FromQuery] int orderId, [FromQuery] int itemId, CancellationToken token)
         {
             var result = await _orderService.AddItemInOrder(orderId, itemId, token);
@@ -76,7 +76,7 @@ namespace ACA.DeliverySystem_Api.Controllers
             return Ok();
         }
 
-        [HttpDelete("/removeItemFromOrder")]
+        [HttpDelete("removeItemFromOrder")]
         public async Task<IActionResult> RemoveItemFromOrder([FromQuery] int orderId, [FromQuery] int itemId, CancellationToken token)
         {
             var result = await _orderService.RemoveItemFromOrder(orderId, itemId, token);
@@ -91,7 +91,7 @@ namespace ACA.DeliverySystem_Api.Controllers
             return Ok();
         }
 
-        [HttpGet("/payment")]
+        [HttpGet("payment")]
 
         public async Task<IActionResult> Pay([FromQuery] int orderId, [FromQuery] decimal amount, CancellationToken token)
         {
@@ -109,7 +109,7 @@ namespace ACA.DeliverySystem_Api.Controllers
         }
 
 
-        [HttpPost("/orderCompleted")]
+        [HttpPost("orderCompleted")]
 
         public async Task<IActionResult> OrderCompleted([FromQuery] int orderId, CancellationToken token)
         {

@@ -145,7 +145,7 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<OperationResult> RemoveItemFromOrder(int orderId, int itemId)
         {
-            var response = await _client.DeleteAsync($"Order/{orderId}/items/{itemId}");
+            var response = await _client.DeleteAsync($"removeItemFromOrder?orderId={orderId}&itemId={itemId}");
 
             if (response.IsSuccessStatusCode)
             {
