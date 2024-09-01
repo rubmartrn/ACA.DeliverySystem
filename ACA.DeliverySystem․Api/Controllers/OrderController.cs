@@ -126,7 +126,7 @@ namespace ACA.DeliverySystem_Api.Controllers
         }
 
 
-        [HttpPost("/cancelOrder")]
+        [HttpPost("cancelOrder")]
 
         public async Task<IActionResult> CancelOrder([FromQuery] int orderId, CancellationToken token)
         {
