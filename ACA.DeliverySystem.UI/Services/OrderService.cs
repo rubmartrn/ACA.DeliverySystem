@@ -3,7 +3,6 @@
 using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Pages;
 using System.Net.Http.Json;
-using static MudBlazor.Colors;
 
 namespace ACA.DeliverySystem.UI.Services
 {
@@ -22,9 +21,24 @@ namespace ACA.DeliverySystem.UI.Services
             return await _client.GetFromJsonAsync<List<Order>>("Order");
         }
 
-        public async Task<Order> GetById(int id)
+        public async Task<OrderViewModel> GetById(int id)
         {
-            return await _client.GetFromJsonAsync<Order>($"Order/{id}");
+            try
+            {
+                return await _client.GetFromJsonAsync<OrderViewModel>($"Order/{id}");
+
+            }
+            catch (HttpRequestException m)
+            {
+                Console.WriteLine(m.Message);
+                return new OrderViewModel();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new OrderViewModel();
+
+            }
         }
 
         public async Task<OperationResult> Create(OrderAddModel model)
@@ -115,7 +129,7 @@ namespace ACA.DeliverySystem.UI.Services
             }
             else
             {
-            
+
                 return new OperationResult
                 {
                     Success = false,
@@ -146,7 +160,7 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<OperationResult> OrderCompleted(int orderId)
         {
-            var response = await _client.PostAsync($"Order/{orderId}/complete",null);
+            var response = await _client.PostAsync($"Order/{orderId}/complete", null);
 
             if (response.IsSuccessStatusCode)
             {
