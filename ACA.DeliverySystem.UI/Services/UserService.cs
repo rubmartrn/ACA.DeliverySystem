@@ -1,8 +1,7 @@
 ﻿using ACA.DeliverySystem.UI.Models;
-using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ACA.DeliverySystem.UI.Services
 {
@@ -81,10 +80,6 @@ namespace ACA.DeliverySystem.UI.Services
             };
 
             return await _client.GetFromJsonAsync<List<OrderViewModel>>($"User/{userId}/orders", options);
-         
-           
-
-
 
 
         }
@@ -93,20 +88,35 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<OperationResult> AddOrderInUser(int userId, OrderAddModel model)
         {
-            var response = await _client.PostAsJsonAsync($"User/{userId}/orders", model);
+            try
+            {
+                var response = await _client.PostAsJsonAsync($"User/{userId}/orders", model);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return OperationResult.Ok();
-            }
-            else
-            {
-                return new OperationResult
+                if (response.IsSuccessStatusCode)
                 {
-                    Success = false,
-                    ErrorMessage = "Failed to add order."
-                };
+                    return OperationResult.Ok();
+                }
+                else
+                {
+                    return new OperationResult
+                    {
+                        Success = false,
+                        ErrorMessage = "Failed to add order."
+                    };
+                }
             }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return OperationResult.Fail("Fail");
+            }
+            catch (Exception m)
+            {
+
+                Console.WriteLine(m.Message);
+                return OperationResult.Fail("Fail");
+            }
+
         }
 
         public async Task<OperationResult<UserViewModel>> SignIn(string email)

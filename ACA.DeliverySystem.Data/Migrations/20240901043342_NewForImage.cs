@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ACA.DeliverySystem.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class NewForImage : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

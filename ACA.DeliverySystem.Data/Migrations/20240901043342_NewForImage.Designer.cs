@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACA.DeliverySystem.Data.Migrations
 {
     [DbContext(typeof(DeliveryDbContext))]
-    [Migration("20240829195020_Initial")]
-    partial class Initial
+    [Migration("20240901043342_NewForImage")]
+    partial class NewForImage
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
