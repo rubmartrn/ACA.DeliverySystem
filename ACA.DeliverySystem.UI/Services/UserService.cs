@@ -1,5 +1,4 @@
 ﻿using ACA.DeliverySystem.UI.Models;
-using ACA.DeliverySystem.UI.Pages;
 using System.Net.Http.Json;
 
 namespace ACA.DeliverySystem.UI.Services
@@ -50,7 +49,7 @@ namespace ACA.DeliverySystem.UI.Services
         }
 
 
-        public async  Task<OperationResult> Delete(int id)
+        public async Task<OperationResult> Delete(int id)
         {
             var response = await _client.DeleteAsync($"User?id={id}");
 
@@ -69,9 +68,9 @@ namespace ACA.DeliverySystem.UI.Services
         }
 
 
-        public async Task<IEnumerable<Order>> GetUserOrders(int userId)
+        public async Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId)
         {
-            return await _client.GetFromJsonAsync<List<Order>>($"User/{userId}/orders");
+            return await _client.GetFromJsonAsync<List<OrderViewModel>>($"User/{userId}/orders");
         }
 
 
@@ -89,11 +88,32 @@ namespace ACA.DeliverySystem.UI.Services
                 return new OperationResult
                 {
                     Success = false,
-                    ErrorMessage = "Failed to delete the user."
+                    ErrorMessage = "Failed to add order."
                 };
             }
         }
 
+        public async Task<OperationResult<UserViewModel>> SignIn(string email)
+        {
+            var response = await _client.GetAsync($"User/by-email/{email}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var user = await response.Content.ReadFromJsonAsync<UserViewModel>();
+                return OperationResult<UserViewModel>.Ok(user);
+            }
+            else
+            {
+                return OperationResult<UserViewModel>.Fail("User not found");
+            }
+        }
+
+        public async Task<UserViewModel> GetUserById(int id)
+        {
+
+            return await _client.GetFromJsonAsync<UserViewModel>($"User/{id}");
+
+        }
 
     }
 }

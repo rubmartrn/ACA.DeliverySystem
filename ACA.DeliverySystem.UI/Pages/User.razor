@@ -1,5 +1,135 @@
-﻿<h3>User</h3>
+﻿@page "/User/{userId:int}"
+@using ACA.DeliverySystem.UI.Models
+@using ACA.DeliverySystem.UI.Services
+@inject NavigationManager NavigationManager
+@inherits UserBase
 
-@code {
+<PageTitle>User Details</PageTitle>
 
-}
+
+<style>
+    body {
+        background-image: url('https://plus.unsplash.com/premium_photo-1681488262364-8aeb1b6aac56?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .details-container {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 30px;
+        border-radius: 10px;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        max-width: 400px;
+        margin: auto;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        color: #00bfff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .detail {
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+        .detail strong {
+            color: cornflowerblue;
+        }
+
+    .order-form {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+    }
+
+        .order-form input, .order-form button {
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .order-form button {
+            background-color: cornflowerblue;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .order-form button:hover {
+                background-color: cornflowerblue;
+            }
+
+    .edit-button {
+        background-color: #00bfff; 
+        color: white; 
+        padding: 10px 20px; 
+        font-size: 16px;
+        font-weight: bold; 
+        border: none; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        transition: background-color 0.3s ease, transform 0.2s ease; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    }
+
+        .edit-button:hover {
+            background-color: #007acc; 
+            transform: scale(1.05); 
+        }
+
+        .edit-button:active {
+            background-color: #005f99;
+            transform: scale(1); 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+        }
+
+</style>
+
+
+<div class="details-container">
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <h1>@_errorMessage</h1>
+
+    }
+    else if (_userModel != null)
+    {
+        <h1>User Details</h1>
+        <div class="detail"><strong>Name:</strong> @_userModel.Name</div>
+        <div class="detail"><strong>Surname:</strong> @_userModel.SurName</div>
+        <div class="detail"><strong>Email:</strong> @_userModel.Email</div>
+
+        <!-- Edit Button -->
+        <button @onclick="EditUser" class="edit-button">Edit your data</button>
+
+        <!-- Add Order Form -->
+        <div class="order-form">
+            <h2>Add Order</h2>
+            <EditForm Model="@_orderModel" OnValidSubmit="HandleAddOrder">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <InputText id="orderName" @bind-Value="_orderModel.Name" placeholder="Order Name" required />
+                <button type="submit">Add Order</button>
+            </EditForm>
+        </div>
+    }
+    else
+    {
+        <h1>Loading......</h1>
+    }
+</div>
+
+
+
+

@@ -1,7 +1,10 @@
 ﻿using ACA.DeliverySystem.Business.Models;
 using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Pages;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace ACA.DeliverySystem.UI.Services
 {
@@ -17,16 +20,45 @@ namespace ACA.DeliverySystem.UI.Services
 
 
         //Read
-        public async Task<IEnumerable<Item>> GetAll()
+        /*public async Task<List<ItemViewModel>> GetAll()
         {
-            return await _client.GetFromJsonAsync<List<Item>>("Item");
+            var response = await _client.GetAsync("http://localhost:5000/api/Item");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<ItemViewModel>>();
+            }
+            else
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Failed to retrieve items: {response.StatusCode}, Content: {content}");
+            }
+        }*/
+
+
+
+
+        public async Task<IEnumerable<ItemViewModel>> GetAll()
+        {
+            try
+            {
+                return await _client.GetFromJsonAsync<List<ItemViewModel>>("Item");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching items: {ex.Message}");
+                return new List<ItemViewModel>();
+            }
         }
+
+
+
 
         public async Task<Item> GetbyId(int id)
         {
             return await _client.GetFromJsonAsync<Item>($"Item/{id}");
         }
-     
+
         //Create
         public async Task<OperationResult> Add(ItemAddModel model)
         {
@@ -63,7 +95,7 @@ namespace ACA.DeliverySystem.UI.Services
 
         //Update
 
-        public async  Task<OperationResult> Update(int id, ItemUpdateModel model)
+        public async Task<OperationResult> Update(int id, ItemUpdateModel model)
         {
             var response = await _client.PutAsJsonAsync($"Item?id={id}", model);
 

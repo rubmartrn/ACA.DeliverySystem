@@ -20,6 +20,11 @@ namespace ACA.DeliverySystem.Data.Repository
             return await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<User> GetByEmail(string email, CancellationToken token)
+        {
+            return await _context.Users.SingleOrDefaultAsync(x => x.Email == email);
+        }
+
         public async Task Add(User user, CancellationToken token)
         {
             _context.Users.Add(user);

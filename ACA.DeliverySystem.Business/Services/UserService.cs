@@ -45,6 +45,12 @@ namespace ACA.DeliverySystem.Business.Services
             return _mapper.Map<UserViewModel>(user);
         }
 
+        public async Task<UserViewModel> GetByEmail(string email, CancellationToken token)
+        {
+            var user = await _uow.UserRepository.GetByEmail(email, token);
+            return _mapper.Map<UserViewModel>(user);
+        }
+
         public async Task<OperationResult> Update(int id, UserUpdateModel model, CancellationToken token)
         {
             var oldUser = await _uow.UserRepository.GetById(id, token);
@@ -53,7 +59,7 @@ namespace ACA.DeliverySystem.Business.Services
                 return OperationResult.Error($"User with id {id} not found.", ErrorType.NotFound);
             }
             oldUser.Name = model.Name;
-            oldUser.SureName = model.SureName;
+            oldUser.SurName = model.SurName;
             await _uow.UserRepository.Update(oldUser, token);
             await _uow.Save(token);
             return OperationResult.Ok();

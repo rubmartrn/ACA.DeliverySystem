@@ -10,7 +10,7 @@ namespace ACA.DeliverySystem.Data.Configurations
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name).IsRequired();
-            builder.Property(x => x.SureName).IsRequired();
+            builder.Property(x => x.SurName).IsRequired();
             builder.Property(x => x.Email).IsRequired();
 
         }
