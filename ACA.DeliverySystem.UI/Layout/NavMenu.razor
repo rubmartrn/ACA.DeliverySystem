@@ -20,8 +20,8 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link custom-nav-link" href="order">
-                <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" /> Orders
+            <NavLink class="nav-link custom-nav-link" href="@($"User/{userId}/orders")">
+                Orders
             </NavLink>
         </div>
 
@@ -37,6 +37,11 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+}
+
+@code {
+    [Parameter]
+    public int userId { get; set; }
 }
 
 

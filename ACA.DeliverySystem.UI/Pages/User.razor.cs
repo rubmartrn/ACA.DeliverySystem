@@ -41,26 +41,14 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected async Task HandleAddOrder()
         {
-            try
+            var result = await UserService.AddOrderInUser(userId, _orderModel!);
+            if (result.Success)
             {
-                var result = await UserService.AddOrderInUser(userId, _orderModel!);
-                if (result.Success)
-                {
-                    NavigationManager.NavigateTo($"User/{userId}/orders");
-                }
-                else
-                {
-                    _errorMessage = result.ErrorMessage;
-                }
+                NavigationManager.NavigateTo($"User/{userId}/orders");
             }
-            catch (HttpRequestException m)
+            else
             {
-                Console.WriteLine(m.Message);
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
+                _errorMessage = result.ErrorMessage;
             }
 
         }
