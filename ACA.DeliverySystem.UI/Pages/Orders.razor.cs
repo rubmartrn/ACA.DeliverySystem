@@ -10,7 +10,7 @@ namespace ACA.DeliverySystem.UI.Pages
         public int userId { get; set; }
         protected string _errorMessage = default!;
         protected IEnumerable<OrderViewModel> orders { get; set; } = new List<OrderViewModel>();
-        protected CancellationTokenSource CTokenS { get; set; } = default!;
+        protected CancellationToken Token { get; set; } = default!;
 
         [Inject]
         protected UserService UserService { get; set; } = default!;
@@ -20,7 +20,7 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            orders = await UserService.GetUserOrders(userId, CTokenS.Token);
+            orders = await UserService.GetUserOrders(userId, Token);
         }
     }
 }

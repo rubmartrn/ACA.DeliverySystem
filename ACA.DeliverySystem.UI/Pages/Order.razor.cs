@@ -13,6 +13,7 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected OrderViewModel _orderModel { get; set; } = new OrderViewModel();
 
+        protected CancellationToken Token { get; set; } = default!;
 
         [Inject]
         protected OrderService OrderService { get; set; } = default!;
@@ -25,7 +26,7 @@ namespace ACA.DeliverySystem.UI.Pages
 
             try
             {
-                _orderModel = await OrderService.GetById(orderId);
+                _orderModel = await OrderService.GetById(orderId, Token);
 
             }
             catch (HttpRequestException m)
