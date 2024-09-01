@@ -14,6 +14,7 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                  .ForMember(d => d.Date, d => d.MapFrom(s => s.Date))
                  .ForMember(d => d.ProgressEnum, d => d.MapFrom(s => s.ProgressEnum))
                  .ForMember(d => d.PaidAmount, d => d.MapFrom(s => s.PaidAmount))
+                 .ForMember(d => d.AmountToPay, d => d.MapFrom(s => s.AmountToPay))
                  .ForMember(d => d.UserId, d => d.MapFrom(s => s.UserId))
                  .ForMember(d => d.Items, d => d.MapFrom(s => s.Items))
                  .PreserveReferences();

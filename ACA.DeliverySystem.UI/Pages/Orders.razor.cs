@@ -21,7 +21,6 @@ namespace ACA.DeliverySystem.UI.Pages
         protected override async Task OnInitializedAsync()
         {
             orders = await UserService.GetUserOrders(userId);
-
         }
     }
 }

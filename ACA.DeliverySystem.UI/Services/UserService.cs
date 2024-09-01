@@ -1,5 +1,4 @@
-﻿using ACA.DeliverySystem.UI.Coneverters;
-using ACA.DeliverySystem.UI.Models;
+﻿using ACA.DeliverySystem.UI.Models;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -77,13 +76,15 @@ namespace ACA.DeliverySystem.UI.Services
             {
                 var options = new JsonSerializerOptions
                 {
-                    Converters = { new JsonStringEnumConverter(),
-                               new CustomDateTimeConverter("yyyy-MM-dd") }
+                    Converters = { new JsonStringEnumConverter()
+                    //,
+                    //           new CustomDateTimeConverter("yyyy-MM-dd") 
+                    }
                 };
 
 
-                return await _client.GetFromJsonAsync<List<OrderViewModel>>($"User/{userId}/orders", options);
-
+                var orders = await _client.GetFromJsonAsync<List<OrderViewModel>>($"User/{userId}/orders", options);
+                return orders!;
             }
             catch (HttpRequestException m)
             {

@@ -16,6 +16,7 @@
         public DateOnly Date { get; private set; }
 
         public decimal PaidAmount { get; set; }
+        public decimal AmountToPay { get; set; }
 
         public ProgressEnum ProgressEnum { get; set; } = ProgressEnum.Created;
 
