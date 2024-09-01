@@ -12,6 +12,5 @@
         public ProgressEnum ProgressEnum { get; set; }
         public List<ItemViewModel> Items { get; set; } = new List<ItemViewModel>();
 
-        public string ImageUrl { get; set; }
     }
 }

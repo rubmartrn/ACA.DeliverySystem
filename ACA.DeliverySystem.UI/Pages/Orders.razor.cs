@@ -9,6 +9,8 @@ namespace ACA.DeliverySystem.UI.Pages
         [Parameter]
         public int userId { get; set; }
         protected string _errorMessage = default!;
+        protected IEnumerable<OrderViewModel> orders { get; set; } = new List<OrderViewModel>();
+
 
         [Inject]
         protected UserService UserService { get; set; } = default!;
@@ -16,19 +18,10 @@ namespace ACA.DeliverySystem.UI.Pages
         [Inject]
         protected NavigationManager NavigationManager { get; set; } = default!;
 
-        protected List<OrderViewModel> orders = default!;
-
         protected override async Task OnInitializedAsync()
         {
-            var result = await UserService.GetUserOrders(userId);
-            if (result != null)
-            {
-                orders = result.ToList();
-            }
-            else
-            {
-                _errorMessage = "Something went wrong...";
-            }
+            orders = await UserService.GetUserOrders(userId);
+
         }
     }
 }

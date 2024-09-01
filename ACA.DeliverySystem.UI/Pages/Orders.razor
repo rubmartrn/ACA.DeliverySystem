@@ -45,11 +45,11 @@
 <h3>Your Orders</h3>
 
 <div class="orders-container">
-    @if (orders == null)
+    @if (!orders.Any())
     {
         <p>Loading orders...</p>
     }
-    else if (orders.Count == 0)
+    else if (orders.Count() == 0)
     {
         <p>No orders found for this user.</p>
     }
@@ -58,7 +58,7 @@
         foreach (var order in orders)
         {
             <div class="order-item">
-                <h4>@order.Name</h4>
+                <p><strong>Name:</strong> @order.Name</p>
                 <p><strong>Date:</strong> @order.Date.ToString("d")</p>
                 <p><strong>Progress:</strong> @order.ProgressEnum.ToString()</p>
                 <p><strong>Paid Amount:</strong> @order.PaidAmount.ToString("C")</p>

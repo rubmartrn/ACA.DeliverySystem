@@ -1,4 +1,5 @@
-﻿using ACA.DeliverySystem.UI.Models;
+﻿using ACA.DeliverySystem.UI.Coneverters;
+using ACA.DeliverySystem.UI.Models;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -72,14 +73,30 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId)
         {
-
-            var options = new JsonSerializerOptions
+            try
             {
-                Converters = { new JsonStringEnumConverter() }
+                var options = new JsonSerializerOptions
+                {
+                    Converters = { new JsonStringEnumConverter(),
+                               new CustomDateTimeConverter("yyyy-MM-dd") }
+                };
 
-            };
 
-            return await _client.GetFromJsonAsync<List<OrderViewModel>>($"User/{userId}/orders", options);
+                return await _client.GetFromJsonAsync<List<OrderViewModel>>($"User/{userId}/orders", options);
+
+            }
+            catch (HttpRequestException m)
+            {
+                Console.WriteLine(m.Message);
+                return Enumerable.Empty<OrderViewModel>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Enumerable.Empty<OrderViewModel>();
+
+            }
+
 
 
         }
