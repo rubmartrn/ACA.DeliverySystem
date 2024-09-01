@@ -105,7 +105,7 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<OperationResult> CancelOrder(int id, CancellationToken token)
         {
-            var response = await _client.PostAsJsonAsync($"Order/cancelOrder?orderId={id}", new { });
+            var response = await _client.PostAsync($"Order/cancelOrder?orderId={id}", null, token);
 
 
             if (response.IsSuccessStatusCode)
@@ -126,7 +126,7 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<OperationResult> Delete(int id)
         {
-            var response = await _client.DeleteAsync($"Order/{id}");
+            var response = await _client.DeleteAsync($"Order?id={id}");
 
             if (response.IsSuccessStatusCode)
             {

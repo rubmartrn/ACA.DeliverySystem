@@ -1,6 +1,7 @@
 using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace ACA.DeliverySystem.UI.Pages
 {
@@ -23,7 +24,11 @@ namespace ACA.DeliverySystem.UI.Pages
         [Inject]
         protected NavigationManager NavigationManager { get; set; } = default!;
 
+        [Inject]
+        public IJSRuntime? JSRuntime { get; set; }
+
         protected override async Task OnInitializedAsync()
+
         {
 
             try
@@ -58,16 +63,16 @@ namespace ACA.DeliverySystem.UI.Pages
             }
             catch (HttpRequestException ex)
             {
-                errorMessage += ex.Message;
+                errorMessage = ex.Message;
             }
             catch (Exception m)
             {
-                errorMessage += m.Message;
+                errorMessage = m.Message;
             }
 
         }
 
-        public async Task RemoveItem(int orderId, int itemId)
+        protected async Task RemoveItem(int orderId, int itemId)
         {
             try
             {
@@ -83,13 +88,30 @@ namespace ACA.DeliverySystem.UI.Pages
             }
             catch (HttpRequestException ex)
             {
-                errorMessage += ex.Message;
+                errorMessage = ex.Message;
             }
             catch (Exception m)
             {
-                errorMessage += m.Message;
+                errorMessage = m.Message;
             }
         }
+        protected async Task DeleteOrder()
+        {
+            var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this order?");
+            if (confirmed)
+            {
+                var result = await OrderService.Delete(orderId);
+                if (result.Success)
+                {
+                    NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+                }
+                else
+                {
+                    errorMessage = "Failed to delete the order. Please try again.";
+                }
+            }
+        }
+
 
         protected async Task Pay()
         {

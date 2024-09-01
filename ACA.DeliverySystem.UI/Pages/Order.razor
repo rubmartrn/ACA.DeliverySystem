@@ -12,6 +12,7 @@
         max-width: 600px;
         margin: auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        position: relative;
     }
 
     .order-summary {
@@ -58,11 +59,11 @@
     }
 
     .pay-button,
-    .cancel-button {
+    .cancel-button,
+    .remove-button,
+    .delete-order-button {
         display: inline-block;
-        width: 100%;
-        padding: 10px 0;
-        margin-top: 10px;
+        padding: 10px 15px;
         border: none;
         border-radius: 5px;
         color: white;
@@ -74,68 +75,61 @@
     }
 
     .pay-button {
-        background-color: #27ae60;
+        background-color: #9b59b6;
         box-shadow: 0 4px 8px rgba(39, 174, 96, 0.5);
     }
 
         .pay-button:hover {
-            background-color: #1e8449;
+            background-color: #8e44ad;
             transform: scale(1.05);
             box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
         }
 
-        .pay-button:active {
-            background-color: #16a085;
-            transform: scale(1);
-            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.4);
-        }
-
     .cancel-button {
-        background-color: #e74c3c;
-        box-shadow: 0 4px 8px rgba(231, 76, 60, 0.5);
+        background-color: #DDA0DD;
+        box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6));
     }
 
         .cancel-button:hover {
-            background-color: #c0392b;
+            background-color: #BA55D3;
             transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(231, 76, 60, 0.6);
-        }
-
-        .cancel-button:active {
-            background-color: #a93226;
-            transform: scale(1);
-            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
         }
 
     .remove-button {
-        display: inline-block;
-        padding: 8px 12px;
-        border: none;
-        border-radius: 5px;
-        color: white;
-        background-color: #e74c3c;
-        font-weight: bold;
-        text-align: center;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        background-color: #E6E6FA;
+        box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
     }
 
         .remove-button:hover {
-            background-color: #c0392b;
+            background-color: #D8BFD8;
             transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.6);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
         }
 
-        .remove-button:active {
-            background-color: #a93226;
-            transform: scale(1);
-            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
+    .delete-order-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #D8BFD8;
+        box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
+    }
+
+        .delete-order-button:hover {
+            background-color: #C0C0C0;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
         }
 
-
+    .error-message {
+        color: red;
+        text-align: center;
+        margin-top: 10px;
+    }
 </style>
 
 <div class="order-detail-container">
+    <button @onclick="DeleteOrder" class="delete-order-button">Delete Order</button>
     @if (_orderModel == null)
     {
         <p>Loading order details...</p>
@@ -178,12 +172,11 @@
 
             <button @onclick="Pay" class="pay-button">Pay</button>
             <button @onclick="CancelOrder" class="cancel-button">Cancel Order</button>
-           
         </div>
 
         @if (!string.IsNullOrEmpty(errorMessage))
         {
-            <div class="error-message" style="color: red; text-align: center; margin-top: 10px;">
+            <div class="error-message">
                 @errorMessage
             </div>
         }
