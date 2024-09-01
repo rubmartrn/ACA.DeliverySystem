@@ -1,10 +1,20 @@
 ﻿@page "/item"
 @using ACA.DeliverySystem.UI.Models
 @using ACA.DeliverySystem.UI.Services
+@inject NavigationManager NavigationManager
 @inject ItemService ItemService
 @inject ISnackbar Snackbar
 
 <PageTitle>Items</PageTitle>
+
+<style>
+    body {
+        background-image: url('https://static.vecteezy.com/system/resources/previews/018/998/198/original/online-delivery-service-concept-perfect-for-landing-page-delivery-website-banner-and-background-free-vector.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+</style>
 
 <MudContainer>
     <MudGrid>
@@ -21,11 +31,11 @@
                         <MudCardMedia Image="@item.ImageUrl" Alt="Item Image" />
                         <MudCardContent>
                             <MudText Typo="Typo.h6">@item.Name</MudText>
-                                <MudText>@item.Description</MudText>
                                 <MudText Typo="Typo.subtitle1">@item.Price.ToString("C")</MudText>
                             </MudCardContent>
                             <MudCardActions>
                                 <MudButton OnClick="() => OrderItem(item)" Color="Color.Success">Order Now</MudButton>
+                                <MudButton OnClick="() => GoToItemDetail(item.Id)" Color="Color.Secondary">See More</MudButton>
                             </MudCardActions>
                         </MudCard>
                     </MudItem>
@@ -33,6 +43,7 @@
         }
     </MudGrid>
 </MudContainer>
+
 
 @code {
     private IEnumerable<ItemViewModel> items;
@@ -49,12 +60,13 @@
         }
     }
 
-  
+    private void GoToItemDetail(int itemId)
+    {
+        NavigationManager.NavigateTo($"/item/{itemId}");
+    }
 
     private void OrderItem(ItemViewModel item)
     {
-
-
         Snackbar.Add($"Ordering {item.Name}...", Severity.Success);
     }
 }

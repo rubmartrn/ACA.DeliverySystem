@@ -1,0 +1,77 @@
+﻿@page "/item/{itemId:int}"
+@using ACA.DeliverySystem.UI.Models
+@using ACA.DeliverySystem.UI.Services
+@inject ItemService ItemService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+<PageTitle>Item Details</PageTitle>
+
+
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="pa-4">
+    @if (item == null)
+    {
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    }
+    else
+    {
+        <MudGrid>
+            <!-- Left Side: Image -->
+            <MudItem xs="12" md="6">
+    <MudCard Class="pa-2" Style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <MudCardMedia Image="@item.ImageUrl" Alt="Item Image" Style="height: 500px; width: 50%; object-fit: contain; border-radius: 8px;" />
+    </MudCard>
+</MudItem>
+
+            <!-- Right Side: Details -->
+            <MudItem xs="12" md="6">
+                <MudText Typo="Typo.h4">@item.Name</MudText>
+                    <MudDivider Class="mb-3" />
+                    <MudText Typo="Typo.body1">@item.Description</MudText>
+                    <MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-2">@item.Price.ToString("C")</MudText>
+
+                    <MudGrid Class="mt-4">
+                        <MudItem xs="6">
+                            <MudButton FullWidth="true" OnClick="OrderItem" Color="Color.Success">Order Now</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudButton FullWidth="true" OnClick="GoBack" Color="Color.Secondary">Go Back</MudButton>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+    }
+</MudContainer>
+
+
+
+
+@code {
+    [Parameter]
+    public int itemId { get; set; }
+
+    private ItemViewModel item;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            item = await ItemService.GetbyId(itemId);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading item: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private void OrderItem()
+    {
+        Snackbar.Add($"Ordering {item.Name}...", Severity.Success);
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/item");
+    }
+}

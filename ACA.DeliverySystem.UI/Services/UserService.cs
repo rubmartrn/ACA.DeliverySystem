@@ -1,5 +1,8 @@
 ﻿using ACA.DeliverySystem.UI.Models;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace ACA.DeliverySystem.UI.Services
 {
@@ -70,7 +73,20 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId)
         {
-            return await _client.GetFromJsonAsync<List<OrderViewModel>>($"User/{userId}/orders");
+
+            var options = new JsonSerializerOptions
+            {
+                Converters = { new JsonStringEnumConverter() }
+
+            };
+
+            return await _client.GetFromJsonAsync<List<OrderViewModel>>($"User/{userId}/orders", options);
+         
+           
+
+
+
+
         }
 
 

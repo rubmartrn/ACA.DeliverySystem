@@ -54,9 +54,11 @@ namespace ACA.DeliverySystem.UI.Services
 
 
 
-        public async Task<Item> GetbyId(int id)
+        public async Task<ItemViewModel> GetbyId(int id)
         {
-            return await _client.GetFromJsonAsync<Item>($"Item/{id}");
+            var respons = await _client.GetFromJsonAsync<ItemViewModel>($"Item/{id}");
+
+            return respons;
         }
 
         //Create
@@ -107,6 +109,8 @@ namespace ACA.DeliverySystem.UI.Services
             return OperationResult.Fail(response.ReasonPhrase!);
 
         }
+
+       
 
     }
 }
