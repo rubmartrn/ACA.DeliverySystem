@@ -103,7 +103,7 @@ namespace ACA.DeliverySystem.UI.Services
         }
 
 
-        public async Task<OperationResult> CancelOrder(int id)
+        public async Task<OperationResult> CancelOrder(int id, CancellationToken token)
         {
             var response = await _client.PostAsJsonAsync($"Order/cancelOrder?orderId={id}", new { });
 

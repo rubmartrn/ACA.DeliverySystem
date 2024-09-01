@@ -11,6 +11,8 @@ namespace ACA.DeliverySystem.UI.Pages
         [Parameter]
         public decimal amountForPay { get; set; }
 
+        public string? errorMessage { get; set; }
+
         protected OrderViewModel _orderModel { get; set; } = new OrderViewModel();
 
         protected CancellationToken Token { get; set; } = default!;
@@ -42,14 +44,50 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected async Task CancelOrder()
         {
-            var result = await OrderService.CancelOrder(orderId);
-            if (result.Success)
+            try
             {
-                NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+                var result = await OrderService.CancelOrder(orderId, Token);
+                if (result.Success)
+                {
+                    NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+                }
+                else
+                {
+                    errorMessage = "Failed to cancel the order. Please try again.";
+                }
             }
-            else
+            catch (HttpRequestException ex)
             {
-                // Handle error message
+                errorMessage += ex.Message;
+            }
+            catch (Exception m)
+            {
+                errorMessage += m.Message;
+            }
+
+        }
+
+        public async Task RemoveItem(int orderId, int itemId)
+        {
+            try
+            {
+                var result = await OrderService.RemoveItemFromOrder(orderId, itemId);
+                if (result.Success)
+                {
+                    NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+                }
+                else
+                {
+                    errorMessage = "Failed to cancel the order. Please try again.";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                errorMessage += ex.Message;
+            }
+            catch (Exception m)
+            {
+                errorMessage += m.Message;
             }
         }
 
@@ -62,7 +100,7 @@ namespace ACA.DeliverySystem.UI.Pages
             }
             else
             {
-                // Handle error message
+                errorMessage = "Fail to pay.";
             }
         }
     }
