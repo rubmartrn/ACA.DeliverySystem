@@ -57,5 +57,14 @@ namespace ACA.DeliverySystem.UI.Pages
         {
             NavigationManager.NavigateTo($"/User/Edit/{userId}");
         }
+
+        protected void GoToUserOrders()
+        {
+            if (_userModel != null)
+            {
+                NavigationManager.NavigateTo($"User/{userId}/orders");
+            }
+        }
+
     }
 }

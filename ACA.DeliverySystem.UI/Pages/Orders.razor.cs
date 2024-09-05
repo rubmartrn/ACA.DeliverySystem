@@ -18,9 +18,18 @@ namespace ACA.DeliverySystem.UI.Pages
         [Inject]
         protected NavigationManager NavigationManager { get; set; } = default!;
 
+        protected bool _isLoading = true;
+
         protected override async Task OnInitializedAsync()
         {
-            orders = await UserService.GetUserOrders(userId, Token);
+            try
+            {
+                orders = await UserService.GetUserOrders(userId, Token);
+            }
+            finally
+            {
+                _isLoading = false;
+            }
         }
     }
 }

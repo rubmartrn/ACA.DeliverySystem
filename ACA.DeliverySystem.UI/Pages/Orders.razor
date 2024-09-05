@@ -76,11 +76,11 @@
 <h3>Your Orders</h3>
 
 <div class="orders-container">
-    @if (!orders.Any())
+    @if (_isLoading)
     {
         <p>Loading orders...</p>
     }
-    else if (orders.Count() == 0)
+    else if (orders.Count() == 0 || orders == null)
     {
         <p>No orders found for this user.</p>
     }
