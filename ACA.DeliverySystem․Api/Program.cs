@@ -1,6 +1,7 @@
 using ACA.DeliverySystem.Business.MappingProfiles;
 using ACA.DeliverySystem.Business.Services;
 using ACA.DeliverySystem.Data;
+using ACA.DeliverySystem_Api;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,9 +24,9 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 
-
+var settings = builder.Configuration.Get<AppSettings>();
 builder.Services.AddDbContext<DeliveryDbContext>(
-options => options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=ACA.DS"));
+options => options.UseSqlServer(settings.EntitySettings.ACAdb));
 
 builder.Services.AddAutoMapper(typeof(ItemProfileDTO).Assembly);
 builder.Services.AddAutoMapper(typeof(ItemProfile).Assembly);
