@@ -1,15 +1,117 @@
 ﻿@page "/"
 
 <PageTitle>Home</PageTitle>
-
+@*Keyframes by https://animate.style/*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 <style>
     body {
-        background-image: url('https://static.vecteezy.com/system/resources/previews/018/998/198/original/online-delivery-service-concept-perfect-for-landing-page-delivery-website-banner-and-background-free-vector.jpg');
+        background-image: url('https://img.freepik.com/free-photo/design-space-paper-textured-background_53876-34033.jpg');
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center center;
     }
 </style>
 
-<h1>WELCOME OUR DELIVERY SYSTEM.</h1>
+<style type="text/css">
 
+
+    .bounceIn {
+        opacity: 0;
+        animation-delay: 0.5s;
+        animation-duration: 0.5s;
+        animation-name: bounceIn;
+        animation-fill-mode: forwards;
+    }
+
+    .bounceOut {
+        animation-duration: 0.5s;
+        animation-name: bounceOut;
+        animation-fill-mode: forwards;
+    }
+
+    .backInDown {
+        opacity: 0;
+        animation-delay: 0.5s;
+        animation-duration: 0.5s;
+        animation-name: backInDown;
+        animation-fill-mode: forwards;
+    }
+
+    .backOutDown {
+        animation-duration: 0.5s;
+        animation-name: backOutDown;
+        animation-fill-mode: forwards;
+    }
+
+    .rotateIn {
+        opacity: 0;
+        animation-delay: 0.5s;
+        animation-duration: 0.5s;
+        animation-name: rotateIn;
+        animation-fill-mode: forwards;
+    }
+
+    .rotateOut {
+        animation-duration: 0.5s;
+        animation-name: rotateOut;
+        animation-fill-mode: forwards;
+    }
+
+    .carousel-image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px; /* Match the Carousel height */
+        overflow: hidden;
+    }
+
+    .carousel-image {
+        width: auto;
+        height: 100%; /* Ensure the height fits, while the width adjusts accordingly */
+        object-fit: cover; /* Ensures the image covers the container without distortion */
+    }
+
+</style>
+
+<MudCarousel Class="mud-width-full" Style="height:650px; width:100%;" TData="object" AutoCycle="true" CycleInterval="3000">
+    <MudCarouselItem Transition="Transition.Slide">
+        <div class="d-flex" style="height:100%">
+            <video class="mx-auto my-auto" style="height: 100%; width: 100%;" autoplay loop muted>
+                <source src="https://marketplace.canva.com/EAFNhFEtJIc/3/0/800w/canva-EMMeOIWnSHs.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Fade">
+        <div class="d-flex" style="height:100%">
+            <video class="mx-auto my-auto" style="height: 100%; width: 100%;" autoplay loop muted>
+                <source src="https://marketplace.canva.com/EAFNhFEtJIc/3/1/800w/canva-qlOEoVGHUz0.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem  Transition="Transition.Custom" CustomTransitionEnter="bounceIn" CustomTransitionExit="bounceOut">
+        <div class="d-flex" style="height:100%">
+            <video class="mx-auto my-auto" style="height: 100%; width: 100%;" autoplay loop muted>
+                <source src="https://marketplace.canva.com/EAFNhFEtJIc/3/2/800w/canva-mCRVaOcxojM.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Custom" CustomTransitionEnter="backInDown" CustomTransitionExit="backOutDown">
+        <div class="d-flex" height:100%>
+            <video class="mx-auto my-auto" style="height: 100%; width: 100%;" autoplay loop muted>
+                <source src="https://marketplace.canva.com/EAFNhFEtJIc/3/3/800w/canva-ZJHUN_DvTck.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Custom" CustomTransitionEnter="rotateIn" CustomTransitionExit="rotateOut">
+        <div class="d-flex" height:100%>
+            <video class="mx-auto my-auto" style="height: 100%; width: 100%;" autoplay loop muted>
+                <source src="https://marketplace.canva.com/EAFNhFEtJIc/3/4/800w/canva-I__MCrF9k6A.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </MudCarouselItem>
+</MudCarousel>

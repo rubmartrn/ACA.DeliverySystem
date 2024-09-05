@@ -1,96 +1,49 @@
-﻿<div class="top-row ps-3 navbar navbar-dark custom-navbar">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Delivery System</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿@inject NavigationManager Navigation
 
-<div class="@NavMenuCssClass nav-scrollable custom-nav-menu" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link custom-nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu custom-nav-icon" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link custom-nav-link" href="item">
-                <MudIcon Icon="@Icons.Material.Filled.Api" Title="API" /> Items
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link custom-nav-link" href="@($"User/{userId}/orders")">
-                Orders
-            </NavLink>
-        </div>
+<MudDrawerContainer>
+    <MudDrawer @bind-Open="_drawerOpen" Anchor="Anchor.Left" Elevation="1" Clipped="true">
+        <MudNavMenu>
+            <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All" OnClick="CloseDrawer">Home</MudNavLink>
+            <MudNavLink Href="item" Icon="@Icons.Material.Filled.List" OnClick="CloseDrawer">Items</MudNavLink>
+            <MudNavLink Href="order" Icon="@Icons.Material.Filled.ShoppingCart" OnClick="CloseDrawer">Orders</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
 
-    </nav>
-</div>
+
+    <MudMainContent>
+        <MudAppBar Elevation="1">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="ToggleDrawer" Edge="Edge.Start" Color="Color.Inherit" />
+            <MudText Typo="Typo.h6">Delivery System</MudText>
+        </MudAppBar>
+    </MudMainContent>
+</MudDrawerContainer>
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool _drawerOpen = false;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
+    private void ToggleDrawer()
     {
-        collapseNavMenu = !collapseNavMenu;
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void CloseDrawer()
+    {
+        _drawerOpen = false;
+    }
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += HandleLocationChanged;
+    }
+
+    private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        _drawerOpen = false;  // Ensure drawer closes on navigation
+        StateHasChanged();    // Force UI update
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= HandleLocationChanged;
     }
 }
-
-@code {
-    [Parameter]
-    public int userId { get; set; }
-}
-
-
-<style>
-    .custom-navbar {
-        background: linear-gradient(90deg, #0052D4, #4364F7, #6FB1FC);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        color: #fff;
-    }
-
-        .custom-navbar .navbar-brand {
-            font-family: 'Arial', sans-serif;
-            font-size: 1.5rem;
-            color: #fff;
-            font-weight: bold;
-        }
-
-        .custom-navbar .navbar-toggler {
-            border: none;
-        }
-
-    .custom-nav-menu {
-        background-color: #1e2a38;
-        color: #fff;
-    }
-
-    .custom-nav-link {
-        color: #c2d9ff;
-        font-size: 1.2rem;
-        padding: 0.75rem 1.25rem;
-        border-radius: 5px;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-        .custom-nav-link:hover {
-            background-color: #3a4a61;
-            color: #ffffff;
-        }
-
-    .custom-nav-icon {
-        margin-right: 10px;
-        font-size: 1.5rem;
-        color: #a0c0ff;
-    }
-
-    .custom-nav-link.active {
-        background-color: #2a3a4d;
-        color: #ffffff;
-        font-weight: bold;
-    }
-
-</style>
