@@ -10,6 +10,10 @@ namespace ACA.DeliverySystem.UI.Pages
     {
         [Parameter]
         public int orderId { get; set; }
+
+        [Parameter]
+
+        public int ItemId { get; set; }
         [Parameter]
         public decimal amountForPay { get; set; }
 
@@ -131,6 +135,10 @@ namespace ACA.DeliverySystem.UI.Pages
             NavigationManager.NavigateTo($"/ItemsList/{_orderModel.Id}");
         }
 
+        protected void GoToItemDetail(int itemId)
+        {
+            NavigationManager.NavigateTo($"Item/{itemId}");
+        }
 
         protected async Task Pay()
         {

@@ -4,12 +4,14 @@ using MudBlazor;
 
 namespace ACA.DeliverySystem.UI.Pages
 {
-    public class ItemForUserBase : ComponentBase
+    public class ItemDetailForUserBase : ComponentBase
     {
-        protected IEnumerable<ItemViewModel> items;
-
+        [Parameter]
+        public int itemId { get; set; }
         [Parameter]
         public int orderId { get; set; }
+
+        protected ItemViewModel? item;
         [Inject]
         protected ItemService ItemService { get; set; } = default!;
 
@@ -25,20 +27,15 @@ namespace ACA.DeliverySystem.UI.Pages
         {
             try
             {
-                items = await ItemService.GetAll();
+                item = await ItemService.GetbyId(itemId);
             }
             catch (Exception ex)
             {
-                Snackbar.Add($"Error loading items: {ex.Message}", Severity.Error);
+                Snackbar.Add($"Error loading item: {ex.Message}", Severity.Error);
             }
         }
 
-        protected void GoToItemDetail(int itemId)
-        {
-            NavigationManager.NavigateTo($"/itemForUser/{itemId}");
-        }
-
-        protected async Task OrderItem(ItemViewModel item)
+        protected async Task OrderItem()
         {
             var response = await OrderService.AddItemInOrder(orderId, item.Id);
             if (response.Success)
@@ -50,6 +47,11 @@ namespace ACA.DeliverySystem.UI.Pages
             {
                 Snackbar.Add($"Failed to order {item.Name}: {response.ErrorMessage}", Severity.Error);
             }
+        }
+
+        protected void GoBack()
+        {
+            NavigationManager.NavigateTo($"/ItemsList/{orderId}");
         }
     }
 }

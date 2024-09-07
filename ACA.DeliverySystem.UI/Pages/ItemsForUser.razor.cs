@@ -40,7 +40,7 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected void GoToItemDetail(int itemId)
         {
-            NavigationManager.NavigateTo($"/itemForUser/{itemId}");
+            NavigationManager.NavigateTo($"ItemDetailForUser/{itemId}/{orderId}");
         }
 
         protected async void OrderItem(ItemViewModel item)
@@ -56,6 +56,11 @@ namespace ACA.DeliverySystem.UI.Pages
                 Snackbar.Add($"Failed to order {item.Name}: {response.ErrorMessage}", Severity.Error);
             }
 
+        }
+
+        protected void GoBackToUserOrder()
+        {
+            NavigationManager.NavigateTo($"/Order/{orderId}");
         }
     }
 }

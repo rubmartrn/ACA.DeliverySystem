@@ -157,6 +157,9 @@
                         <button @onclick="() => RemoveItem(item.Id, orderId)" class="remove-button">
                             Remove Item
                         </button>
+                        <button @onclick="() => GoToItemDetail(item.Id)" class="pay-button">
+                            View Item Details
+                        </button>
                     </li>
                 }
             </ul>
