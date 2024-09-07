@@ -166,12 +166,15 @@
             <p>No items in this order.</p>
         }
 
+        <button @onclick="AddItems" class="pay-button">Add Items</button>
+
         <div class="payment-section">
             <label for="paymentAmount">Enter Payment Amount:</label>
             <InputNumber @bind-Value="amountForPay" id="amountForPay" />
 
             <button @onclick="Pay" class="pay-button">Pay</button>
             <button @onclick="CancelOrder" class="cancel-button">Cancel Order</button>
+            <button @onclick="GoBackToOrders" class="cancel-button">Go Back</button>
         </div>
 
         @if (!string.IsNullOrEmpty(errorMessage))

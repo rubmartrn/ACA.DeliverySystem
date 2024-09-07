@@ -83,7 +83,7 @@ namespace ACA.DeliverySystem.UI.Pages
                 }
                 else
                 {
-                    errorMessage = "Failed to cancel the order. Please try again.";
+                    errorMessage = "Failed to remove the item. Please try again.";
                 }
             }
             catch (HttpRequestException ex)
@@ -110,6 +110,16 @@ namespace ACA.DeliverySystem.UI.Pages
                     errorMessage = "Failed to delete the order. Please try again.";
                 }
             }
+        }
+
+        protected void GoBackToOrders()
+        {
+            NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+        }
+
+        protected void AddItems()
+        {
+            NavigationManager.NavigateTo($"/ItemsList/{_orderModel.Id}");
         }
 
 

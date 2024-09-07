@@ -1,9 +1,10 @@
-﻿@page "/item"
+﻿@page "/ItemsList/{orderId:int}"
 @using ACA.DeliverySystem.UI.Models
 @using ACA.DeliverySystem.UI.Services
 @inject NavigationManager NavigationManager
 @inject ItemService ItemService
 @inject ISnackbar Snackbar
+@inherits ItemsForUserBase
 
 <PageTitle>Items</PageTitle>
 
@@ -45,28 +46,4 @@
 </MudContainer>
 
 
-@code {
-    private IEnumerable<ItemViewModel> items;
 
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            items = await ItemService.GetAll();
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Error loading items: {ex.Message}", Severity.Error);
-        }
-    }
-
-    private void GoToItemDetail(int itemId)
-    {
-        NavigationManager.NavigateTo($"/item/{itemId}");
-    }
-
-    private void OrderItem(ItemViewModel item)
-    {
-        NavigationManager.NavigateTo("/signin");
-    }
-}

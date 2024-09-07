@@ -67,7 +67,7 @@
 
     private void OrderItem()
     {
-        Snackbar.Add($"Ordering {item.Name}...", Severity.Success);
+        NavigationManager.NavigateTo("/signin");
     }
 
     private void GoBack()
