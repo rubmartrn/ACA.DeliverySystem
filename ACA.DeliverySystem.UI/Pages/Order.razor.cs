@@ -2,6 +2,7 @@ using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using MudBlazor;
 
 namespace ACA.DeliverySystem.UI.Pages
 {
@@ -26,6 +27,9 @@ namespace ACA.DeliverySystem.UI.Pages
 
         [Inject]
         public IJSRuntime? JSRuntime { get; set; }
+
+        [Inject]
+        protected ISnackbar Snackbar { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
 
@@ -54,11 +58,12 @@ namespace ACA.DeliverySystem.UI.Pages
                 var result = await OrderService.CancelOrder(orderId, Token);
                 if (result.Success)
                 {
+                    Snackbar.Add("Order canceled", Severity.Success);
                     NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
                 }
                 else
                 {
-                    errorMessage = "Failed to cancel the order. Please try again.";
+                    Snackbar.Add("Failed to cancel order", Severity.Error);
                 }
             }
             catch (HttpRequestException ex)
@@ -79,11 +84,13 @@ namespace ACA.DeliverySystem.UI.Pages
                 var result = await OrderService.RemoveItemFromOrder(orderId, itemId);
                 if (result.Success)
                 {
+                    Snackbar.Add("Item removed", Severity.Success);
                     NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
                 }
                 else
                 {
                     errorMessage = "Failed to remove the item. Please try again.";
+                    Snackbar.Add("Failed to remove item", Severity.Error);
                 }
             }
             catch (HttpRequestException ex)
@@ -104,10 +111,12 @@ namespace ACA.DeliverySystem.UI.Pages
                 if (result.Success)
                 {
                     NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+                    Snackbar.Add("Order deleted", Severity.Success);
                 }
                 else
                 {
                     errorMessage = "Failed to delete the order. Please try again.";
+                    Snackbar.Add($"Can't delete order.", Severity.Warning);
                 }
             }
         }

@@ -4,17 +4,12 @@ using MudBlazor;
 
 namespace ACA.DeliverySystem.UI.Pages
 {
-    public class ItemsForUserBase : ComponentBase
+    public class ItemForUserBase : ComponentBase
     {
         protected IEnumerable<ItemViewModel> items;
 
         [Parameter]
         public int orderId { get; set; }
-
-        [Parameter]
-
-        public int itemId { get; set; }
-
         [Inject]
         protected ItemService ItemService { get; set; } = default!;
 
@@ -43,7 +38,7 @@ namespace ACA.DeliverySystem.UI.Pages
             NavigationManager.NavigateTo($"/itemForUser/{itemId}");
         }
 
-        protected async void OrderItem(ItemViewModel item)
+        protected async Task OrderItem(ItemViewModel item)
         {
             var response = await OrderService.AddItemInOrder(orderId, item.Id);
             if (response.Success)
@@ -55,7 +50,6 @@ namespace ACA.DeliverySystem.UI.Pages
             {
                 Snackbar.Add($"Failed to order {item.Name}: {response.ErrorMessage}", Severity.Error);
             }
-
         }
     }
 }

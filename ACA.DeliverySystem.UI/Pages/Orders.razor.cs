@@ -31,5 +31,10 @@ namespace ACA.DeliverySystem.UI.Pages
                 _isLoading = false;
             }
         }
+
+        protected void NavigateToUserPage()
+        {
+            NavigationManager.NavigateTo($"/User/{userId}");
+        }
     }
 }

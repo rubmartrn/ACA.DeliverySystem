@@ -37,6 +37,10 @@ namespace ACA.DeliverySystem.Data.Repository
             {
                 return OperationResult.Error($"Order with id {id} not found.", ErrorType.NotFound);
             }
+            if (order.Items != null)
+            {
+                return OperationResult.Error($"Can't delete order. It have items in it.", ErrorType.BadRequest);
+            }
             _context.Orders.Remove(order);
             return OperationResult.Ok();
         }
