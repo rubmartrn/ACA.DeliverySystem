@@ -1,75 +1,190 @@
-﻿@page "/order"
-@using ACA.DeliverySystem.UI.Models
-@using ACA.DeliverySystem.UI.Services
-@inject OrderService OrderService
-@inject ISnackbar Snackbar
+﻿@page "/Order/{orderId:int}"
+@inherits OrderDetailBase
 
-<h3>Order</h3>
+<PageTitle>Order Details</PageTitle>
 
 <style>
-    body {
-        background-image: url('https://plus.unsplash.com/premium_photo-1678281888592-8ad623bb39e9?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
+    .order-detail-container {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        position: relative;
+    }
+
+    .order-summary {
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .order-summary p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .order-summary strong {
+            color: #9b59b6;
+        }
+
+    .order-items-list {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .order-item {
+        margin-bottom: 15px;
+        padding: 15px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .order-item p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .order-item strong {
+            color: #3498db;
+        }
+
+    .payment-section {
+        margin-top: 20px;
+    }
+
+    .pay-button,
+    .cancel-button,
+    .remove-button,
+    .delete-order-button {
+        display: inline-block;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    .pay-button {
+        background-color: #9b59b6;
+        box-shadow: 0 4px 8px rgba(39, 174, 96, 0.5);
+    }
+
+        .pay-button:hover {
+            background-color: #8e44ad;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
+        }
+
+    .cancel-button {
+        background-color: #DDA0DD;
+        box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6));
+    }
+
+        .cancel-button:hover {
+            background-color: #BA55D3;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
+        }
+
+    .remove-button {
+        background-color: #BA55D3;
+        box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
+    }
+
+        .remove-button:hover {
+            background-color: #BA55D3;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
+        }
+
+    .delete-order-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #BA55D3;
+        box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
+    }
+
+        .delete-order-button:hover {
+            background-color: #C0C0C0;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
+        }
+
+    .error-message {
+        color: red;
+        text-align: center;
+        margin-top: 10px;
     }
 </style>
-@* 
-<MudContainer>
-    <MudGrid>
-        @if (orders == null)
+
+<div class="order-detail-container">
+    <button @onclick="DeleteOrder" class="delete-order-button">Delete Order</button>
+    @if (_orderModel == null)
+    {
+        <p>Loading order details...</p>
+    }
+    else
+    {
+        <div class="order-summary">
+            <p><strong>Name:</strong> @_orderModel.Name.ToString()</p>
+            <p><strong>Date:</strong> @_orderModel.Date.ToString("d")</p>
+            <p><strong>Progress:</strong> @_orderModel.ProgressEnum.ToString()</p>
+            <p><strong>Paid Amount:</strong> @_orderModel.PaidAmount.ToString("C") ֏</p>
+            <p><strong>Amount To Pay:</strong> @_orderModel.AmountToPay.ToString("C") ֏</p>
+        </div>
+
+        <h3 style="color: #9b59b6; text-align: center;">Order Items</h3>
+        @if (_orderModel.Items.Any())
         {
-            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            <ul class="order-items-list">
+                @foreach (var item in _orderModel.Items)
+                {
+                    <li class="order-item">
+                        <p><strong>Item Name:</strong> @item.Name</p>
+                        <p><strong>Description:</strong> @item.Description</p>
+                        <p><strong>Price:</strong> @item.Price.ToString("C")</p>
+                        <button @onclick="() => RemoveItem(item.Id, orderId)" class="remove-button">
+                            Remove Item
+                        </button>
+                        <button @onclick="() => GoToItemDetail(item.Id)" class="pay-button">
+                            View Item Details
+                        </button>
+                    </li>
+                }
+            </ul>
         }
         else
         {
-            @foreach (var order in orders)
-            {
-                <MudItem xs="12" sm="6" md="4" lg="3">
-                    <MudCard>
-                        <MudCardMedia Image="@order.ImageUrl" Alt="Item Image" />
-                        <MudCardContent>
-                            <MudText Typo="Typo.h6">@order.Name</MudText>
-                                <MudText>@order.Description</MudText>
-                                <MudText Typo="Typo.subtitle1">@order.Price.ToString("C")</MudText>
-                            </MudCardContent>
-                            <MudCardActions>
-                            
-                                <MudButton OnClick="() => OrderItem(order)" Color="Color.Success">Order Now</MudButton>
-                            </MudCardActions>
-                        </MudCard>
-                    </MudItem>
-            }
+            <p>No items in this order.</p>
         }
-    </MudGrid>
-</MudContainer>
 
-@code {
-    private IEnumerable<OrderViewModel> orders;
+        <button @onclick="AddItems" class="pay-button">Add Items</button>
 
-    protected override async Task OnInitializedAsync()
-    {
-        try
+        <div class="payment-section">
+            <label for="paymentAmount">Enter Payment Amount:</label>
+            <InputNumber @bind-Value="amountForPay" id="amountForPay" />
+
+            <button @onclick="Pay" class="pay-button">Pay</button>
+            <button @onclick="CancelOrder" class="cancel-button">Cancel Order</button>
+            <button @onclick="GoBackToOrders" class="cancel-button">Go Back</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
         {
-            orders = await OrderService.GetAll();
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Error loading items: {ex.Message}", Severity.Error);
+            <div class="error-message">
+                @errorMessage
+            </div>
         }
     }
-
-  
-
-    private void OrderItem(ItemViewModel item)
-    {
-
-
-        Snackbar.Add($"Ordering {item.Name}...", Severity.Success);
-    }
-}
-
-@code {
-
-}
- *@
+</div>

@@ -6,7 +6,7 @@ namespace ACA.DeliverySystem.Business.Services
     public interface IUserService
     {
         Task AddOrderInUser(int userId, OrderAddModel model, CancellationToken token);
-        Task Create(UserAddModel user, CancellationToken token);
+        Task<OperationResult> Create(UserAddModel user, CancellationToken token);
         Task<OperationResult> Delete(int id, CancellationToken token);
         Task<IEnumerable<UserViewModel>> GetAll(CancellationToken token);
         Task<UserViewModel> GetByEmail(string email, CancellationToken token);

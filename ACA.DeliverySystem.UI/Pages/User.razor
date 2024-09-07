@@ -94,6 +94,31 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
         }
 
+    .orders-button {
+        background-color: #32cd32; 
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+        .orders-button:hover {
+            background-color: #228b22; 
+            transform: scale(1.05);
+        }
+
+        .orders-button:active {
+            background-color: #006400;
+            transform: scale(1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+
 </style>
 
 
@@ -123,13 +148,13 @@
                 <button type="submit">Add Order</button>
             </EditForm>
         </div>
+
+        <!-- View Orders Button -->
+        <button @onclick="GoToUserOrders" class="orders-button">View Orders</button>
+
     }
     else
     {
         <h1>Loading......</h1>
     }
 </div>
-
-
-
-

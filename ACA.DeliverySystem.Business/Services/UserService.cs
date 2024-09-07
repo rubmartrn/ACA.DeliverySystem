@@ -16,11 +16,17 @@ namespace ACA.DeliverySystem.Business.Services
             _mapper = mapper;
         }
 
-        public async Task Create(UserAddModel user, CancellationToken token)
+        public async Task<OperationResult> Create(UserAddModel user, CancellationToken token)
         {
+            var haveUser = await _uow.UserRepository.GetByEmail(user.Email, token);
+            if (haveUser != null)
+            {
+                return OperationResult.Error("This email is already registered.", ErrorType.BadRequest);
+            }
             var mappedUser = _mapper.Map<User>(user);
             await _uow.UserRepository.Add(mappedUser, token);
             await _uow.Save(token);
+            return OperationResult.Ok();
         }
         public async Task<OperationResult> Delete(int id, CancellationToken token)
         {

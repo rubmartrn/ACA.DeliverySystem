@@ -37,6 +37,7 @@ namespace ACA.DeliverySystem.Data.Repository
             {
                 return OperationResult.Error($"Order with id {id} not found.", ErrorType.NotFound);
             }
+
             _context.Orders.Remove(order);
             return OperationResult.Ok();
         }
@@ -64,6 +65,7 @@ namespace ACA.DeliverySystem.Data.Repository
             {
                 return OperationResult.Error("You can't add item from order.", ErrorType.BadRequest);
             }
+            order.AmountToPay += item.Price;
             order.Items.Add(item);
             return OperationResult.Ok();
         }
@@ -89,6 +91,7 @@ namespace ACA.DeliverySystem.Data.Repository
             {
                 return OperationResult.Error("You can't remove item from order.", ErrorType.BadRequest);
             }
+            order.AmountToPay -= item.Price;
             order.Items.Remove(item);
             return OperationResult.Ok();
         }
@@ -114,6 +117,7 @@ namespace ACA.DeliverySystem.Data.Repository
                 return OperationResult.Error("The order is in progress or canceled.", ErrorType.BadRequest);
             }
             order.PaidAmount = amountToPay;
+            order.AmountToPay -= order.PaidAmount;
             order.ProgressEnum = ProgressEnum.InProgress;
             return OperationResult.Ok();
         }

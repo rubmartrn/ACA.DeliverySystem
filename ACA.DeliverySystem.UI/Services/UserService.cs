@@ -1,8 +1,8 @@
-﻿using ACA.DeliverySystem.UI.Models;
-using System.Net.Http;
+﻿using ACA.DeliverySystem.UI.Coneverters;
+using ACA.DeliverySystem.UI.Models;
 using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ACA.DeliverySystem.UI.Services
 {
@@ -71,42 +71,60 @@ namespace ACA.DeliverySystem.UI.Services
         }
 
 
-        public async Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId)
+        public async Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId, CancellationToken token)
         {
 
-            var options = new JsonSerializerOptions
-            {
-                Converters = { new JsonStringEnumConverter() }
-
-            };
-
-            return await _client.GetFromJsonAsync<List<OrderViewModel>>($"User/{userId}/orders", options);
-         
-           
-
-
-
-
-        }
-
-
-
-        public async Task<OperationResult> AddOrderInUser(int userId, OrderAddModel model)
-        {
-            var response = await _client.PostAsJsonAsync($"User/{userId}/orders", model);
+            var response = await _client.GetAsync($"User/{userId}/orders", token);
 
             if (response.IsSuccessStatusCode)
             {
-                return OperationResult.Ok();
-            }
-            else
-            {
-                return new OperationResult
+                var json = await response.Content.ReadAsStringAsync();
+                var orders = JsonSerializer.Deserialize<IEnumerable<OrderViewModel>>(json, new JsonSerializerOptions
                 {
-                    Success = false,
-                    ErrorMessage = "Failed to add order."
-                };
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter(),
+                            new CustomDateTimeConverter("MM-dd-yyyy")
+                    }
+                });
+                return orders;
+
             }
+            return Enumerable.Empty<OrderViewModel>();
+
+        }
+
+        public async Task<OperationResult> AddOrderInUser(int userId, OrderAddModel model)
+        {
+            try
+            {
+                var response = await _client.PostAsJsonAsync($"User/addOrder?userId={userId}", model);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return OperationResult.Ok();
+                }
+                else
+                {
+                    return new OperationResult
+                    {
+                        Success = false,
+                        ErrorMessage = "Failed to add order."
+                    };
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return OperationResult.Fail("Fail");
+            }
+            catch (Exception m)
+            {
+
+                Console.WriteLine(m.Message);
+                return OperationResult.Fail("Fail");
+            }
+
         }
 
         public async Task<OperationResult<UserViewModel>> SignIn(string email)

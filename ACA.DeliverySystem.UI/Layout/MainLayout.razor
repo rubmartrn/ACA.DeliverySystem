@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation  // Inject the NavigationManager
+
 @* Required *@
 <MudThemeProvider />
 <MudPopoverProvider />
@@ -9,18 +11,59 @@
 @* Needed for snackbars *@
 <MudSnackbarProvider />
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<MudDrawerContainer>
+    <MudDrawer @bind-Open="_drawerOpen" Anchor="Anchor.Left" Elevation="1" Clipped="true">
+        <MudNavMenu>
+            <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All" OnClick="CloseDrawer">Home</MudNavLink>
+            <MudNavLink Href="item" Icon="@Icons.Material.Filled.List" OnClick="CloseDrawer">Items</MudNavLink>
+            <MudNavLink Href="signin" Icon="@Icons.Material.Filled.ShoppingCart" OnClick="CloseDrawer">Orders</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="/signin" target="_blank">Sign In</a>
-        </div>
+    <MudMainContent>
+        <!-- This is where your MudAppBar goes -->
+        <MudAppBar Elevation="1" Color="Color.Primary" Style="background-image: url('https://w0.peakpx.com/wallpaper/535/915/HD-wallpaper-delivery-blue-background-online-ordering-background-blue-digital-technology-background-online-shopping.jpg'), linear-gradient(to right, #6a11cb, #2575fc); background-size: cover; background-blend-mode: overlay;">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="ToggleDrawer" Edge="Edge.Start" Color="Color.Inherit" />
+            <MudText Typo="Typo.h6">Delivery System</MudText>
+            <MudSpacer />
+            <MudLink Href="/signin" Color="Color.Inherit" Class="d-flex align-items-center">
+                <MudIcon Icon="@Icons.Material.Filled.AccountCircle" />
+                <span class="ms-2">Sign In</span>
+            </MudLink>
+        </MudAppBar>
 
         <article class="content px-4">
             @Body
         </article>
-    </main>
-</div>
+    </MudMainContent>
+</MudDrawerContainer>
+
+@code {
+    private bool _drawerOpen = false;
+
+    private void ToggleDrawer()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void CloseDrawer()
+    {
+        _drawerOpen = false;
+    }
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += HandleLocationChanged;
+    }
+
+    private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        _drawerOpen = false;  // Ensure drawer closes on navigation
+        StateHasChanged();    // Force UI update
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= HandleLocationChanged;
+    }
+}

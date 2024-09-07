@@ -62,6 +62,9 @@ namespace ACA.DeliverySystem.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<decimal>("AmountToPay")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 

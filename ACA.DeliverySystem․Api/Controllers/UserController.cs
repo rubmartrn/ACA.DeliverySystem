@@ -46,8 +46,13 @@ namespace ACA.DeliverySystem_Api.Controllers
         public async Task<IActionResult> Create([FromBody] UserAddModelDTO model, CancellationToken token)
         {
             var user = _mapper.Map<UserAddModel>(model);
-            await _userService.Create(user, token);
-            return Ok();
+            var result = await _userService.Create(user, token);
+            if (result.Success)
+            {
+                return Ok();
+
+            }
+            return BadRequest();
         }
 
         [HttpPut]

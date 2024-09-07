@@ -9,6 +9,8 @@ namespace ACA.DeliverySystem.UI.Pages
         [Parameter]
         public int userId { get; set; }
         protected string _errorMessage = default!;
+        protected IEnumerable<OrderViewModel> orders { get; set; } = new List<OrderViewModel>();
+        protected CancellationToken Token { get; set; } = default!;
 
         [Inject]
         protected UserService UserService { get; set; } = default!;
@@ -16,19 +18,23 @@ namespace ACA.DeliverySystem.UI.Pages
         [Inject]
         protected NavigationManager NavigationManager { get; set; } = default!;
 
-        protected List<OrderViewModel> orders = default!;
+        protected bool _isLoading = true;
 
         protected override async Task OnInitializedAsync()
         {
-            var result = await UserService.GetUserOrders(userId);
-            if (result != null)
+            try
             {
-                orders = result.ToList();
+                orders = await UserService.GetUserOrders(userId, Token);
             }
-            else
+            finally
             {
-                _errorMessage = "Something went wrong...";
+                _isLoading = false;
             }
+        }
+
+        protected void NavigateToUserPage()
+        {
+            NavigationManager.NavigateTo($"/User/{userId}");
         }
     }
 }

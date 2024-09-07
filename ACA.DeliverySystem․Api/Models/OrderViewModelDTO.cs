@@ -8,6 +8,7 @@
         public DateOnly Date { get; set; }
 
         public decimal PaidAmount { get; set; }
+        public decimal AmountToPay { get; set; }
 
         public ProgressEnum ProgressEnum { get; set; }
         public List<ItemViewModelDTO> Items { get; set; } = new List<ItemViewModelDTO>();
