@@ -1,6 +1,7 @@
 using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Services;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 
 namespace ACA.DeliverySystem.UI.Pages
@@ -13,7 +14,8 @@ namespace ACA.DeliverySystem.UI.Pages
         [Inject] protected UserService UserService { get; set; } = default!;
         [Inject]
         protected NavigationManager NavigationManager { get; set; } = default!;
-
+        [Inject]
+        protected ISnackbar Snackbar { get; set; } = default!;
 
         protected override void OnInitialized()
         {
@@ -29,6 +31,7 @@ namespace ACA.DeliverySystem.UI.Pages
             }
             else
             {
+                Snackbar.Add("This email is already registered.", Severity.Error);
                 _errorMessage = result.ErrorMessage;
             }
         }
