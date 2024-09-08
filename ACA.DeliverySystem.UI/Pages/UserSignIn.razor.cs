@@ -1,5 +1,6 @@
 using ACA.DeliverySystem.UI.Services;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace ACA.DeliverySystem.UI.Pages
 {
@@ -13,19 +14,37 @@ namespace ACA.DeliverySystem.UI.Pages
         [Inject]
         protected NavigationManager NavigationManager { get; set; } = default!;
 
+        [Inject]
+        protected ISnackbar Snackbar { get; set; } = default!;
+
         protected async Task HandleSignIn()
         {
-            var result = await UserService.SignIn(signInModel.Email);
-            if (result.Success)
+            try
             {
+                var result = await UserService.SignIn(signInModel.Email);
+                if (result.Success)
+                {
 
-                NavigationManager.NavigateTo($"/User/{result.Data.Id}");
+                    NavigationManager.NavigateTo($"/User/{result.Data.Id}");
+                }
+                else
+                {
+
+                    Snackbar.Add("The user not found.", Severity.Error);
+                }
             }
-            else
+            catch (HttpRequestException ex)
             {
+                Snackbar.Add("The user not found.", Severity.Error);
 
-                Console.WriteLine(result.ErrorMessage);
+
             }
+            catch (Exception m)
+            {
+                Snackbar.Add("The user not found.", Severity.Error);
+
+            }
+
         }
 
         protected class SignInModel

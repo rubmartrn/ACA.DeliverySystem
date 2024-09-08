@@ -89,7 +89,7 @@ namespace ACA.DeliverySystem.UI.Pages
                 if (result.Success)
                 {
                     Snackbar.Add("Item removed", Severity.Success);
-                    NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+                    NavigationManager.NavigateTo($"Order/{orderId}", true);
                 }
                 else
                 {
