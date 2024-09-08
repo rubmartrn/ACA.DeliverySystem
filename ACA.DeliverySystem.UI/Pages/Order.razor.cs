@@ -19,7 +19,7 @@ namespace ACA.DeliverySystem.UI.Pages
 
         public string? errorMessage { get; set; }
 
-        protected OrderViewModel _orderModel { get; set; } = new OrderViewModel();
+        protected OrderViewModel? _orderModel { get; set; } 
 
         protected CancellationToken Token { get; set; } = default!;
 
@@ -38,6 +38,7 @@ namespace ACA.DeliverySystem.UI.Pages
         protected override async Task OnInitializedAsync()
 
         {
+            _orderModel =  new OrderViewModel();
 
             try
             {
@@ -64,6 +65,7 @@ namespace ACA.DeliverySystem.UI.Pages
                 {
                     Snackbar.Add("Order canceled", Severity.Success);
                     NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+
                 }
                 else
                 {
@@ -89,7 +91,7 @@ namespace ACA.DeliverySystem.UI.Pages
                 if (result.Success)
                 {
                     Snackbar.Add("Item removed", Severity.Success);
-                    NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+                    NavigationManager.NavigateTo($"Order/{orderId}", true);
                 }
                 else
                 {

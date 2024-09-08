@@ -3,6 +3,7 @@
 using ACA.DeliverySystem.UI.Coneverters;
 using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Pages;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -164,7 +165,8 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<OperationResult> PayForOrder(int orderId, decimal amount)
         {
-            var response = await _client.PostAsJsonAsync($"Order/{orderId}/pay", new { amount });
+            var response = await _client.GetAsync($"Order/payment?orderId={orderId}&amount={amount}");
+
 
             if (response.IsSuccessStatusCode)
             {
