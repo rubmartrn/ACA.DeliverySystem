@@ -1,9 +1,5 @@
 ﻿@page "/item/{itemId:int}"
-@using ACA.DeliverySystem.UI.Models
-@using ACA.DeliverySystem.UI.Services
-@inject ItemService ItemService
-@inject ISnackbar Snackbar
-@inject NavigationManager NavigationManager
+@inherits ItemDetailBase
 
 <PageTitle>Item Details</PageTitle>
 
@@ -47,31 +43,4 @@
 
 
 
-@code {
-    [Parameter]
-    public int itemId { get; set; }
 
-    private ItemViewModel item;
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            item = await ItemService.GetbyId(itemId);
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Error loading item: {ex.Message}", Severity.Error);
-        }
-    }
-
-    private void OrderItem()
-    {
-        NavigationManager.NavigateTo("/signin");
-    }
-
-    private void GoBack()
-    {
-        NavigationManager.NavigateTo("/item");
-    }
-}

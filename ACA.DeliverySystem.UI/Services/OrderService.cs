@@ -3,7 +3,6 @@
 using ACA.DeliverySystem.UI.Coneverters;
 using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Pages;
-using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -50,7 +49,6 @@ namespace ACA.DeliverySystem.UI.Services
 
                 }
                 return new OrderViewModel();
-                // return await _client.GetFromJsonAsync<OrderViewModel>($"Order/{id}");
 
             }
             catch (HttpRequestException m)
@@ -95,10 +93,11 @@ namespace ACA.DeliverySystem.UI.Services
             }
             else
             {
+                var errorMessage = await response.Content.ReadAsStringAsync();
                 return new OperationResult
                 {
                     Success = false,
-                    ErrorMessage = "Failed to add item to the order."
+                    ErrorMessage = errorMessage
                 };
             }
         }
@@ -115,10 +114,11 @@ namespace ACA.DeliverySystem.UI.Services
             }
             else
             {
+                var errorMessage = await response.Content.ReadAsStringAsync();
                 return new OperationResult
                 {
                     Success = false,
-                    ErrorMessage = "Failed to cancel the order."
+                    ErrorMessage = errorMessage
                 };
             }
         }
@@ -135,10 +135,11 @@ namespace ACA.DeliverySystem.UI.Services
             }
             else
             {
+                var errorMessage = await response.Content.ReadAsStringAsync();
                 return new OperationResult
                 {
                     Success = false,
-                    ErrorMessage = "Failed to delete the order."
+                    ErrorMessage = errorMessage
                 };
             }
         }
@@ -154,11 +155,11 @@ namespace ACA.DeliverySystem.UI.Services
             }
             else
             {
-
+                var errorMessage = await response.Content.ReadAsStringAsync();
                 return new OperationResult
                 {
                     Success = false,
-                    ErrorMessage = "Failed to remove the item from the order."
+                    ErrorMessage = errorMessage
                 };
             }
         }
@@ -167,17 +168,17 @@ namespace ACA.DeliverySystem.UI.Services
         {
             var response = await _client.GetAsync($"Order/payment?orderId={orderId}&amount={amount}");
 
-
             if (response.IsSuccessStatusCode)
             {
                 return OperationResult.Ok();
             }
             else
             {
+                var errorMessage = await response.Content.ReadAsStringAsync();
                 return new OperationResult
                 {
                     Success = false,
-                    ErrorMessage = "Failed to process the payment."
+                    ErrorMessage = errorMessage
                 };
             }
         }
@@ -186,7 +187,7 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<OperationResult> OrderCompleted(int orderId)
         {
-            var response = await _client.PostAsync($"Order/{orderId}/complete", null);
+            var response = await _client.PostAsync($"Order/orderCompleted?orderId={orderId}", null);
 
             if (response.IsSuccessStatusCode)
             {
@@ -194,10 +195,11 @@ namespace ACA.DeliverySystem.UI.Services
             }
             else
             {
+                var errorMessage = await response.Content.ReadAsStringAsync();
                 return new OperationResult
                 {
                     Success = false,
-                    ErrorMessage = "Failed to complete the order."
+                    ErrorMessage = errorMessage
                 };
             }
         }
