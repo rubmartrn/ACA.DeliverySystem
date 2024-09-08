@@ -130,6 +130,7 @@
 
 <div class="order-detail-container">
     <button @onclick="DeleteOrder" class="delete-order-button">Delete Order</button>
+
     @if (_orderModel == null)
     {
         <p>Loading order details...</p>
@@ -137,7 +138,7 @@
     else
     {
         <div class="order-summary">
-            <p><strong>Name:</strong> @_orderModel.Name.ToString()</p>
+            <p><strong>Name:</strong> @_orderModel.Name?.ToString()</p>
             <p><strong>Date:</strong> @_orderModel.Date.ToString("d")</p>
             <p><strong>Progress:</strong> @_orderModel.ProgressEnum.ToString()</p>
             <p><strong>Paid Amount:</strong> @_orderModel.PaidAmount.ToString("C") ֏</p>
@@ -154,7 +155,7 @@
                         <p><strong>Item Name:</strong> @item.Name</p>
                         <p><strong>Description:</strong> @item.Description</p>
                         <p><strong>Price:</strong> @item.Price.ToString("C")</p>
-                        <button @onclick="() => RemoveItem(item.Id, orderId)" class="remove-button">
+                        <button @onclick="() => RemoveItem(orderId,item.Id)" class="remove-button">
                             Remove Item
                         </button>
                         <button @onclick="() => GoToItemDetail(item.Id)" class="pay-button">
