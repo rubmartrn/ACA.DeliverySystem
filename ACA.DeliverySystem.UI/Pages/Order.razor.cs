@@ -132,6 +132,10 @@ namespace ACA.DeliverySystem.UI.Pages
             {
                 Snackbar.Add($"Order is {_orderModel.ProgressEnum}", Severity.Warning);
             }
+            else if (_orderModel.AmountToPay == 0)
+            {
+                Snackbar.Add("First add items.", Severity.Info);
+            }
             else
             {
                 NavigationManager.NavigateTo($"/Order/{orderId}/pay");
