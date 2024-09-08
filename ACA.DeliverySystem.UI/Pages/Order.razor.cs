@@ -111,7 +111,14 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected void AddItems()
         {
-            NavigationManager.NavigateTo($"/ItemsList/{_orderModel.Id}");
+            if (_orderModel.ProgressEnum != ProgressEnum.Created)
+            {
+                Snackbar.Add($"You can't add new items. Order is {_orderModel.ProgressEnum}", Severity.Info);
+            }
+            else
+            {
+                NavigationManager.NavigateTo($"/ItemsList/{_orderModel.Id}");
+            }
         }
 
         protected void GoToItemDetail(int itemId)

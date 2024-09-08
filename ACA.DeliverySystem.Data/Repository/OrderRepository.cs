@@ -31,7 +31,7 @@ namespace ACA.DeliverySystem.Data.Repository
 
         public async Task<OperationResult> Delete(int id, CancellationToken token)
         {
-            var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == id, token);
+            var order = await _context.Orders.Include(o => o.Items).SingleOrDefaultAsync(x => x.Id == id, token);
 
             if (order == null)
             {
@@ -42,7 +42,7 @@ namespace ACA.DeliverySystem.Data.Repository
             {
                 return OperationResult.Error($"You can't delete it. Order is {order.ProgressEnum}", ErrorType.BadRequest);
             }
-            if (order.Items != null)
+            if (order.Items.Count != 0)
             {
                 return OperationResult.Error($"Order have items in it. You can't delete it.", ErrorType.BadRequest);
             }
@@ -118,7 +118,7 @@ namespace ACA.DeliverySystem.Data.Repository
             }
             if (amount != amountToPay)
             {
-                return OperationResult.Error($"You must pay {amountToPay}.", ErrorType.BadRequest);
+                return OperationResult.Error($"You must pay {amountToPay.ToString("C")}.", ErrorType.BadRequest);
             }
             if (order.ProgressEnum != ProgressEnum.Created)
             {

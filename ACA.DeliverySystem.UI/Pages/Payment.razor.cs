@@ -37,7 +37,6 @@ namespace ACA.DeliverySystem.UI.Pages
             else
             {
                 Snackbar.Add(result.ErrorMessage, Severity.Error);
-                errorMessage = "Failed to process payment.";
             }
 
         }
