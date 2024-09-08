@@ -37,7 +37,15 @@ namespace ACA.DeliverySystem.Data.Repository
             {
                 return OperationResult.Error($"Order with id {id} not found.", ErrorType.NotFound);
             }
-
+            if (order.ProgressEnum == ProgressEnum.InProgress ||
+               order.ProgressEnum == ProgressEnum.Completed)
+            {
+                return OperationResult.Error($"You can't delete it. Order is {order.ProgressEnum}", ErrorType.BadRequest);
+            }
+            if (order.Items != null)
+            {
+                return OperationResult.Error($"Order have items in it. You can't delete it.", ErrorType.BadRequest);
+            }
             _context.Orders.Remove(order);
             return OperationResult.Ok();
         }
@@ -63,7 +71,7 @@ namespace ACA.DeliverySystem.Data.Repository
             }
             if (order.ProgressEnum != ProgressEnum.Created)
             {
-                return OperationResult.Error("You can't add item from order.", ErrorType.BadRequest);
+                return OperationResult.Error($"You can't add item. Order is {order.ProgressEnum}", ErrorType.BadRequest);
             }
             order.Items.Add(item);
             order.AmountToPay += item.Price;
@@ -89,7 +97,7 @@ namespace ACA.DeliverySystem.Data.Repository
             }
             if (order.ProgressEnum != ProgressEnum.Created)
             {
-                return OperationResult.Error("You can't remove item from order.", ErrorType.BadRequest);
+                return OperationResult.Error($"You can't remove item from order. Order is {order.ProgressEnum}", ErrorType.BadRequest);
             }
             order.Items.Remove(item);
             order.AmountToPay -= item.Price;
@@ -131,7 +139,7 @@ namespace ACA.DeliverySystem.Data.Repository
             }
             if (order.ProgressEnum != ProgressEnum.InProgress)
             {
-                return OperationResult.Error("Order must be in progress.", ErrorType.BadRequest);
+                return OperationResult.Error("Order must be in progress to marke it as completed.", ErrorType.BadRequest);
             }
             order.ProgressEnum = ProgressEnum.Completed;
             return OperationResult.Ok();

@@ -58,57 +58,33 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected async Task CancelOrder()
         {
-            try
+            var result = await OrderService.CancelOrder(orderId, Token);
+            if (result.Success)
             {
-                var result = await OrderService.CancelOrder(orderId, Token);
-                if (result.Success)
-                {
-                    Snackbar.Add("Order canceled", Severity.Success);
-                    NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+                Snackbar.Add("Order canceled", Severity.Success);
+                NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
 
-                }
-                else
-                {
-                    Snackbar.Add("Failed to cancel order", Severity.Error);
-                }
             }
-            catch (HttpRequestException ex)
+            else
             {
-                errorMessage = ex.Message;
-            }
-            catch (Exception m)
-            {
-                errorMessage = m.Message;
+                Snackbar.Add($"{result.ErrorMessage}", Severity.Error);
             }
 
         }
 
         protected async Task RemoveItem(int orderId, int itemId)
         {
-            try
+            var result = await OrderService.RemoveItemFromOrder(orderId, itemId);
+            if (result.Success)
             {
-                var result = await OrderService.RemoveItemFromOrder(orderId, itemId);
-                if (result.Success)
-                {
-                    Snackbar.Add("Item removed", Severity.Success);
-                    NavigationManager.NavigateTo($"Order/{orderId}", true);
-                }
-                else
-                {
-                    errorMessage = "Failed to remove the item. Please try again.";
-                    Snackbar.Add("Failed to remove item", Severity.Error);
-                }
+                Snackbar.Add("Item removed", Severity.Success);
+                NavigationManager.NavigateTo($"Order/{orderId}", true);
             }
-            catch (HttpRequestException ex)
+            else
             {
-                errorMessage = ex.Message;
-                Snackbar.Add("Failed to remove item", Severity.Error);
+                Snackbar.Add($"{result.ErrorMessage}", Severity.Error);
             }
-            catch (Exception m)
-            {
-                errorMessage = m.Message;
-                Snackbar.Add("Failed to remove item", Severity.Error);
-            }
+
         }
         protected async Task DeleteOrder()
         {
@@ -140,7 +116,7 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected void GoToItemDetail(int itemId)
         {
-            NavigationManager.NavigateTo($"Item/{itemId}");
+            NavigationManager.NavigateTo($"ItemDetailForUser/{itemId}/{orderId}");
         }
 
         protected async Task GoToPayment()
@@ -165,7 +141,7 @@ namespace ACA.DeliverySystem.UI.Pages
             }
             else
             {
-                Snackbar.Add("Failed", Severity.Error);
+                Snackbar.Add($"{result.ErrorMessage}", Severity.Error);
             }
         }
     }
