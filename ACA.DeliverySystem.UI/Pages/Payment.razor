@@ -1,0 +1,48 @@
+﻿@page "/Order/{orderId:int}/pay"
+@inherits PaymentBase
+
+<style>
+    .payment-page {
+        background-image: url('https://plus.unsplash.com/premium_photo-1663931932646-15ceb9c0033f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-position: center;
+        height: 100vh; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .payment-card {
+        background-color: rgba(255, 255, 255, 0.8); 
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="payment-page">
+    <MudCard Class="payment-card mx-auto my-4" Style="max-width: 400px;">
+        <MudCardContent>
+            <MudText Typo="Typo.h5" Align="Align.Center">Pay for Order @orderId</MudText>
+
+            <MudTextField @bind-Value="cardNumber" Label="Card Number" Required="true" InputType="InputType.Text" Placeholder="1234 5678 9012 3456" />
+
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudTextField @bind-Value="expiryDate" Label="Expiry Date" Required="true" Placeholder="MM/YY" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField @bind-Value="cvv" Label="CVV" Required="true" InputType="InputType.Password" Placeholder="123" />
+                </MudItem>
+            </MudGrid>
+
+            <MudTextField @bind-Value="amountForPay" Label="Amount to Pay" Required="true" InputType="InputType.Number" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.AttachMoney" />
+
+            <MudButton OnClick="Pay" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" FullWidth="true">Submit Payment</MudButton>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <MudText Typo="Typo.subtitle1" Color="Color.Error" Align="Align.Center">@errorMessage</MudText>
+            }
+        </MudCardContent>
+    </MudCard>
+</div>

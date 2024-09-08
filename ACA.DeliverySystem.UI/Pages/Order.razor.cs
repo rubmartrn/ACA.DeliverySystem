@@ -19,7 +19,7 @@ namespace ACA.DeliverySystem.UI.Pages
 
         public string? errorMessage { get; set; }
 
-        protected OrderViewModel? _orderModel { get; set; } 
+        protected OrderViewModel? _orderModel { get; set; }
 
         protected CancellationToken Token { get; set; } = default!;
 
@@ -38,7 +38,7 @@ namespace ACA.DeliverySystem.UI.Pages
         protected override async Task OnInitializedAsync()
 
         {
-            _orderModel =  new OrderViewModel();
+            _orderModel = new OrderViewModel();
 
             try
             {
@@ -102,10 +102,12 @@ namespace ACA.DeliverySystem.UI.Pages
             catch (HttpRequestException ex)
             {
                 errorMessage = ex.Message;
+                Snackbar.Add("Failed to remove item", Severity.Error);
             }
             catch (Exception m)
             {
                 errorMessage = m.Message;
+                Snackbar.Add("Failed to remove item", Severity.Error);
             }
         }
         protected async Task DeleteOrder()
@@ -121,8 +123,7 @@ namespace ACA.DeliverySystem.UI.Pages
                 }
                 else
                 {
-                    errorMessage = "Failed to delete the order. Please try again.";
-                    Snackbar.Add($"Can't delete order.", Severity.Warning);
+                    Snackbar.Add($"{result.ErrorMessage}", Severity.Warning);
                 }
             }
         }
@@ -142,16 +143,29 @@ namespace ACA.DeliverySystem.UI.Pages
             NavigationManager.NavigateTo($"Item/{itemId}");
         }
 
-        protected async Task Pay()
+        protected async Task GoToPayment()
         {
-            var result = await OrderService.PayForOrder(orderId, amountForPay);
+            if (_orderModel.ProgressEnum != ProgressEnum.Created)
+            {
+                Snackbar.Add($"Order is {_orderModel.ProgressEnum}", Severity.Warning);
+            }
+            else
+            {
+                NavigationManager.NavigateTo($"/Order/{orderId}/pay");
+            }
+        }
+
+        protected async Task MarkAsCompleted()
+        {
+            var result = await OrderService.OrderCompleted(orderId);
             if (result.Success)
             {
+                Snackbar.Add($"{_orderModel.Name} order marked as completed", Severity.Success);
                 NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
             }
             else
             {
-                errorMessage = "Fail to pay.";
+                Snackbar.Add("Failed", Severity.Error);
             }
         }
     }

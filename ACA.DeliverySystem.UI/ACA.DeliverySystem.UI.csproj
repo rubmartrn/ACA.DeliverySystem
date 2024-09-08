@@ -19,6 +19,9 @@
     <Content Update="Pages\ItemsForUser.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+    <Content Update="Pages\Payment.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
     <Content Update="Pages\UserSignIn.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>

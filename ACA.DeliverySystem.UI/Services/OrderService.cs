@@ -3,7 +3,6 @@
 using ACA.DeliverySystem.UI.Coneverters;
 using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Pages;
-using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -135,10 +134,11 @@ namespace ACA.DeliverySystem.UI.Services
             }
             else
             {
+
                 return new OperationResult
                 {
                     Success = false,
-                    ErrorMessage = "Failed to delete the order."
+                    ErrorMessage = "Failed to delete the order. You can only delete empty orders."
                 };
             }
         }
@@ -167,7 +167,6 @@ namespace ACA.DeliverySystem.UI.Services
         {
             var response = await _client.GetAsync($"Order/payment?orderId={orderId}&amount={amount}");
 
-
             if (response.IsSuccessStatusCode)
             {
                 return OperationResult.Ok();
@@ -186,7 +185,7 @@ namespace ACA.DeliverySystem.UI.Services
 
         public async Task<OperationResult> OrderCompleted(int orderId)
         {
-            var response = await _client.PostAsync($"Order/{orderId}/complete", null);
+            var response = await _client.PostAsync($"Order/orderCompleted?orderId={orderId}", null);
 
             if (response.IsSuccessStatusCode)
             {

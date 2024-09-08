@@ -153,6 +153,10 @@ namespace ACA.DeliverySystem.Data.Repository
             {
                 return OperationResult.Error("It's already canceled.", ErrorType.BadRequest);
             }
+            if (order.ProgressEnum == ProgressEnum.InProgress)
+            {
+                return OperationResult.Error("You can't cancel order.It is in progress.", ErrorType.BadRequest);
+            }
             order.ProgressEnum = ProgressEnum.Canceled;
             return OperationResult.Ok();
 
