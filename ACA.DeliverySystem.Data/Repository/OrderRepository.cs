@@ -108,7 +108,7 @@ namespace ACA.DeliverySystem.Data.Repository
         public async Task<OperationResult> RemoveItemFromOrder(int orderId, int itemId, CancellationToken token)
         {
             var item = await _context.Items.SingleOrDefaultAsync(x => x.Id == itemId);
-            var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
+            var order = await _context.Orders.Include(x => x.OrderItems).SingleOrDefaultAsync(x => x.Id == orderId);
             if (item == null)
             {
                 return OperationResult.Error($"Item with id {itemId} not found.", ErrorType.NotFound);
