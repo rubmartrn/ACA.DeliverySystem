@@ -85,9 +85,10 @@ namespace ACA.DeliverySystem.UI.Services
                     PropertyNameCaseInsensitive = true,
                     Converters = { new JsonStringEnumConverter(),
                             new CustomDateTimeConverter("MM-dd-yyyy")
-                    }
+                    },
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles
                 });
-                return orders;
+                return orders!;
 
             }
             return Enumerable.Empty<OrderViewModel>();

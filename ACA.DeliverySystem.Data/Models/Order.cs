@@ -12,7 +12,7 @@
         public int Id { get; set; }
 
         public int? UserId { get; set; }
-        public int? ItemId { get; set; }
+        public int? OrderItemId { get; set; }
         public DateOnly Date { get; private set; }
 
         public decimal PaidAmount { get; set; }
@@ -21,8 +21,7 @@
         public ProgressEnum ProgressEnum { get; set; } = ProgressEnum.Created;
 
         public User User { get; set; }
-        public List<Item> Items { get; set; } = new List<Item>();
-
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     }
 }
