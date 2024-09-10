@@ -49,16 +49,22 @@
         border-radius: 10px;
         background-color: rgba(255, 255, 255, 0.1);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
-        .order-item p {
-            margin: 5px 0;
-            font-size: 16px;
-        }
+    .order-item-details {
+        flex-grow: 1;
+    }
 
-        .order-item strong {
-            color: #3498db;
-        }
+    .order-item img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-left: 20px;
+    }
 
     .payment-section {
         margin-top: 20px;
@@ -93,7 +99,7 @@
 
     .cancel-button {
         background-color: #DDA0DD;
-        box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6));
+        box-shadow: 0 6px 12px rgba(39, 174, 96, 0.6);
     }
 
         .cancel-button:hover {
@@ -155,19 +161,24 @@
         @if (_orderModel.Items.Any())
         {
             <ul class="order-items-list">
-                @foreach (var item in _orderModel.Items)
+                @foreach (var orderItem in _orderModel.Items)
                 {
                     <li class="order-item">
-                        <p><strong>Item Name:</strong> @item.Name</p>
-                        <p><strong>Description:</strong> @item.Description</p>
-                        <p><strong>Price:</strong> @item.Price.ToString("C")</p>
-                        <button @onclick="() => RemoveItem(orderId,item.Id)" class="remove-button">
-                            Remove Item
-                        </button>
-                        <button @onclick="() => GoToItemDetail(item.Id)" class="pay-button">
-                            View Item Details
-                        </button>
+                        <div class="order-item-details">
+                            <p><strong>Item Name:</strong> @orderItem.ItemName</p>
+                            <p><strong>Description:</strong> @orderItem?.Item?.Description</p>
+                            <p><strong>Quantity:</strong> @orderItem?.Quantity</p>
+                            <p><strong>Price:</strong> @orderItem?.Price.ToString("C")</p>
+                            <button @onclick="() => RemoveItem(orderId, orderItem!.ItemId)" class="remove-button">
+                                Remove Item
+                            </button>
+                            <button @onclick="() => GoToItemDetail(orderItem!.ItemId)" class="pay-button">
+                                View Item Details
+                            </button>
+                        </div>
+                        <img src="@orderItem?.Item?.ImageUrl" alt="@orderItem!.ItemName" />
                     </li>
+
                 }
             </ul>
         }

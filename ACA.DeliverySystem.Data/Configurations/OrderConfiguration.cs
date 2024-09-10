@@ -12,13 +12,16 @@ namespace ACA.DeliverySystem.Data.Configurations
 
             builder.Property(x => x.Name).IsRequired();
 
-            builder.HasMany(x => x.Items)
+            builder.HasMany(x => x.OrderItems)
                 .WithOne(x => x.Order)
-                .HasForeignKey(x => x.OrderId);
+                .HasForeignKey(x => x.OrderId)
+                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.User)
                 .WithMany(x => x.Orders)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

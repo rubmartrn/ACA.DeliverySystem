@@ -2,7 +2,6 @@
 
 using ACA.DeliverySystem.UI.Coneverters;
 using ACA.DeliverySystem.UI.Models;
-using ACA.DeliverySystem.UI.Pages;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -19,9 +18,9 @@ namespace ACA.DeliverySystem.UI.Services
             _client = client;
         }
 
-        public async Task<IEnumerable<Order>> GetAll()
+        public async Task<IEnumerable<OrderViewModel>> GetAll()
         {
-            return await _client.GetFromJsonAsync<List<Order>>("Order");
+            return await _client.GetFromJsonAsync<List<OrderViewModel>>("Order");
         }
 
         public async Task<OrderViewModel> GetById(int id, CancellationToken token)
@@ -45,7 +44,7 @@ namespace ACA.DeliverySystem.UI.Services
                 }
                     });
 
-                    return order;
+                    return order!;
 
                 }
                 return new OrderViewModel();

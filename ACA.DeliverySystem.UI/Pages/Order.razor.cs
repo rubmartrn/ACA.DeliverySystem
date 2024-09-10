@@ -62,7 +62,7 @@ namespace ACA.DeliverySystem.UI.Pages
             if (result.Success)
             {
                 Snackbar.Add("Order canceled", Severity.Success);
-                NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+                NavigationManager.NavigateTo($"/User/{_orderModel!.UserId}/orders");
 
             }
             else
@@ -88,13 +88,13 @@ namespace ACA.DeliverySystem.UI.Pages
         }
         protected async Task DeleteOrder()
         {
-            var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this order?");
+            var confirmed = await JSRuntime!.InvokeAsync<bool>("confirm", "Are you sure you want to delete this order?");
             if (confirmed)
             {
                 var result = await OrderService.Delete(orderId);
                 if (result.Success)
                 {
-                    NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+                    NavigationManager.NavigateTo($"/User/{_orderModel!.UserId}/orders");
                     Snackbar.Add("Order deleted", Severity.Success);
                 }
                 else
@@ -106,12 +106,12 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected void GoBackToOrders()
         {
-            NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
+            NavigationManager.NavigateTo($"/User/{_orderModel!.UserId}/orders");
         }
 
         protected void AddItems()
         {
-            if (_orderModel.ProgressEnum != ProgressEnum.Created)
+            if (_orderModel!.ProgressEnum != ProgressEnum.Created)
             {
                 Snackbar.Add($"You can't add new items. Order is {_orderModel.ProgressEnum}", Severity.Info);
             }
@@ -126,9 +126,9 @@ namespace ACA.DeliverySystem.UI.Pages
             NavigationManager.NavigateTo($"ItemDetailForUser/{itemId}/{orderId}");
         }
 
-        protected async Task GoToPayment()
+        protected void GoToPayment()
         {
-            if (_orderModel.ProgressEnum != ProgressEnum.Created)
+            if (_orderModel!.ProgressEnum != ProgressEnum.Created)
             {
                 Snackbar.Add($"Order is {_orderModel.ProgressEnum}", Severity.Warning);
             }
@@ -147,7 +147,7 @@ namespace ACA.DeliverySystem.UI.Pages
             var result = await OrderService.OrderCompleted(orderId);
             if (result.Success)
             {
-                Snackbar.Add($"{_orderModel.Name} order marked as completed", Severity.Success);
+                Snackbar.Add($"{_orderModel!.Name} order marked as completed", Severity.Success);
                 NavigationManager.NavigateTo($"/User/{_orderModel.UserId}/orders");
             }
             else

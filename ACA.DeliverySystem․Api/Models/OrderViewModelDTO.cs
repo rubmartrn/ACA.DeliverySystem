@@ -1,8 +1,10 @@
-﻿namespace ACA.DeliverySystem.Business.Models
+﻿using ACA.DeliverySystem_Api.Models;
+
+namespace ACA.DeliverySystem.Business.Models
 {
     public class OrderViewModelDTO
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int Id { get; set; }
         public int UserId { get; set; }
         public DateOnly Date { get; set; }
@@ -11,7 +13,7 @@
         public decimal AmountToPay { get; set; }
 
         public ProgressEnum ProgressEnum { get; set; }
-        public List<ItemViewModelDTO> Items { get; set; } = new List<ItemViewModelDTO>();
+        public List<OrderItemViewModelDTO> Items { get; set; } = new List<OrderItemViewModelDTO>();
 
     }
 }

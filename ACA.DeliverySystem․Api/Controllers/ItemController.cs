@@ -26,7 +26,7 @@ namespace ACA.DeliverySystem_Api.Controllers
             return items.Select(x => _mapper.Map<ItemViewModelDTO>(x));
         }
 
-        [HttpGet("Items")]
+        [HttpGet("OrderItems")]
         public async Task<IEnumerable<ItemViewModelDTO>> GetAll([FromQuery] int orderId, CancellationToken token)
         {
             var items = await _itemService.GetAll(token);

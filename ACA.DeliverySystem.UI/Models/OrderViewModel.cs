@@ -11,7 +11,8 @@
         public decimal AmountToPay { get; set; }
 
         public ProgressEnum ProgressEnum { get; set; }
-        public List<ItemViewModel> Items { get; set; } = new List<ItemViewModel>();
+
+        public List<OrderItemViewModel> Items { get; set; } = new List<OrderItemViewModel>();
 
     }
 }

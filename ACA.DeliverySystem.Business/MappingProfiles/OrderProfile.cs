@@ -16,7 +16,7 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                  .ForMember(d => d.PaidAmount, d => d.MapFrom(s => s.PaidAmount))
                  .ForMember(d => d.AmountToPay, d => d.MapFrom(s => s.AmountToPay))
                  .ForMember(d => d.UserId, d => d.MapFrom(s => s.UserId))
-                 .ForMember(d => d.Items, d => d.MapFrom(s => s.Items))
+                 .ForMember(d => d.Items, d => d.MapFrom(s => s.OrderItems))
                  .PreserveReferences();
 
             CreateMap<OrderAddModel, Order>()
