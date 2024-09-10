@@ -4,6 +4,7 @@ using ACA.DeliverySystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACA.DeliverySystem.Data.Migrations
 {
     [DbContext(typeof(DeliveryDbContext))]
-    partial class DeliveryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240910193227_FixRemove")]
+    partial class FixRemove
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

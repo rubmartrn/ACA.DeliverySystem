@@ -152,10 +152,10 @@
         </div>
 
         <h3 style="color: #9b59b6; text-align: center;">Order Items</h3>
-        @if (_orderModel.OrderItems.Any())
+        @if (_orderModel.Items.Any())
         {
             <ul class="order-items-list">
-                @foreach (var orderItem in _orderModel.OrderItems)
+                @foreach (var orderItem in _orderModel.Items)
                 {
                     <li class="order-item">
                         <p><strong>Item Name:</strong> @orderItem.ItemName</p>

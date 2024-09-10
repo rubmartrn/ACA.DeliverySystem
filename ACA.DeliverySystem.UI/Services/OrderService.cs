@@ -22,17 +22,19 @@ namespace ACA.DeliverySystem.UI.Services
         {
             return await _client.GetFromJsonAsync<List<OrderViewModel>>("Order");
         }
-
         public async Task<OrderViewModel> GetById(int id, CancellationToken token)
         {
             try
             {
+                // Ապահովում ենք, որ սերվերի պատասխանը ստացվում է ճիշտ կերպ
                 var response = await _client.GetAsync($"Order/{id}", token);
-
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // Ստանում ենք JSON պատասխանը որպես տեքստ
                     var json = await response.Content.ReadAsStringAsync();
+
+                    // Deserialize ամբողջական OrderViewModel-ը
                     var order = JsonSerializer.Deserialize<OrderViewModel>(json, new JsonSerializerOptions
                     {
                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -44,24 +46,47 @@ namespace ACA.DeliverySystem.UI.Services
                 }
                     });
 
-                    return order!;
+                    if (order == null)
+                    {
+                        Console.WriteLine("Order is null.");
+                        return new OrderViewModel(); // Եթե order-ը null է, վերադարձնում ենք դատարկ մոդել
+                    }
 
+                    // Տպում ենք ստացված Order-ի տվյալները՝ debugging նպատակով
+                    Console.WriteLine($"Order ID: {order.Id}, Name: {order.Name}");
+
+                    // Եթե order-ը ունի items, տպում ենք դրանց տվյալները
+                    if (order.Items != null)
+                    {
+                        foreach (var item in order.Items)
+                        {
+                            Console.WriteLine($"Order Item: {item.ItemName}, Quantity: {item.Quantity}");
+
+                            if (item.Item != null)
+                            {
+                                Console.WriteLine($"Item: {item.Item.Name}, Price: {item.Item.Price}");
+                            }
+                        }
+                    }
+
+                    return order;
                 }
-                return new OrderViewModel();
 
+                // Եթե պատասխանը չի հաջողվել, վերադարձնում ենք դատարկ մոդել
+                return new OrderViewModel();
             }
             catch (HttpRequestException m)
             {
-                Console.WriteLine(m.Message);
+                Console.WriteLine($"HTTP request error: {m.Message}");
                 return new OrderViewModel();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error: {ex.Message}");
                 return new OrderViewModel();
-
             }
         }
+
 
         public async Task<OperationResult> Create(OrderAddModel model)
         {

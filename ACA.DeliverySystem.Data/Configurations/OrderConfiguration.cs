@@ -15,7 +15,7 @@ namespace ACA.DeliverySystem.Data.Configurations
             builder.HasMany(x => x.OrderItems)
                 .WithOne(x => x.Order)
                 .HasForeignKey(x => x.OrderId)
-                 .OnDelete(DeleteBehavior.Restrict);
+                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.User)
                 .WithMany(x => x.Orders)

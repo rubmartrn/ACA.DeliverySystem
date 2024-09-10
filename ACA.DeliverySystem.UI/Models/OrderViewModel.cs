@@ -12,7 +12,7 @@
 
         public ProgressEnum ProgressEnum { get; set; }
 
-        public List<OrderItemViewModel> OrderItems { get; set; } = new List<OrderItemViewModel>();
+        public List<OrderItemViewModel> Items { get; set; } = new List<OrderItemViewModel>();
 
     }
 }
