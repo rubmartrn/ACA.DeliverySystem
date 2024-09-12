@@ -17,5 +17,7 @@ namespace ACA.DeliverySystem.Data.Models
 
         [EmailAddress]
         public string? Email { get; set; }
+
+        public string PasswordHash { get; set; } = null!;
     }
 }

@@ -1,3 +1,4 @@
+using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Services;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -6,50 +7,30 @@ namespace ACA.DeliverySystem.UI.Pages
 {
     public class UserSignInBase : ComponentBase
     {
-        protected SignInModel signInModel = new SignInModel();
+        protected SignInRequestModel? _loginModel { get; set; }
+        protected string _errorMessage;
+        [Inject] protected UserService UserService { get; set; } = default!;
+        [Inject] protected NavigationManager NavigationManager { get; set; } = default!;
+        [Inject] protected ISnackbar Snackbar { get; set; } = default!;
 
-        [Inject]
-        protected UserService UserService { get; set; } = default!;
-
-        [Inject]
-        protected NavigationManager NavigationManager { get; set; } = default!;
-
-        [Inject]
-        protected ISnackbar Snackbar { get; set; } = default!;
-
-        protected async Task HandleSignIn()
+        protected override void OnInitialized()
         {
-            try
-            {
-                var result = await UserService.SignIn(signInModel.Email);
-                if (result.Success)
-                {
-
-                    NavigationManager.NavigateTo($"/User/{result.Data.Id}");
-                }
-                else
-                {
-
-                    Snackbar.Add("The user not found.", Severity.Error);
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                Snackbar.Add("The user not found.", Severity.Error);
-
-
-            }
-            catch (Exception m)
-            {
-                Snackbar.Add("The user not found.", Severity.Error);
-
-            }
-
+            _loginModel = new SignInRequestModel();
+            _errorMessage = string.Empty;
         }
 
-        protected class SignInModel
+        protected async Task HandleSubmit()
         {
-            public string? Email { get; set; }
+            var result = await UserService.SignIn(_loginModel);
+            if (result.Success)
+            {
+                NavigationManager.NavigateTo("/"); // Redirect to home or dashboard
+            }
+            else
+            {
+                Snackbar.Add("Invalid email or password.", Severity.Error);
+                _errorMessage = result.ErrorMessage;
+            }
         }
     }
 }

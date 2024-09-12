@@ -23,11 +23,19 @@ namespace ACA.DeliverySystem.Business.Services
             {
                 return OperationResult.Error("This email is already registered.", ErrorType.BadRequest);
             }
+
+            // If password is not hashed, we need to ensure it's hashed
+            if (!BCrypt.Net.BCrypt.Verify(user.PasswordHash, user.PasswordHash))
+            {
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+            }
+
             var mappedUser = _mapper.Map<User>(user);
             await _uow.UserRepository.Add(mappedUser, token);
             await _uow.Save(token);
             return OperationResult.Ok();
         }
+
         public async Task<OperationResult> Delete(int id, CancellationToken token)
         {
             var result = await _uow.UserRepository.Delete(id, token);
