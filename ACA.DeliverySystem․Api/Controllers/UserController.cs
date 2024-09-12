@@ -54,7 +54,7 @@ namespace ACA.DeliverySystem_Api.Controllers
              }
 
              // Check if the provided plain text password matches the stored password hash
-             if (BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
+             if (BCrypt.Net.BCrypt.Verify(model.PasswordHash, user.PasswordHash))
              {
                  var userDto = _mapper.Map<UserViewModelDTO>(user);
                  return Ok(userDto);
@@ -66,33 +66,19 @@ namespace ACA.DeliverySystem_Api.Controllers
          }*/
 
         [HttpPost("sign-in")]
-        public async Task<IActionResult> SignIn([FromBody] SignInRequestModelDTO model, CancellationToken token)
+        public async Task<SignInRequestModelDTO> SignIn([FromBody] SignInRequestModelDTO model, CancellationToken token)
         {
-            var user = await _userService.GetByEmail(model.Email, token);
-            if (user == null)
+
+            var userModel = _mapper.Map<SignInRequestModel>(model);
+            var result = await _userService.SignIn(userModel, token);
+            if (result.Success)
             {
-                return Unauthorized("Invalid email or password.");
+                return _mapper.Map<UserViewModelDTO>(result);
+
             }
-            Console.WriteLine($"Login Password: {model.Password}");
-            Console.WriteLine($"Stored Password Hash: {user.PasswordHash}");
+            // code for change
+            return new UserViewModelDTO();
 
-            /* if (user.PasswordHash == BCrypt.Net.BCrypt.HashPassword(model.Password))
-             {
-                 return Ok("Password is valid");
-             }
-             else
-             {
-                 return Unauthorized("Invalid password");
-             }*/
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash);
-
-            if (!isPasswordValid)
-            {
-                return Unauthorized("Invalid Password"); // Գաղտնաբառը սխալ է
-            }
-
-            // Մուտքը հաջողված է
-            return Ok();
         }
 
 
@@ -101,11 +87,6 @@ namespace ACA.DeliverySystem_Api.Controllers
         public async Task<IActionResult> Create([FromBody] UserAddModelDTO model, CancellationToken token)
         {
             var user = _mapper.Map<UserAddModel>(model);
-
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
-
-            Console.WriteLine($"Original Password: {model.Password}");
-            Console.WriteLine($"Hashed Password: {user.PasswordHash}");
 
             var result = await _userService.Create(user, token);
             if (result.Success)

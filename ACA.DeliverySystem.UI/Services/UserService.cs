@@ -129,20 +129,21 @@ namespace ACA.DeliverySystem.UI.Services
         }
 
 
-        public async Task<OperationResult> SignIn(SignInRequestModel model)
+        public async Task<OperationResult<UserViewModel>> SignIn(SignInRequestModel model)
         {
             var response = await _client.PostAsJsonAsync("User/sign-in", model);
 
             if (response.IsSuccessStatusCode)
             {
-                return OperationResult.Ok();
+                return OperationResult<UserViewModel>.Ok();
             }
             else
             {
-                return new OperationResult
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                return new OperationResult<UserViewModel>
                 {
                     Success = false,
-                    ErrorMessage = "Invalid email or password."
+                    ErrorMessage = errorMessage
                 };
             }
         }

@@ -82,7 +82,7 @@
 <div class="form-container">
     <h1>Sign In</h1>
     <EditForm Model="_loginModel" OnValidSubmit="HandleSubmit">
-        <InputText @bind-Value="_loginModel.Email" placeholder="Email" type="email" required class="form-control" />
+        <InputText @bind-Value="_loginModel!.Email" placeholder="Email" type="email" required class="form-control" />
         <InputText @bind-Value="_loginModel.Password" placeholder="Password" type="password" required class="form-control" />
         <button type="submit">Sign In</button>
     </EditForm>

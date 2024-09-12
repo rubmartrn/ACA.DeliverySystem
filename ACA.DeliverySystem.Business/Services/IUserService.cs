@@ -9,9 +9,10 @@ namespace ACA.DeliverySystem.Business.Services
         Task<OperationResult> Create(UserAddModel user, CancellationToken token);
         Task<OperationResult> Delete(int id, CancellationToken token);
         Task<IEnumerable<UserViewModel>> GetAll(CancellationToken token);
-        Task<UserViewModel> GetByEmail(string email, CancellationToken token);
+        Task<SignInRequestModel> GetByEmail(string email, CancellationToken token);
         Task<UserViewModel> GetById(int id, CancellationToken token);
         Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId, CancellationToken token);
+        Task<OperationResult<SignInRequestModel>> SignIn(SignInRequestModel model, CancellationToken token);
         Task<OperationResult> Update(int id, UserUpdateModel model, CancellationToken token);
     }
 }

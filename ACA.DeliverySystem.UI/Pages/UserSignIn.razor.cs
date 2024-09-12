@@ -21,15 +21,16 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected async Task HandleSubmit()
         {
-            var result = await UserService.SignIn(_loginModel);
+            var result = await UserService.SignIn(_loginModel!);
             if (result.Success)
             {
-                NavigationManager.NavigateTo("/"); // Redirect to home or dashboard
+                var userId = result.Data!.Id!;
+                NavigationManager.NavigateTo($"/User/{userId}");
             }
             else
             {
                 Snackbar.Add("Invalid email or password.", Severity.Error);
-                _errorMessage = result.ErrorMessage;
+                _errorMessage = result.ErrorMessage!;
             }
         }
     }

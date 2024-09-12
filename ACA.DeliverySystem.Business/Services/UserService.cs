@@ -24,11 +24,7 @@ namespace ACA.DeliverySystem.Business.Services
                 return OperationResult.Error("This email is already registered.", ErrorType.BadRequest);
             }
 
-            // If password is not hashed, we need to ensure it's hashed
-            if (!BCrypt.Net.BCrypt.Verify(user.PasswordHash, user.PasswordHash))
-            {
-                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
-            }
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
 
             var mappedUser = _mapper.Map<User>(user);
             await _uow.UserRepository.Add(mappedUser, token);
@@ -59,10 +55,10 @@ namespace ACA.DeliverySystem.Business.Services
             return _mapper.Map<UserViewModel>(user);
         }
 
-        public async Task<UserViewModel> GetByEmail(string email, CancellationToken token)
+        public async Task<SignInRequestModel> GetByEmail(string email, CancellationToken token)
         {
             var user = await _uow.UserRepository.GetByEmail(email, token);
-            return _mapper.Map<UserViewModel>(user);
+            return _mapper.Map<SignInRequestModel>(user);
         }
 
         public async Task<OperationResult> Update(int id, UserUpdateModel model, CancellationToken token)
@@ -105,6 +101,24 @@ namespace ACA.DeliverySystem.Business.Services
 
         }
 
+        public async Task<OperationResult<SignInRequestModel>> SignIn(SignInRequestModel model, CancellationToken token)
+        {
+            var user = await GetByEmail(model.Email, token);
+            if (user == null)
+            {
+                return OperationResult<SignInRequestModel>.Error("Invalid email or password", ErrorType.Unauthorized);
+            }
+
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(model.Password, user.Password);
+
+            if (!isPasswordValid)
+            {
+                return OperationResult<SignInRequestModel>.Error("Invalid email or password", ErrorType.Unauthorized);
+            }
+            var userView = _mapper.Map<SignInRequestModel>(user);
+            return OperationResult<SignInRequestModel>.Ok(userView);
+
+        }
 
     }
 }
