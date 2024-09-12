@@ -1,4 +1,4 @@
-﻿using ACA.DeliverySystem.Business.Models;
+﻿using ACA.DeliverySystem.Api.Models;
 
 namespace ACA.DeliverySystem_Api.Models
 {

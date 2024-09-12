@@ -128,20 +128,51 @@ namespace ACA.DeliverySystem.UI.Services
 
         }
 
-        public async Task<OperationResult<UserViewModel>> SignIn(string email)
+
+        public async Task<OperationResult> SignIn(SignInRequestModel model)
         {
-            var response = await _client.GetAsync($"User/by-email/{email}");
+            var response = await _client.PostAsJsonAsync("User/sign-in", model);
 
             if (response.IsSuccessStatusCode)
             {
-                var user = await response.Content.ReadFromJsonAsync<UserViewModel>();
-                return OperationResult<UserViewModel>.Ok(user);
+                return OperationResult.Ok();
             }
             else
             {
-                return OperationResult<UserViewModel>.Fail("User not found");
+                return new OperationResult
+                {
+                    Success = false,
+                    ErrorMessage = "Invalid email or password."
+                };
             }
         }
+
+
+        /*     public async Task<OperationResult<UserViewModel>> SignIn(UserLoginModel model)
+             {
+                 // Fetch the user by email
+                 var response = await _client.GetAsync($"User/sign-in");
+
+                 if (response.IsSuccessStatusCode)
+                 {
+                     var user = await response.Content.ReadFromJsonAsync<UserViewModel>();
+
+                     // Check if the provided hashed password matches the stored password hash
+                     if (user.PasswordHash == password)
+                     {
+                         return OperationResult<UserViewModel>.Ok(user);
+                     }
+                     else
+                     {
+                         return OperationResult<UserViewModel>.Fail("Invalid password");
+                     }
+                 }
+                 else
+                 {
+                     return OperationResult<UserViewModel>.Fail("User not found");
+                 }
+             }*/
+
 
         public async Task<UserViewModel> GetUserById(int id)
         {

@@ -1,6 +1,6 @@
 ﻿using ACA.DeliverySystem_Api.Models;
 
-namespace ACA.DeliverySystem.Business.Models
+namespace ACA.DeliverySystem.Api.Models
 {
     public class OrderViewModelDTO
     {

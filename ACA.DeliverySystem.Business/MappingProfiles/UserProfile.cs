@@ -12,6 +12,7 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .ForMember(d => d.SurName, d => d.MapFrom(s => s.SurName))
                 .ForMember(d => d.Email, d => d.MapFrom(s => s.Email))
+                .ForMember(d => d.PasswordHash, d => d.MapFrom(s => s.PasswordHash))
                 .ForMember(d => d.Id, d => d.MapFrom(s => s.Id))
                 .PreserveReferences();
 
@@ -19,7 +20,12 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .ForMember(d => d.SurName, d => d.MapFrom(s => s.SurName))
                 .ForMember(d => d.Email, d => d.MapFrom(s => s.Email))
+                .ForMember(d => d.PasswordHash, d => d.MapFrom(s => s.PasswordHash))
                 .PreserveReferences();
+
+            CreateMap<SignInRequestModel, User>()
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
 
         }
     }
