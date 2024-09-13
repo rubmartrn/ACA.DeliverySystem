@@ -1,4 +1,4 @@
-﻿namespace ACA.DeliverySystem.Business.Models
+﻿namespace ACA.DeliverySystem.Api.Models
 {
     public class ItemUpdateModelDTO
     {

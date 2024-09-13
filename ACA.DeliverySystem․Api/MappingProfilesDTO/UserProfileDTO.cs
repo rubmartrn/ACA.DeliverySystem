@@ -1,4 +1,5 @@
-﻿using ACA.DeliverySystem.Business.Models;
+﻿using ACA.DeliverySystem.Api.Models;
+using ACA.DeliverySystem.Business.Models;
 using AutoMapper;
 
 namespace ACA.DeliverySystem.Business.MappingProfiles
@@ -18,12 +19,24 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .ForMember(d => d.SurName, d => d.MapFrom(s => s.SurName))
                 .ForMember(d => d.Email, d => d.MapFrom(s => s.Email))
+                .ForMember(d => d.PasswordHash, d => d.MapFrom(s => s.Password))
                 .PreserveReferences();
 
             CreateMap<UserUpdateModelDTO, UserUpdateModel>()
                 .ForMember(d => d.Name, d => d.MapFrom(s => s.Name))
                 .ForMember(d => d.SurName, d => d.MapFrom(s => s.SurName))
                 .PreserveReferences();
+
+            CreateMap<SignInRequestModelDTO, SignInRequestModel>()
+                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
+                .PreserveReferences();
+
+            CreateMap<ResponseForSignIn, ResponseForSignInDTO>()
+               .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+               .PreserveReferences();
+
+
 
         }
     }

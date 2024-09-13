@@ -128,22 +128,30 @@ namespace ACA.DeliverySystem.UI.Services
 
         }
 
-        public async Task<OperationResult<UserViewModel>> SignIn(string email)
+
+        public async Task<OperationResult<ResponseForSignIn>> SignIn(SignInRequestModel model)
         {
-            var response = await _client.GetAsync($"User/by-email/{email}");
+            var response = await _client.PostAsJsonAsync("User/sign-in", model);
 
             if (response.IsSuccessStatusCode)
             {
-                var user = await response.Content.ReadFromJsonAsync<UserViewModel>();
-                return OperationResult<UserViewModel>.Ok(user);
+                var resultData = await response.Content.ReadFromJsonAsync<ResponseForSignIn>();
+                return OperationResult<ResponseForSignIn>.Ok(resultData!);
             }
             else
             {
-                return OperationResult<UserViewModel>.Fail("User not found");
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                return new OperationResult<ResponseForSignIn>
+                {
+                    Success = false,
+                    ErrorMessage = errorMessage
+                };
             }
         }
 
-        public async Task<UserViewModel> GetUserById(int id)
+
+
+        public async Task<UserViewModel?> GetUserById(int id)
         {
 
             return await _client.GetFromJsonAsync<UserViewModel>($"User/{id}");

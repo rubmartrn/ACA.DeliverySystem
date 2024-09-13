@@ -1,4 +1,5 @@
-﻿using ACA.DeliverySystem.Business.Models;
+﻿using ACA.DeliverySystem.Api.Models;
+using ACA.DeliverySystem.Business.Models;
 using ACA.DeliverySystem.Business.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -41,16 +42,62 @@ namespace ACA.DeliverySystem_Api.Controllers
             return _mapper.Map<UserViewModelDTO>(user);
         }
 
+        /* [HttpPost("sign-in")]
+         public async Task<IActionResult> SignIn([FromBody] SignInRequestModelDTO model, CancellationToken token)
+         {
+             // Fetch the user by email
+             var user = await _userService.GetByEmail(model.Email, token);
+
+             if (user == null)
+             {
+                 return NotFound("User not found");
+             }
+
+             // Check if the provided plain text password matches the stored password hash
+             if (BCrypt.Net.BCrypt.Verify(model.PasswordHash, user.PasswordHash))
+             {
+                 var userDto = _mapper.Map<UserViewModelDTO>(user);
+                 return Ok(userDto);
+             }
+             else
+             {
+                 return BadRequest("Invalid password");
+             }
+         }*/
+
+        [HttpPost("sign-in")]
+        public async Task<IActionResult> SignIn([FromBody] SignInRequestModelDTO model, CancellationToken token)
+        {
+
+            var userModel = _mapper.Map<SignInRequestModel>(model);
+            var result = await _userService.SignIn(userModel, token);
+            if (result.Success)
+            {
+                var responseDto = _mapper.Map<ResponseForSignInDTO>(result.Data);
+                return Ok(responseDto);
+
+            }
+
+            if (result.ErrorType == ErrorType.Unauthorized)
+            {
+                return Unauthorized(new { message = result.ErrorMessage });
+            }
+
+            return BadRequest(new { message = result.ErrorMessage });
+
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] UserAddModelDTO model, CancellationToken token)
         {
             var user = _mapper.Map<UserAddModel>(model);
+
             var result = await _userService.Create(user, token);
             if (result.Success)
             {
                 return Ok();
-
             }
             return BadRequest();
         }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACA.DeliverySystem.Data.Migrations
 {
     [DbContext(typeof(DeliveryDbContext))]
-    [Migration("20240910193626_Key_Fix_Update")]
-    partial class Key_Fix_Update
+    [Migration("20240912184735_Add_New_Password")]
+    partial class Add_New_Password
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -139,6 +139,10 @@ namespace ACA.DeliverySystem.Data.Migrations
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SurName")
                         .IsRequired()

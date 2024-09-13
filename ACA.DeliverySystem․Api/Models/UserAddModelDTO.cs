@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ACA.DeliverySystem.Business.Models
+namespace ACA.DeliverySystem.Api.Models
 {
     public class UserAddModelDTO
     {
@@ -10,5 +10,6 @@ namespace ACA.DeliverySystem.Business.Models
 
         [EmailAddress]
         public string? Email { get; set; }
+        public string Password { get; set; } = null!;
     }
 }

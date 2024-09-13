@@ -15,16 +15,16 @@
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center center;
+        display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
         margin: 0;
         font-family: Arial, sans-serif;
-        
     }
 
     .form-container {
-        background-color: rgba(0, 0, 0, 0.5); 
+        background-color: rgba(0, 0, 0, 0.5);
         padding: 30px;
         border-radius: 10px;
         text-align: center;
@@ -32,8 +32,8 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         width: 100%;
         max-width: 400px;
-
     }
+
 
     h1 {
         margin-bottom: 20px;
@@ -42,15 +42,16 @@
     }
 
     input[type="email"],
-    input[type="text"]{
+    input[type="text"],
+    input[type="password"] {
         width: 100%;
         padding: 10px;
         margin-top: 20px;
         border: none;
         border-radius: 5px;
         font-size: 16px;
+        box-sizing: border-box; /* Ensures padding and borders don't affect the width */
     }
-
 
     button {
         width: 100%;
@@ -86,15 +87,24 @@
 <div class="form-container">
     <h1>Create an Account</h1>
     <EditForm Model="_userModel" OnValidSubmit="HandleSubmit">
-        <InputText @bind-Value="_userModel.Name" placeholder="Name" required class="form-control" />
-        <InputText @bind-Value="_userModel.SurName" placeholder="SurName" required class="form-control" />
+        <InputText @bind-Value="_userModel.Name" placeholder="Name" type="text" required class="form-control" />
+        <InputText @bind-Value="_userModel.SurName" placeholder="SurName" type="text" required class="form-control" />
         <InputText @bind-Value="_userModel.Email" placeholder="Email" type="email" required class="form-control" />
+
+        <!-- Adding password input fields -->
+        <InputText @bind-Value="_userModel.Password" placeholder="Password" type="password" required class="form-control" />
+        <InputText @bind-Value="_passwordConfirmation" placeholder="Confirm Password" type="password" required class="form-control" />
+
         <button type="submit">Sign Up</button>
     </EditForm>
+
+
+
     @if (!string.IsNullOrEmpty(_errorMessage))
     {
-            <p style="color: red;">@_errorMessage</p>
+        <p style="color: red;">@_errorMessage</p>
     }
+
     <div class="signin-link">
         <p>Already have an account? <a href="/signin">Sign in here</a>.</p>
     </div>

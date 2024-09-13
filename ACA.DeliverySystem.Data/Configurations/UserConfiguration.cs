@@ -12,6 +12,7 @@ namespace ACA.DeliverySystem.Data.Configurations
             builder.Property(x => x.Name).IsRequired();
             builder.Property(x => x.SurName).IsRequired();
             builder.Property(x => x.Email).IsRequired();
+            builder.Property(x => x.PasswordHash).IsRequired();
 
         }
     }

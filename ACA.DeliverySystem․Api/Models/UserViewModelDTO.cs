@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ACA.DeliverySystem.Business.Models
+namespace ACA.DeliverySystem.Api.Models
 {
     public class UserViewModelDTO
     {
