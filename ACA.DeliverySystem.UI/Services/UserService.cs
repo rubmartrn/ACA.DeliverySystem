@@ -129,18 +129,19 @@ namespace ACA.DeliverySystem.UI.Services
         }
 
 
-        public async Task<OperationResult<UserViewModel>> SignIn(SignInRequestModel model)
+        public async Task<OperationResult<ResponseForSignIn>> SignIn(SignInRequestModel model)
         {
             var response = await _client.PostAsJsonAsync("User/sign-in", model);
 
             if (response.IsSuccessStatusCode)
             {
-                return OperationResult<UserViewModel>.Ok();
+                var resultData = await response.Content.ReadFromJsonAsync<ResponseForSignIn>();
+                return OperationResult<ResponseForSignIn>.Ok(resultData!);
             }
             else
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
-                return new OperationResult<UserViewModel>
+                return new OperationResult<ResponseForSignIn>
                 {
                     Success = false,
                     ErrorMessage = errorMessage
@@ -149,33 +150,8 @@ namespace ACA.DeliverySystem.UI.Services
         }
 
 
-        /*     public async Task<OperationResult<UserViewModel>> SignIn(UserLoginModel model)
-             {
-                 // Fetch the user by email
-                 var response = await _client.GetAsync($"User/sign-in");
 
-                 if (response.IsSuccessStatusCode)
-                 {
-                     var user = await response.Content.ReadFromJsonAsync<UserViewModel>();
-
-                     // Check if the provided hashed password matches the stored password hash
-                     if (user.PasswordHash == password)
-                     {
-                         return OperationResult<UserViewModel>.Ok(user);
-                     }
-                     else
-                     {
-                         return OperationResult<UserViewModel>.Fail("Invalid password");
-                     }
-                 }
-                 else
-                 {
-                     return OperationResult<UserViewModel>.Fail("User not found");
-                 }
-             }*/
-
-
-        public async Task<UserViewModel> GetUserById(int id)
+        public async Task<UserViewModel?> GetUserById(int id)
         {
 
             return await _client.GetFromJsonAsync<UserViewModel>($"User/{id}");

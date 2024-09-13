@@ -18,7 +18,7 @@ namespace ACA.DeliverySystem.Business.Services
 
         public async Task<OperationResult> Create(UserAddModel user, CancellationToken token)
         {
-            var haveUser = await _uow.UserRepository.GetByEmail(user.Email, token);
+            var haveUser = await _uow.UserRepository.GetByEmail(user.Email!, token);
             if (haveUser != null)
             {
                 return OperationResult.Error("This email is already registered.", ErrorType.BadRequest);
@@ -55,10 +55,10 @@ namespace ACA.DeliverySystem.Business.Services
             return _mapper.Map<UserViewModel>(user);
         }
 
-        public async Task<SignInRequestModel> GetByEmail(string email, CancellationToken token)
+        public async Task<ResponseForSignIn> GetByEmail(string email, CancellationToken token)
         {
             var user = await _uow.UserRepository.GetByEmail(email, token);
-            return _mapper.Map<SignInRequestModel>(user);
+            return _mapper.Map<ResponseForSignIn>(user);
         }
 
         public async Task<OperationResult> Update(int id, UserUpdateModel model, CancellationToken token)
@@ -101,22 +101,22 @@ namespace ACA.DeliverySystem.Business.Services
 
         }
 
-        public async Task<OperationResult<SignInRequestModel>> SignIn(SignInRequestModel model, CancellationToken token)
+        public async Task<OperationResult<ResponseForSignIn>> SignIn(SignInRequestModel model, CancellationToken token)
         {
             var user = await GetByEmail(model.Email, token);
             if (user == null)
             {
-                return OperationResult<SignInRequestModel>.Error("Invalid email or password", ErrorType.Unauthorized);
+                return OperationResult<ResponseForSignIn>.Error("Invalid email or password", ErrorType.Unauthorized);
             }
 
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(model.Password, user.Password);
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash);
 
             if (!isPasswordValid)
             {
-                return OperationResult<SignInRequestModel>.Error("Invalid email or password", ErrorType.Unauthorized);
+                return OperationResult<ResponseForSignIn>.Error("Invalid email or password", ErrorType.Unauthorized);
             }
-            var userView = _mapper.Map<SignInRequestModel>(user);
-            return OperationResult<SignInRequestModel>.Ok(userView);
+            var userView = _mapper.Map<ResponseForSignIn>(user);
+            return OperationResult<ResponseForSignIn>.Ok(userView);
 
         }
 

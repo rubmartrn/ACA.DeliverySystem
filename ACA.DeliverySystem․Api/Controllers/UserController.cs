@@ -66,18 +66,24 @@ namespace ACA.DeliverySystem_Api.Controllers
          }*/
 
         [HttpPost("sign-in")]
-        public async Task<SignInRequestModelDTO> SignIn([FromBody] SignInRequestModelDTO model, CancellationToken token)
+        public async Task<IActionResult> SignIn([FromBody] SignInRequestModelDTO model, CancellationToken token)
         {
 
             var userModel = _mapper.Map<SignInRequestModel>(model);
             var result = await _userService.SignIn(userModel, token);
             if (result.Success)
             {
-                return _mapper.Map<UserViewModelDTO>(result);
+                var responseDto = _mapper.Map<ResponseForSignInDTO>(result.Data);
+                return Ok(responseDto);
 
             }
-            // code for change
-            return new UserViewModelDTO();
+
+            if (result.ErrorType == ErrorType.Unauthorized)
+            {
+                return Unauthorized(new { message = result.ErrorMessage });
+            }
+
+            return BadRequest(new { message = result.ErrorMessage });
 
         }
 

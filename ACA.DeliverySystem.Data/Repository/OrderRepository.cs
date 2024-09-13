@@ -17,9 +17,11 @@ namespace ACA.DeliverySystem.Data.Repository
             return await _context.Orders.ToListAsync(token);
         }
 
-        public async Task<Order> GetById(int id, CancellationToken token)
+        public async Task<Order?> GetById(int id, CancellationToken token)
         {
-            return await _context.Orders.Include(x => x.OrderItems).ThenInclude(oi => oi.Item)
+            return await _context.Orders
+                .Include(x => x.OrderItems)
+                .ThenInclude(oi => oi.Item)
                 .SingleOrDefaultAsync(x => x.Id == id, token);
 
         }

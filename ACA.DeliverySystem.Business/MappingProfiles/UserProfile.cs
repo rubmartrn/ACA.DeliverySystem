@@ -22,9 +22,9 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                 .ForMember(d => d.PasswordHash, d => d.MapFrom(s => s.PasswordHash))
                 .PreserveReferences();
 
-            CreateMap<User, SignInRequestModel>()
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-            .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash))
+            CreateMap<User, ResponseForSignIn>()
+            .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(d => d.PasswordHash, opt => opt.MapFrom(src => src.PasswordHash))
             .PreserveReferences();
 
 

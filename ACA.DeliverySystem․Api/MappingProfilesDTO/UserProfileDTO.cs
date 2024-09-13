@@ -32,6 +32,12 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
                 .PreserveReferences();
 
+            CreateMap<ResponseForSignIn, ResponseForSignInDTO>()
+               .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+               .PreserveReferences();
+
+
+
         }
     }
 }
