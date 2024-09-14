@@ -77,13 +77,45 @@
             .signup-link a:hover {
                 text-decoration: underline;
             }
+
+    .password-container {
+        position: relative;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .password-input {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+        padding-right: 40px; 
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 10px; 
+        top: 50%; 
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
 </style>
 
 <div class="form-container">
     <h1>Sign In</h1>
     <EditForm Model="_loginModel" OnValidSubmit="HandleSubmit">
         <InputText @bind-Value="_loginModel!.Email" placeholder="Email" type="email" required class="form-control" />
-        <InputText @bind-Value="_loginModel.Password" placeholder="Password" type="password" required class="form-control" />
+        
+
+        <!-- Password input with toggle visibility feature -->
+        <div class="password-container">
+            <InputText @bind-Value="_loginModel.Password" placeholder="Password" type="@_passwordInputType" required class="password-input" />
+            <MudIconButton Icon="@_passwordIcon" Color="Color.Inherit" Class="toggle-password" @onclick="TogglePasswordVisibility" />
+        </div>
+
+
         <button type="submit">Sign In</button>
     </EditForm>
 
