@@ -3,6 +3,7 @@
     public class ResponseForSignInDTO
     {
         public int Id { get; set; }
+        public string? Token { get; set; }
 
     }
 }

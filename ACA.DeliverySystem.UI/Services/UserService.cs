@@ -1,5 +1,6 @@
 ﻿using ACA.DeliverySystem.UI.Coneverters;
 using ACA.DeliverySystem.UI.Models;
+using Blazored.LocalStorage;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,10 +10,12 @@ namespace ACA.DeliverySystem.UI.Services
     public class UserService
     {
         private readonly HttpClient _client;
+        private readonly ILocalStorageService _localStorage;
 
-        public UserService(HttpClient Client)
+        public UserService(HttpClient Client, ILocalStorageService localStorage)
         {
             _client = Client;
+            _localStorage = localStorage;
         }
 
         public async Task<OperationResult> Create(UserAddModel model)
@@ -136,17 +139,25 @@ namespace ACA.DeliverySystem.UI.Services
             if (response.IsSuccessStatusCode)
             {
                 var resultData = await response.Content.ReadFromJsonAsync<ResponseForSignIn>();
+
                 return OperationResult<ResponseForSignIn>.Ok(resultData!);
+
             }
-            else
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            return new OperationResult<ResponseForSignIn>
             {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                return new OperationResult<ResponseForSignIn>
-                {
-                    Success = false,
-                    ErrorMessage = errorMessage
-                };
-            }
+                Success = false,
+                ErrorMessage = errorMessage
+            };
+        }
+        public async Task SignOutAsync()
+        {
+            await _localStorage.RemoveItemAsync("authToken");
+        }
+
+        public async Task<string> GetTokenAsync()
+        {
+            return await _localStorage.GetItemAsync<string>("authToken");
         }
 
 

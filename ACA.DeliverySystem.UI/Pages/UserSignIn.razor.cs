@@ -14,7 +14,7 @@ namespace ACA.DeliverySystem.UI.Pages
         protected string _passwordInputType = "password";
         protected string _passwordIcon = Icons.Material.Filled.VisibilityOff;
 
-
+        [Inject] protected AuthService AuthService { get; set; } = default!;
         [Inject] protected UserService UserService { get; set; } = default!;
         [Inject] protected NavigationManager NavigationManager { get; set; } = default!;
         [Inject] protected ISnackbar Snackbar { get; set; } = default!;
@@ -27,16 +27,30 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected async Task HandleSubmit()
         {
-            var result = await UserService.SignIn(_loginModel!);
+            var result = await AuthService.SignInAsync(_loginModel!);
             if (result.Success)
             {
-                var userId = result.Data!.Id!;
-                NavigationManager.NavigateTo($"/User/{userId}");
+                var token = result.Data!.Token; // assuming `Token` is part of the response
+                await AuthService.StoreTokenAsync(token!); // Store the token
+
+                NavigationManager.NavigateTo($"/User/{result.Data!.Id}");
             }
             else
             {
-                _errorMessage = result.ErrorMessage!;
+                _errorMessage = result.ErrorMessage;
+                Snackbar.Add(_errorMessage, Severity.Error);
             }
+
+            //var result = await UserService.SignIn(_loginModel!);
+            //if (result.Success)
+            //{
+            //    NavigationManager.NavigateTo($"/User/{result.Data!.Id}");
+            //}
+            //else
+            //{
+            //    Snackbar.Add($"{_errorMessage}", Severity.Error);
+            //}
+
         }
 
         // Toggle password visibility
