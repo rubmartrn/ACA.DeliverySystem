@@ -87,12 +87,14 @@
 <div class="form-container">
     <h1>Create an Account</h1>
     <EditForm Model="_userModel" OnValidSubmit="HandleSubmit">
-        <InputText @bind-Value="_userModel.Name" placeholder="Name" type="text" required class="form-control" />
+        <InputText @bind-Value="_userModel!.Name" placeholder="Name" type="text" required class="form-control" />
         <InputText @bind-Value="_userModel.SurName" placeholder="SurName" type="text" required class="form-control" />
         <InputText @bind-Value="_userModel.Email" placeholder="Email" type="email" required class="form-control" />
 
         <!-- Adding password input fields -->
         <InputText @bind-Value="_userModel.Password" placeholder="Password" type="password" required class="form-control" />
+        <span style="color: red;" id="password-requirements">@_passwordValidationMessage</span>
+
         <InputText @bind-Value="_passwordConfirmation" placeholder="Confirm Password" type="password" required class="form-control" />
 
         <button type="submit">Sign Up</button>

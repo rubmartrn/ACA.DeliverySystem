@@ -1,52 +1,51 @@
-﻿namespace ACA.DeliverySystem.UI.Models
+﻿namespace ACA.DeliverySystem.UI.Models;
+
+public class OperationResult
 {
-    public class OperationResult
+    public bool Success { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    public static OperationResult Ok()
     {
-        public bool Success { get; set; }
-
-        public string? ErrorMessage { get; set; }
-
-        public static OperationResult Ok()
-        {
-            return new OperationResult { Success = true };
-        }
-
-        public static OperationResult Fail(string message)
-        {
-            return new OperationResult { Success = false, ErrorMessage = message };
-        }
-
-
+        return new OperationResult { Success = true };
     }
 
-    public class OperationResult<T> : OperationResult
+    public static OperationResult Fail(string message)
     {
-        public T? Data { get; set; }
+        return new OperationResult { Success = false, ErrorMessage = message };
+    }
 
-        public static OperationResult<T> Ok(T data)
-        {
-            return new OperationResult<T>
-            {
-                Success = true,
-                Data = data
-            };
-        }
 
-        public static new OperationResult<T> Ok()
-        {
-            return new OperationResult<T>
-            {
-                Success = true
-            };
-        }
+}
 
-        public static new OperationResult<T> Fail(string? message = null)
+public class OperationResult<T> : OperationResult
+{
+    public T? Data { get; set; }
+
+    public static OperationResult<T> Ok(T data)
+    {
+        return new OperationResult<T>
         {
-            return new OperationResult<T>
-            {
-                Success = false,
-                ErrorMessage = message,
-            };
-        }
+            Success = true,
+            Data = data
+        };
+    }
+
+    public static new OperationResult<T> Ok()
+    {
+        return new OperationResult<T>
+        {
+            Success = true
+        };
+    }
+
+    public static new OperationResult<T> Fail(string? message = null)
+    {
+        return new OperationResult<T>
+        {
+            Success = false,
+            ErrorMessage = message,
+        };
     }
 }

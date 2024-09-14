@@ -8,7 +8,7 @@ namespace ACA.DeliverySystem.UI.Pages
     public class UserSignInBase : ComponentBase
     {
         protected SignInRequestModel? _loginModel { get; set; }
-        protected string _errorMessage;
+        protected string? _errorMessage;
         [Inject] protected UserService UserService { get; set; } = default!;
         [Inject] protected NavigationManager NavigationManager { get; set; } = default!;
         [Inject] protected ISnackbar Snackbar { get; set; } = default!;
@@ -29,7 +29,6 @@ namespace ACA.DeliverySystem.UI.Pages
             }
             else
             {
-                Snackbar.Add("Invalid email or password.", Severity.Error);
                 _errorMessage = result.ErrorMessage!;
             }
         }

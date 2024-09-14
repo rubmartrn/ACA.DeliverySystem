@@ -1,10 +1,6 @@
 ﻿using ACA.DeliverySystem.Business.Models;
 using ACA.DeliverySystem.UI.Models;
-using ACA.DeliverySystem.UI.Pages;
-using Microsoft.AspNetCore.Components.Forms;
-using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace ACA.DeliverySystem.UI.Services
 {
@@ -110,7 +106,7 @@ namespace ACA.DeliverySystem.UI.Services
 
         }
 
-       
+
 
     }
 }
