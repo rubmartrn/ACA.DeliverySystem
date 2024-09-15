@@ -41,16 +41,6 @@ namespace ACA.DeliverySystem.UI.Pages
                 Snackbar.Add(_errorMessage, Severity.Error);
             }
 
-            //var result = await UserService.SignIn(_loginModel!);
-            //if (result.Success)
-            //{
-            //    NavigationManager.NavigateTo($"/User/{result.Data!.Id}");
-            //}
-            //else
-            //{
-            //    Snackbar.Add($"{_errorMessage}", Severity.Error);
-            //}
-
         }
 
         // Toggle password visibility

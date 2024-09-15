@@ -23,9 +23,10 @@ builder.Services.AddHttpClient<UserService>(
     h => h.BaseAddress = new Uri("https://localhost:7055")
     );
 
+builder.Services.AddHttpClient<AuthService>(
+    h => h.BaseAddress = new Uri("https://localhost:7055")
+    );
 
-// No need to set base address for AuthService
-builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddHttpClient<ItemService>(
     h => h.BaseAddress = new Uri("https://localhost:7055")

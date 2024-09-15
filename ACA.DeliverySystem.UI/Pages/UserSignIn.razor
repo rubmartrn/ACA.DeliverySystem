@@ -91,30 +91,40 @@
         border-radius: 5px;
         font-size: 16px;
         box-sizing: border-box;
-        padding-right: 40px; 
+        padding-right: 40px; /* Leave space for the icon */
     }
 
     .toggle-password {
         position: absolute;
-        right: 10px; 
-        top: 50%; 
+        right: 10px; /* Align the icon to the right */
+        top: 50%;
         transform: translateY(-50%);
         cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.3); /* Darker background */
+        border-radius: 50%;
+        padding: 5px; /* Padding around the icon */
+        color: white;
+        font-size: 16px; /* Smaller icon size */
+        width: 30px;
+        height: 30px;
     }
+
+        .toggle-password:hover {
+            background-color: rgba(0, 0, 0, 0.5); /* Darker on hover */
+        }
+
 </style>
 
 <div class="form-container">
     <h1>Sign In</h1>
     <EditForm Model="_loginModel" OnValidSubmit="HandleSubmit">
         <InputText @bind-Value="_loginModel!.Email" placeholder="Email" type="email" required class="form-control" />
-        
 
         <!-- Password input with toggle visibility feature -->
         <div class="password-container">
             <InputText @bind-Value="_loginModel.Password" placeholder="Password" type="@_passwordInputType" required class="password-input" />
             <MudIconButton Icon="@_passwordIcon" Color="Color.Inherit" Class="toggle-password" @onclick="TogglePasswordVisibility" />
         </div>
-
 
         <button type="submit">Sign In</button>
     </EditForm>
