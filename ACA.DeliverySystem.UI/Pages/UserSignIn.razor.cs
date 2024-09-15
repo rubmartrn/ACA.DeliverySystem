@@ -30,8 +30,8 @@ namespace ACA.DeliverySystem.UI.Pages
             var result = await AuthService.SignInAsync(_loginModel!);
             if (result.Success)
             {
-                var token = result.Data!.Token; // assuming `Token` is part of the response
-                await AuthService.StoreTokenAsync(token!); // Store the token
+                var token = result.Data!.Token; 
+                await AuthService.StoreTokenAsync(token!); 
 
                 NavigationManager.NavigateTo($"/User/{result.Data!.Id}");
             }
@@ -43,7 +43,7 @@ namespace ACA.DeliverySystem.UI.Pages
 
         }
 
-        // Toggle password visibility
+
         protected void TogglePasswordVisibility()
         {
             if (_passwordInputType == "password")

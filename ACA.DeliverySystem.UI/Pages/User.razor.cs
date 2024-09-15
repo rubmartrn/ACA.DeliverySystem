@@ -44,7 +44,7 @@ namespace ACA.DeliverySystem.UI.Pages
             var result = await UserService.AddOrderInUser(userId, _orderModel!);
             if (result.Success)
             {
-                NavigationManager.NavigateTo($"User/{userId}/orders");
+                NavigationManager.NavigateTo($"User/orders");
             }
             else
             {

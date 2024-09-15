@@ -6,14 +6,17 @@ namespace ACA.DeliverySystem.UI.Pages
 {
     public class OrdersBase : ComponentBase
     {
-        [Parameter]
         public int userId { get; set; }
+
         protected string _errorMessage = default!;
         protected IEnumerable<OrderViewModel> orders { get; set; } = new List<OrderViewModel>();
         protected CancellationToken Token { get; set; } = default!;
 
         [Inject]
         protected UserService UserService { get; set; } = default!;
+
+        [Inject]
+        protected AuthService AuthService { get; set; } = default!;
 
         [Inject]
         protected NavigationManager NavigationManager { get; set; } = default!;
@@ -24,6 +27,14 @@ namespace ACA.DeliverySystem.UI.Pages
         {
             try
             {
+           
+                if (!await AuthService.CheckAuthenticationAsync())
+                {
+                    
+                    NavigationManager.NavigateTo("/signin");
+                    return;
+                }
+                userId = await AuthService.GetUserIdAsync();
                 orders = await UserService.GetUserOrders(userId, Token);
             }
             finally
@@ -34,6 +45,7 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected void NavigateToUserPage()
         {
+           
             NavigationManager.NavigateTo($"/User/{userId}");
         }
     }

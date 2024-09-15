@@ -1,5 +1,6 @@
 ﻿using ACA.DeliverySystem.UI.Models;
 using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 
 public class AuthService
@@ -7,6 +8,7 @@ public class AuthService
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
 
+    public int userId { get; set; }
     public AuthService(HttpClient httpClient, ILocalStorageService localStorage)
     {
         _httpClient = httpClient;
@@ -24,10 +26,14 @@ public class AuthService
             {
                 var result = await response.Content.ReadFromJsonAsync<ResponseForSignIn>();
 
+
                 if (result != null && !string.IsNullOrEmpty(result.Token))
                 {
                     // Save token in localStorage
                     await _localStorage.SetItemAsync("authToken", result.Token);
+                    await _localStorage.SetItemAsync("userId", result.Id);
+
+
                     return OperationResult<ResponseForSignIn>.Ok(result);
                 }
             }
@@ -40,6 +46,42 @@ public class AuthService
 
         }
 
+    }
+    public bool IsTokenValid(string token)
+    {
+        var jwtHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+
+        if (jwtHandler.CanReadToken(token))
+        {
+            var jwtToken = jwtHandler.ReadJwtToken(token);
+            var expirationDate = jwtToken.ValidTo;
+
+            // Ստուգել՝ արդյոք ժամկետը լրացել է
+            if (expirationDate > DateTime.UtcNow)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public async Task<bool> CheckAuthenticationAsync()
+    {
+        var token = await GetTokenAsync();
+
+        if (string.IsNullOrEmpty(token) || !IsTokenValid(token))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task<int> GetUserIdAsync()
+    {
+       
+        return await _localStorage.GetItemAsync<int>("userId");
     }
 
     public async Task SignOutAsync()

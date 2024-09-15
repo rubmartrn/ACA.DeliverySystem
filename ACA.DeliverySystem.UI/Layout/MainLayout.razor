@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager Navigation  // Inject the NavigationManager
-
+@inject AuthService AuthService
 @* Required *@
 <MudThemeProvider />
 <MudPopoverProvider />
@@ -16,7 +16,7 @@
         <MudNavMenu>
             <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All" OnClick="CloseDrawer">Home</MudNavLink>
             <MudNavLink Href="item" Icon="@Icons.Material.Filled.List" OnClick="CloseDrawer">Items</MudNavLink>
-            <MudNavLink Href="signin" Icon="@Icons.Material.Filled.ShoppingCart" OnClick="CloseDrawer">Orders</MudNavLink>
+            <MudNavLink Href="@($"/User/{userId}/orders")" Icon="@Icons.Material.Filled.ShoppingCart" OnClick="CloseDrawer">Orders</MudNavLink>
         </MudNavMenu>
     </MudDrawer>
 
@@ -40,6 +40,8 @@
 
 @code {
     private bool _drawerOpen = false;
+    private int userId;
+
 
     private void ToggleDrawer()
     {
@@ -51,8 +53,9 @@
         _drawerOpen = false;
     }
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        userId = await AuthService.GetUserIdAsync();
         Navigation.LocationChanged += HandleLocationChanged;
     }
 
