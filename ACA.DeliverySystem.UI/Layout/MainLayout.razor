@@ -1,14 +1,9 @@
 ﻿@inherits LayoutComponentBase
-@inject NavigationManager Navigation  // Inject the NavigationManager
+@inject NavigationManager Navigation
 @inject AuthService AuthService
-@* Required *@
 <MudThemeProvider />
 <MudPopoverProvider />
-
-@* Needed for dialogs *@
 <MudDialogProvider />
-
-@* Needed for snackbars *@
 <MudSnackbarProvider />
 
 <MudDrawerContainer>
@@ -16,12 +11,11 @@
         <MudNavMenu>
             <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All" OnClick="CloseDrawer">Home</MudNavLink>
             <MudNavLink Href="item" Icon="@Icons.Material.Filled.List" OnClick="CloseDrawer">Items</MudNavLink>
-            <MudNavLink Href="@($"/User/{userId}/orders")" Icon="@Icons.Material.Filled.ShoppingCart" OnClick="CloseDrawer">Orders</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.ShoppingCart" OnClick="OrdersClicked">Orders</MudNavLink> <!-- Updated -->
         </MudNavMenu>
     </MudDrawer>
 
     <MudMainContent>
-        <!-- This is where your MudAppBar goes -->
         <MudAppBar Elevation="1" Color="Color.Primary" Style="background-image: url('https://w0.peakpx.com/wallpaper/535/915/HD-wallpaper-delivery-blue-background-online-ordering-background-blue-digital-technology-background-online-shopping.jpg'), linear-gradient(to right, #6a11cb, #2575fc); background-size: cover; background-blend-mode: overlay;">
             <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="ToggleDrawer" Edge="Edge.Start" Color="Color.Inherit" />
             <MudText Typo="Typo.h6">Delivery System</MudText>
@@ -42,7 +36,6 @@
     private bool _drawerOpen = false;
     private int userId;
 
-
     private void ToggleDrawer()
     {
         _drawerOpen = !_drawerOpen;
@@ -53,20 +46,39 @@
         _drawerOpen = false;
     }
 
-    protected override async void OnInitialized()
+    protected override void OnInitialized()
     {
-        userId = await AuthService.GetUserIdAsync();
         Navigation.LocationChanged += HandleLocationChanged;
+    }
+
+    // This method will be called when the "Orders" button is clicked
+    private async Task OrdersClicked()
+    {
+        CloseDrawer(); // Close drawer when clicking
+
+        // Check if the user is authenticated
+        if (await AuthService.CheckAuthenticationAsync())
+        {
+            // If authenticated, get the userId and navigate to the orders page
+            userId = await AuthService.GetUserIdAsync();
+            Navigation.NavigateTo($"/User/{userId}/orders");
+        }
+        else
+        {
+            // If not authenticated, redirect to the sign-in page
+            Navigation.NavigateTo("/signin");
+        }
     }
 
     private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
     {
-        _drawerOpen = false;  // Ensure drawer closes on navigation
-        StateHasChanged();    // Force UI update
+        _drawerOpen = false; // Ensure drawer closes on navigation
+        StateHasChanged(); // Force UI update
     }
 
     public void Dispose()
     {
+        // Clean up the event handler
         Navigation.LocationChanged -= HandleLocationChanged;
     }
 }
