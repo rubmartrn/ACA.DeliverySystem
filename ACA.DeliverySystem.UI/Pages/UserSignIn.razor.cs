@@ -30,8 +30,8 @@ namespace ACA.DeliverySystem.UI.Pages
             var result = await AuthService.SignInAsync(_loginModel!);
             if (result.Success)
             {
-                var token = result.Data!.Token; 
-                await AuthService.StoreTokenAsync(token!); 
+                var token = result.Data!.Token;
+                await AuthService.StoreTokenAsync(token!);
 
                 NavigationManager.NavigateTo($"/User/{result.Data!.Id}");
             }

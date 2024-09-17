@@ -1,6 +1,5 @@
 ﻿using ACA.DeliverySystem.UI.Models;
 using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 
 public class AuthService
@@ -80,13 +79,14 @@ public class AuthService
 
     public async Task<int> GetUserIdAsync()
     {
-       
+
         return await _localStorage.GetItemAsync<int>("userId");
     }
 
     public async Task SignOutAsync()
     {
         await _localStorage.RemoveItemAsync("authToken");
+        await _localStorage.RemoveItemAsync("userId");
     }
 
     public async Task<string?> GetTokenAsync()
