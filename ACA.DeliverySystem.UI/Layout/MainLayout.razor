@@ -16,26 +16,46 @@
     </MudDrawer>
 
     <MudMainContent>
-        <MudAppBar Elevation="1" Color="Color.Primary" Style="background-image: url('https://w0.peakpx.com/wallpaper/535/915/HD-wallpaper-delivery-blue-background-online-ordering-background-blue-digital-technology-background-online-shopping.jpg'), linear-gradient(to right, #6a11cb, #2575fc); background-size: cover; background-blend-mode: overlay;">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="ToggleDrawer" Edge="Edge.Start" Color="Color.Inherit" />
-            <MudText Typo="Typo.h6">Delivery System</MudText>
-            <MudSpacer />
+    <MudAppBar Elevation="1" Color="Color.Primary" Style="background-image: url('https://w0.peakpx.com/wallpaper/535/915/HD-wallpaper-delivery-blue-background-online-ordering-background-blue-shopping.jpg'), linear-gradient(to right, #6a11cb, #2575fc); background-size: cover; background-blend-mode: overlay;">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="ToggleDrawer" Edge="Edge.Start" Color="Color.Inherit" />
+        <MudText Typo="Typo.h6">Delivery System</MudText>
+        <MudSpacer />
+
+        @if (isAuthenticated)
+        {
+            <!-- Display avatar with a dropdown menu when user is authenticated -->
+            <MudMenu>
+                <ActivatorContent>
+                    <MudAvatar Color="Color.Warning" Variant="Variant.Filled">
+                        <MudIcon Color="Color.Dark" Icon="@Icons.Custom.Uncategorized.Radioactive" Size="Size.Large" />
+                    </MudAvatar>
+                </ActivatorContent>
+                <ChildContent>
+                <MudMenuItem OnClick="GoToProfile">My Profile</MudMenuItem>
+                <MudMenuItem OnClick="SignOut">Sign Out</MudMenuItem>
+                    </ChildContent>
+            </MudMenu>
+        }
+        else
+        {
+            <!-- Display sign-in link when user is not authenticated -->
             <MudLink Href="/signin" Color="Color.Inherit" Class="d-flex align-items-center">
                 <MudIcon Icon="@Icons.Material.Filled.AccountCircle" />
                 <span class="ms-2">Sign In</span>
             </MudLink>
-        </MudAppBar>
+        }
+    </MudAppBar>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </MudMainContent>
+    <article class="content px-4">
+        @Body
+    </article>
+</MudMainContent>
 </MudDrawerContainer>
 
 @code {
     private bool _drawerOpen = false;
     private int userId;
-
+    private bool isAuthenticated = false;
     private void ToggleDrawer()
     {
         _drawerOpen = !_drawerOpen;
@@ -46,9 +66,22 @@
         _drawerOpen = false;
     }
 
-    protected override void OnInitialized()
+    private async Task SignOut()
+    {
+        await AuthService.SignOutAsync();
+        Navigation.NavigateTo("/signin");
+    }
+
+
+    private async Task GoToProfile()
+    {
+        userId = await AuthService.GetUserIdAsync();
+        Navigation.NavigateTo($"/User/{userId}");
+    }
+    protected override async Task OnInitializedAsync()
     {
         Navigation.LocationChanged += HandleLocationChanged;
+        isAuthenticated = await AuthService.CheckAuthenticationAsync();
     }
 
     // This method will be called when the "Orders" button is clicked

@@ -87,6 +87,7 @@ public class AuthService
     public async Task SignOutAsync()
     {
         await _localStorage.RemoveItemAsync("authToken");
+        await _localStorage.RemoveItemAsync("userId");
     }
 
     public async Task<string?> GetTokenAsync()
