@@ -138,16 +138,7 @@
         <!-- Edit Button -->
         <button @onclick="EditUser" class="edit-button">Edit your data</button>
 
-        <!-- Add Order Form -->
-        <div class="order-form">
-            <h2>Add Order</h2>
-            <EditForm Model="@_orderModel" OnValidSubmit="HandleAddOrder">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <InputText id="orderName" @bind-Value="_orderModel.Name" placeholder="Order Name" required />
-                <button type="submit">Add Order</button>
-            </EditForm>
-        </div>
+     
 
         <!-- View Orders Button -->
         <button @onclick="GoToUserOrders" class="orders-button">View Orders</button>

@@ -10,6 +10,7 @@ namespace ACA.DeliverySystem.UI.Pages
         public int userId { get; set; }
 
         protected string _errorMessage = string.Empty;
+        protected OrderAddModel? _orderModel { get; set; }
         protected IEnumerable<OrderViewModel> orders { get; set; } = new List<OrderViewModel>();
         protected CancellationToken Token { get; set; } = default!;
 
@@ -28,16 +29,17 @@ namespace ACA.DeliverySystem.UI.Pages
         {
             try
             {
+                _orderModel = new OrderAddModel();
                 if (!await AuthService.CheckAuthenticationAsync())
                 {
-                    
+
                     NavigationManager.NavigateTo("/signin");
                     return;
                 }
 
-               /* userId = await AuthService.GetUserIdAsync(); */
+                /* userId = await AuthService.GetUserIdAsync(); */
 
-               
+
                 orders = await UserService.GetUserOrders(userId, Token);
             }
             catch (Exception ex)
@@ -54,6 +56,20 @@ namespace ACA.DeliverySystem.UI.Pages
         {
             // ?????????? ????????? ???
             NavigationManager.NavigateTo($"/User/{userId}");
+        }
+
+        protected async Task HandleAddOrder()
+        {
+            var result = await UserService.AddOrderInUser(userId, _orderModel!);
+            if (result.Success)
+            {
+                NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+            }
+            else
+            {
+                _errorMessage = result.ErrorMessage!;
+            }
+
         }
     }
 }
