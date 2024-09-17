@@ -14,6 +14,8 @@ namespace ACA.DeliverySystem.UI.Pages
         protected ItemViewModel? item;
         [Inject]
         protected ItemService ItemService { get; set; } = default!;
+        [Inject]
+        protected AuthService AuthService { get; set; } = default!;
 
         [Inject]
         protected OrderService OrderService { get; set; } = default!;
@@ -37,7 +39,13 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected async Task OrderItem()
         {
-            var response = await OrderService.AddItemInOrder(orderId, item.Id);
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
+            var response = await OrderService.AddItemInOrder(orderId, item!.Id);
             if (response.Success)
             {
                 Snackbar.Add($"Ordering {item.Name}...", Severity.Success);

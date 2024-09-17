@@ -9,11 +9,14 @@ namespace ACA.DeliverySystem.Business.Services
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly ITokenService _tokenService;
 
-        public UserService(IUnitOfWork uow, IMapper mapper)
+
+        public UserService(IUnitOfWork uow, IMapper mapper, ITokenService tokenService)
         {
             _uow = uow;
             _mapper = mapper;
+            _tokenService = tokenService;
         }
 
         public async Task<OperationResult> Create(UserAddModel user, CancellationToken token)
@@ -115,7 +118,13 @@ namespace ACA.DeliverySystem.Business.Services
             {
                 return OperationResult<ResponseForSignIn>.Error("Invalid email or password", ErrorType.Unauthorized);
             }
+
             var userView = _mapper.Map<ResponseForSignIn>(user);
+
+            // Assuming result.Data contains user information needed to generate the token
+            var userToken = _tokenService.GenerateToken(userView); // Generate JWT token
+            userView.Token = userToken;
+
             return OperationResult<ResponseForSignIn>.Ok(userView);
 
         }

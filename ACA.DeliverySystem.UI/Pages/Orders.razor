@@ -17,12 +17,12 @@
         border-radius: 10px;
         color: white;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        max-width: 600px;
+        max-width: 500px; /* Reduced width */
         margin: auto;
     }
 
     .order-item {
-        background-color: rgba(0, 0, 0, 0.8); 
+        background-color: rgba(0, 0, 0, 0.8);
         border-radius: 8px;
         padding: 15px;
         margin-bottom: 20px;
@@ -31,7 +31,7 @@
     }
 
         .order-item h4 {
-            color: #9b59b6; 
+            color: #9b59b6;
             margin-top: 0;
             margin-bottom: 10px;
         }
@@ -42,55 +42,164 @@
         }
 
             .order-item p strong {
-                color: #9b59b6; 
+                color: #9b59b6;
             }
 
     .view-details-link {
         display: inline-block;
         margin-top: 10px;
-        padding: 10px 15px;
-        background-color: #9b59b6; 
+        padding: 8px 12px; /* Reduced padding */
+        background-color: #9b59b6;
         color: white;
         text-decoration: none;
         border-radius: 5px;
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-        box-shadow: 0 4px 8px rgba(155, 89, 182, 0.5); 
+        box-shadow: 0 4px 8px rgba(155, 89, 182, 0.5);
     }
 
         .view-details-link:hover {
-            background-color: #8e44ad; 
+            background-color: #8e44ad;
             transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(155, 89, 182, 0.6); 
+            box-shadow: 0 6px 12px rgba(155, 89, 182, 0.6);
         }
 
         .view-details-link:active {
-            background-color: #732d91; 
+            background-color: #732d91;
             transform: scale(1);
-            box-shadow: 0 4px 8px rgba(155, 89, 182, 0.4); 
+            box-shadow: 0 4px 8px rgba(155, 89, 182, 0.4);
         }
 
     .back-button-container {
-        text-align: right; 
+        text-align: right;
         margin-top: 20px;
+    }
 
+    /* Add Order Form Styles */
+    .order-form {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 15px; /* Reduced padding */
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        max-width: 400px; /* Reduced width */
+        margin: auto;
+    }
+
+        .order-form h2 {
+            color: #9b59b6;
+            margin-bottom: 10px; /* Reduced margin */
+            text-align: center;
+            font-size: 20px; /* Reduced font size */
+        }
+
+        .order-form input {
+            width: 100%;
+            padding: 8px; /* Reduced padding */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px; /* Reduced margin */
+            font-size: 14px; /* Reduced font size */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .order-form input:focus {
+                border-color: #9b59b6;
+                box-shadow: 0 4px 8px rgba(155, 89, 182, 0.2);
+            }
+
+    .add-order-button {
+        background-color: #9b59b6;
+        color: white;
+        padding: 8px 15px; /* Reduced padding */
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 8px rgba(155, 89, 182, 0.5);
+    }
+
+        .add-order-button:hover {
+            background-color: #8e44ad;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(155, 89, 182, 0.6);
+        }
+
+        .add-order-button:active {
+            background-color: #732d91;
+            transform: scale(1);
+            box-shadow: 0 4px 8px rgba(155, 89, 182, 0.4);
+        }
+
+    /* Filter Dropdown Styles */
+    .filter-dropdown {
+        margin-bottom: 20px;
+        display: block;
+    }
+
+        .filter-dropdown select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: #fff;
+            color: #333;
+        }
+
+            .filter-dropdown select:focus {
+                border-color: #9b59b6;
+                box-shadow: 0 4px 8px rgba(155, 89, 182, 0.2);
+            }
 
 </style>
 
 <h3>Your Orders</h3>
+
+
+<!-- Filter Dropdown -->
+<div class="filter-dropdown">
+    <label for="filterSelect">Filter Orders:</label>
+    <select id="filterSelect" @onchange="FilterOrdersByStatus">
+        <option value="">All Orders</option>
+        <option value="Created">Created</option>
+        <option value="InProgress">In Progress</option>
+        <option value="Canceled">Canceled</option>
+        <option value="Completed">Completed</option>
+    </select>
+</div>
+
+
+<!-- Add Order Form -->
+<div class="order-form">
+    <h2>Add Order</h2>
+    <EditForm Model="@_orderModel" OnValidSubmit="HandleAddOrder">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <InputText id="orderName" @bind-Value="_orderModel!.Name" placeholder="Order Name" required />
+        <button type="submit" class="add-order-button">Add New Order</button>
+    </EditForm>
+</div>
+
+
+
 
 <div class="orders-container">
     @if (_isLoading)
     {
         <p>Loading orders...</p>
     }
-    else if (orders.Count() == 0 || orders == null)
+    else if (filteredOrders.Count() == 0 || filteredOrders == null)
     {
         <p>No orders found for this user.</p>
     }
     else
     {
-        foreach (var order in orders)
+        foreach (var order in filteredOrders.OrderByDescending(o => o.Date))
         {
             <div class="order-item">
                 <p><strong>Name:</strong> @order.Name</p>
@@ -106,10 +215,7 @@
     }
 </div>
 
+
 <div class="back-button-container">
     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="NavigateToUserPage">Back to User Page</MudButton>
 </div>
-
-
-
-

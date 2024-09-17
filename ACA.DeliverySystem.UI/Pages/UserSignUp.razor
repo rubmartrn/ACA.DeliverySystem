@@ -50,7 +50,7 @@
         border: none;
         border-radius: 5px;
         font-size: 16px;
-        box-sizing: border-box; /* Ensures padding and borders don't affect the width */
+        box-sizing: border-box;
     }
 
     button {
@@ -82,18 +82,64 @@
             .signin-link a:hover {
                 text-decoration: underline;
             }
+
+    .password-container {
+        position: relative;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .password-input {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+        padding-right: 40px; /* Leave space for the icon */
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 10px; /* Align the icon to the right */
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.3); /* Darker background */
+        border-radius: 50%;
+        padding: 5px; /* Padding around the icon */
+        color: white;
+        font-size: 16px; /* Smaller icon size */
+        width: 30px;
+        height: 30px;
+    }
+
+        .toggle-password:hover {
+            background-color: rgba(0, 0, 0, 0.5); /* Darker on hover */
+        }
+
+
 </style>
 
 <div class="form-container">
     <h1>Create an Account</h1>
     <EditForm Model="_userModel" OnValidSubmit="HandleSubmit">
-        <InputText @bind-Value="_userModel.Name" placeholder="Name" type="text" required class="form-control" />
+        <InputText @bind-Value="_userModel!.Name" placeholder="Name" type="text" required class="form-control" />
         <InputText @bind-Value="_userModel.SurName" placeholder="SurName" type="text" required class="form-control" />
         <InputText @bind-Value="_userModel.Email" placeholder="Email" type="email" required class="form-control" />
 
-        <!-- Adding password input fields -->
-        <InputText @bind-Value="_userModel.Password" placeholder="Password" type="password" required class="form-control" />
-        <InputText @bind-Value="_passwordConfirmation" placeholder="Confirm Password" type="password" required class="form-control" />
+        <!-- Password input with toggle visibility feature -->
+        <div class="password-container">
+            <InputText @bind-Value="_userModel.Password" placeholder="Password" type="@_passwordInputType" required class="password-input" />
+            <MudIconButton Icon="@_passwordIcon" Color="Color.Inherit" Class="toggle-password" @onclick="TogglePasswordVisibility" />
+        </div>
+        <span style="color: red;" id="password-requirements">@_passwordValidationMessage</span>
+
+        <!-- Confirm password input with same toggle functionality -->
+        <div class="password-container">
+            <InputText @bind-Value="_passwordConfirmation" placeholder="Confirm Password" type="@_confirmPasswordInputType" required class="password-input" />
+            <MudIconButton Icon="@_confirmPasswordIcon" Color="Color.Inherit" Class="toggle-password" @onclick="ToggleConfirmPasswordVisibility" />
+        </div>
 
         <button type="submit">Sign Up</button>
     </EditForm>

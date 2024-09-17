@@ -34,6 +34,7 @@ namespace ACA.DeliverySystem.Business.MappingProfiles
 
             CreateMap<ResponseForSignIn, ResponseForSignInDTO>()
                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+               .ForMember(d => d.Token, opt => opt.MapFrom(src => src.Token))
                .PreserveReferences();
 
 

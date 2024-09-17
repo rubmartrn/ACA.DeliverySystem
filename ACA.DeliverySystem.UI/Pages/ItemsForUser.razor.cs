@@ -6,7 +6,7 @@ namespace ACA.DeliverySystem.UI.Pages
 {
     public class ItemsForUserBase : ComponentBase
     {
-        protected IEnumerable<ItemViewModel> items;
+        protected IEnumerable<ItemViewModel>? items;
 
         [Parameter]
         public int orderId { get; set; }
@@ -20,6 +20,8 @@ namespace ACA.DeliverySystem.UI.Pages
 
         [Inject]
         protected OrderService OrderService { get; set; } = default!;
+        [Inject]
+        protected AuthService AuthService { get; set; } = default!;
 
         [Inject]
         protected NavigationManager NavigationManager { get; set; } = default!;
@@ -45,6 +47,12 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected async void OrderItem(ItemViewModel item)
         {
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
             var response = await OrderService.AddItemInOrder(orderId, item.Id);
             if (response.Success)
             {
@@ -58,8 +66,14 @@ namespace ACA.DeliverySystem.UI.Pages
 
         }
 
-        protected void GoBackToUserOrder()
+        protected async Task GoBackToUserOrder()
         {
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
             NavigationManager.NavigateTo($"/Order/{orderId}");
         }
     }

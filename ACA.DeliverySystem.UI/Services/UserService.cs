@@ -1,5 +1,6 @@
 ﻿using ACA.DeliverySystem.UI.Coneverters;
 using ACA.DeliverySystem.UI.Models;
+using Blazored.LocalStorage;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,10 +10,12 @@ namespace ACA.DeliverySystem.UI.Services
     public class UserService
     {
         private readonly HttpClient _client;
+        private readonly ILocalStorageService _localStorage;
 
-        public UserService(HttpClient Client)
+        public UserService(HttpClient Client, ILocalStorageService localStorage)
         {
             _client = Client;
+            _localStorage = localStorage;
         }
 
         public async Task<OperationResult> Create(UserAddModel model)
@@ -51,7 +54,7 @@ namespace ACA.DeliverySystem.UI.Services
             }
         }
 
-
+        // for deleting user, but I don't give a user permission to do that
         public async Task<OperationResult> Delete(int id)
         {
             var response = await _client.DeleteAsync($"User?id={id}");
@@ -129,26 +132,24 @@ namespace ACA.DeliverySystem.UI.Services
         }
 
 
-        public async Task<OperationResult<ResponseForSignIn>> SignIn(SignInRequestModel model)
-        {
-            var response = await _client.PostAsJsonAsync("User/sign-in", model);
+        //public async Task<OperationResult<ResponseForSignIn>> SignIn(SignInRequestModel model)
+        //{
+        //    var response = await _client.PostAsJsonAsync("User/sign-in", model);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var resultData = await response.Content.ReadFromJsonAsync<ResponseForSignIn>();
-                return OperationResult<ResponseForSignIn>.Ok(resultData!);
-            }
-            else
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                return new OperationResult<ResponseForSignIn>
-                {
-                    Success = false,
-                    ErrorMessage = errorMessage
-                };
-            }
-        }
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        var resultData = await response.Content.ReadFromJsonAsync<ResponseForSignIn>();
 
+        //        return OperationResult<ResponseForSignIn>.Ok(resultData!);
+
+        //    }
+        //    var errorMessage = await response.Content.ReadAsStringAsync();
+        //    return new OperationResult<ResponseForSignIn>
+        //    {
+        //        Success = false,
+        //        ErrorMessage = errorMessage
+        //    };
+        //}
 
 
         public async Task<UserViewModel?> GetUserById(int id)

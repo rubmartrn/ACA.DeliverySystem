@@ -1,14 +1,9 @@
 ﻿@inherits LayoutComponentBase
-@inject NavigationManager Navigation  // Inject the NavigationManager
-
-@* Required *@
+@inject NavigationManager Navigation
+@inject AuthService AuthService
 <MudThemeProvider />
 <MudPopoverProvider />
-
-@* Needed for dialogs *@
 <MudDialogProvider />
-
-@* Needed for snackbars *@
 <MudSnackbarProvider />
 
 <MudDrawerContainer>
@@ -16,20 +11,36 @@
         <MudNavMenu>
             <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All" OnClick="CloseDrawer">Home</MudNavLink>
             <MudNavLink Href="item" Icon="@Icons.Material.Filled.List" OnClick="CloseDrawer">Items</MudNavLink>
-            <MudNavLink Href="signin" Icon="@Icons.Material.Filled.ShoppingCart" OnClick="CloseDrawer">Orders</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.ShoppingCart" OnClick="OrdersClicked">Orders</MudNavLink> <!-- Updated -->
         </MudNavMenu>
     </MudDrawer>
 
     <MudMainContent>
-        <!-- This is where your MudAppBar goes -->
         <MudAppBar Elevation="1" Color="Color.Primary" Style="background-image: url('https://w0.peakpx.com/wallpaper/535/915/HD-wallpaper-delivery-blue-background-online-ordering-background-blue-digital-technology-background-online-shopping.jpg'), linear-gradient(to right, #6a11cb, #2575fc); background-size: cover; background-blend-mode: overlay;">
             <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="ToggleDrawer" Edge="Edge.Start" Color="Color.Inherit" />
-            <MudText Typo="Typo.h6">Delivery System</MudText>
+            <MudText Typo="Typo.h6">Delivery</MudText>
             <MudSpacer />
-            <MudLink Href="/signin" Color="Color.Inherit" Class="d-flex align-items-center">
-                <MudIcon Icon="@Icons.Material.Filled.AccountCircle" />
-                <span class="ms-2">Sign In</span>
-            </MudLink>
+            @if (isAuthenticated)
+            {
+                <MudMenu>
+                    <ActivatorContent>
+                        <MudAvatar Color="Color.Default" Variant="Variant.Filled">
+                            <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.AccountCircle" Size="Size.Large" />
+                        </MudAvatar>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudMenuItem OnClick="GoToProfile">My Profile</MudMenuItem>
+                        <MudMenuItem OnClick="SignOut">Sign Out</MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
+            }
+            else
+            {
+                <MudLink Href="/signin" Color="Color.Inherit" Class="d-flex align-items-center">
+                    <MudIcon Icon="@Icons.Material.Filled.AccountCircle" />
+                    <span class="ms-2">Sign In</span>
+                </MudLink>
+            }
         </MudAppBar>
 
         <article class="content px-4">
@@ -40,6 +51,8 @@
 
 @code {
     private bool _drawerOpen = false;
+    private int userId;
+    private bool isAuthenticated;
 
     private void ToggleDrawer()
     {
@@ -51,19 +64,60 @@
         _drawerOpen = false;
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await UpdateAuthenticationStatus();
         Navigation.LocationChanged += HandleLocationChanged;
     }
 
-    private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    // This method will be called when the "Orders" button is clicked
+    private async Task OrdersClicked()
     {
-        _drawerOpen = false;  // Ensure drawer closes on navigation
-        StateHasChanged();    // Force UI update
+        CloseDrawer(); // Close drawer when clicking
+
+        // Check if the user is authenticated
+        if (await AuthService.CheckAuthenticationAsync())
+        {
+            // If authenticated, get the userId and navigate to the orders page
+            userId = await AuthService.GetUserIdAsync();
+            Navigation.NavigateTo($"/User/{userId}/orders");
+        }
+        else
+        {
+            // If not authenticated, redirect to the sign-in page
+            Navigation.NavigateTo("/signin");
+        }
+    }
+
+    private async void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        _drawerOpen = false; // Ensure drawer closes on navigation
+        await UpdateAuthenticationStatus();
+        StateHasChanged(); // Force UI update
     }
 
     public void Dispose()
     {
+        // Clean up the event handler
         Navigation.LocationChanged -= HandleLocationChanged;
+    }
+
+    private async Task SignOut()
+    {
+        await AuthService.SignOutAsync();
+        await UpdateAuthenticationStatus();
+        Navigation.NavigateTo("/signin");
+    }
+
+    private async Task UpdateAuthenticationStatus()
+    {
+        isAuthenticated = await AuthService.CheckAuthenticationAsync();
+        StateHasChanged(); 
+    }
+
+    private async Task GoToProfile()
+    {
+        userId = await AuthService.GetUserIdAsync();
+        Navigation.NavigateTo($"/User/{userId}");
     }
 }

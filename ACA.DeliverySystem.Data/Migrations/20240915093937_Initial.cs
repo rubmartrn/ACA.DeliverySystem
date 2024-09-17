@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ACA.DeliverySystem.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Add_New_Password : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

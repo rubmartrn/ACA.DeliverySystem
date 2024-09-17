@@ -1,3 +1,4 @@
+using ACA.DeliverySystem.UI.Attributes;
 using ACA.DeliverySystem.UI.Models;
 using ACA.DeliverySystem.UI.Services;
 using Microsoft.AspNetCore.Components;
@@ -25,6 +26,9 @@ namespace ACA.DeliverySystem.UI.Pages
 
         [Inject]
         protected OrderService OrderService { get; set; } = default!;
+        
+        [Inject]
+        protected AuthService AuthService { get; set; } = default!;
 
         [Inject]
         protected NavigationManager NavigationManager { get; set; } = default!;
@@ -35,9 +39,16 @@ namespace ACA.DeliverySystem.UI.Pages
         [Inject]
         protected ISnackbar Snackbar { get; set; } = default!;
 
+
         protected override async Task OnInitializedAsync()
 
         {
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
+
             _orderModel = new OrderViewModel();
 
             try
@@ -58,6 +69,13 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected async Task CancelOrder()
         {
+
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
             var result = await OrderService.CancelOrder(orderId, Token);
             if (result.Success)
             {
@@ -74,6 +92,13 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected async Task RemoveItem(int orderId, int itemId)
         {
+
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
             var result = await OrderService.RemoveItemFromOrder(orderId, itemId);
             if (result.Success)
             {
@@ -88,6 +113,13 @@ namespace ACA.DeliverySystem.UI.Pages
         }
         protected async Task DeleteOrder()
         {
+
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
             var confirmed = await JSRuntime!.InvokeAsync<bool>("confirm", "Are you sure you want to delete this order?");
             if (confirmed)
             {
@@ -104,13 +136,25 @@ namespace ACA.DeliverySystem.UI.Pages
             }
         }
 
-        protected void GoBackToOrders()
+        protected async Task  GoBackToOrders()
         {
+
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
             NavigationManager.NavigateTo($"/User/{_orderModel!.UserId}/orders");
         }
 
-        protected void AddItems()
+        protected async Task AddItems()
         {
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
             if (_orderModel!.ProgressEnum != ProgressEnum.Created)
             {
                 Snackbar.Add($"You can't add new items. Order is {_orderModel.ProgressEnum}", Severity.Info);
@@ -121,13 +165,23 @@ namespace ACA.DeliverySystem.UI.Pages
             }
         }
 
-        protected void GoToItemDetail(int itemId)
+        protected async Task GoToItemDetail(int itemId)
         {
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
             NavigationManager.NavigateTo($"ItemDetailForUser/{itemId}/{orderId}");
         }
 
-        protected void GoToPayment()
+        protected async Task GoToPayment()
         {
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
             if (_orderModel!.ProgressEnum != ProgressEnum.Created)
             {
                 Snackbar.Add($"Order is {_orderModel.ProgressEnum}", Severity.Warning);
@@ -144,6 +198,11 @@ namespace ACA.DeliverySystem.UI.Pages
 
         protected async Task MarkAsCompleted()
         {
+            if (!await AuthService.CheckAuthenticationAsync())
+            {
+                NavigationManager.NavigateTo("/signin");
+                return;
+            }
             var result = await OrderService.OrderCompleted(orderId);
             if (result.Success)
             {
