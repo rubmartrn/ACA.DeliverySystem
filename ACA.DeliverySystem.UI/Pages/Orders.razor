@@ -134,9 +134,45 @@
             box-shadow: 0 4px 8px rgba(155, 89, 182, 0.4);
         }
 
+    /* Filter Dropdown Styles */
+    .filter-dropdown {
+        margin-bottom: 20px;
+        display: block;
+    }
+
+        .filter-dropdown select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: #fff;
+            color: #333;
+        }
+
+            .filter-dropdown select:focus {
+                border-color: #9b59b6;
+                box-shadow: 0 4px 8px rgba(155, 89, 182, 0.2);
+            }
+
 </style>
 
 <h3>Your Orders</h3>
+
+
+<!-- Filter Dropdown -->
+<div class="filter-dropdown">
+    <label for="filterSelect">Filter Orders:</label>
+    <select id="filterSelect" @onchange="FilterOrdersByStatus">
+        <option value="">All Orders</option>
+        <option value="Created">Created</option>
+        <option value="InProgress">In Progress</option>
+        <option value="Canceled">Canceled</option>
+        <option value="Completed">Completed</option>
+    </select>
+</div>
+
 
 <!-- Add Order Form -->
 <div class="order-form">
@@ -149,18 +185,21 @@
     </EditForm>
 </div>
 
+
+
+
 <div class="orders-container">
     @if (_isLoading)
     {
         <p>Loading orders...</p>
     }
-    else if (orders.Count() == 0 || orders == null)
+    else if (filteredOrders.Count() == 0 || filteredOrders == null)
     {
         <p>No orders found for this user.</p>
     }
     else
     {
-        foreach (var order in orders.OrderByDescending(o => o.Date))
+        foreach (var order in filteredOrders.OrderByDescending(o => o.Date))
         {
             <div class="order-item">
                 <p><strong>Name:</strong> @order.Name</p>
@@ -175,6 +214,7 @@
         }
     }
 </div>
+
 
 <div class="back-button-container">
     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="NavigateToUserPage">Back to User Page</MudButton>
