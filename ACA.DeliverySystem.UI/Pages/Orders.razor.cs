@@ -42,7 +42,7 @@ namespace ACA.DeliverySystem.UI.Pages
 
 
                 orders = await UserService.GetUserOrders(userId, Token);
-                FilterOrders();
+                filteredOrders = orders.ToList();
             }
             catch (Exception ex)
             {
