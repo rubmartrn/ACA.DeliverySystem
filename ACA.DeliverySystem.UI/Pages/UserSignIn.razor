@@ -46,6 +46,12 @@
         border: none;
         border-radius: 5px;
         font-size: 16px;
+        transition: border-color 0.3s ease;
+    }
+
+    input:focus {
+        border: 1px solid #28a745; /* Highlight border on focus */
+        outline: none; /* Remove default outline */
     }
 
     button {
@@ -58,6 +64,7 @@
         color: white;
         font-size: 18px;
         cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
         button:hover {
@@ -112,17 +119,16 @@
         .toggle-password:hover {
             background-color: rgba(0, 0, 0, 0.5); /* Darker on hover */
         }
-
 </style>
 
 <div class="form-container">
     <h1>Sign In</h1>
     <EditForm Model="_loginModel" OnValidSubmit="HandleSubmit">
-        <InputText @bind-Value="_loginModel!.Email" placeholder="Email" type="email" required class="form-control" />
+        <InputText id="email" @bind-Value="_loginModel!.Email" placeholder="Email" type="email" required class="form-control" aria-label="Email" />
 
         <!-- Password input with toggle visibility feature -->
         <div class="password-container">
-            <InputText @bind-Value="_loginModel.Password" placeholder="Password" type="@_passwordInputType" required class="password-input" />
+            <InputText id="password" @bind-Value="_loginModel.Password" placeholder="Password" type="@_passwordInputType" required class="password-input" aria-label="Password" />
             <MudIconButton Icon="@_passwordIcon" Color="Color.Inherit" Class="toggle-password" @onclick="TogglePasswordVisibility" />
         </div>
 
