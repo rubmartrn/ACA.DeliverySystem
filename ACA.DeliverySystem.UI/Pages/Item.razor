@@ -4,6 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject ItemService ItemService
 @inject ISnackbar Snackbar
+@inject AuthService AuthService
 
 <PageTitle>Items</PageTitle>
 
@@ -65,8 +66,9 @@
         NavigationManager.NavigateTo($"/item/{itemId}");
     }
 
-    private void OrderItem(ItemViewModel item)
+    private async Task OrderItem(ItemViewModel item)
     {
-        NavigationManager.NavigateTo("/signin");
+        var userId = await AuthService.GetUserIdAsync();
+        NavigationManager.NavigateTo($"User/{userId}/orders");
     }
 }
