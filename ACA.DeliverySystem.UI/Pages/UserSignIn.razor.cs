@@ -39,6 +39,7 @@ namespace ACA.DeliverySystem.UI.Pages
             {
                 _errorMessage = result.ErrorMessage;
                 Snackbar.Add(_errorMessage, Severity.Error);
+                StateHasChanged();
             }
 
         }

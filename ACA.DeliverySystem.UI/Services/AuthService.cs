@@ -99,5 +99,15 @@ public class AuthService
         await _localStorage.SetItemAsync("authToken", token);
     }
 
+    public async Task<bool> ValidatePassword(PasswordValidationRequest request)
+    {
+        var result = await _httpClient.PostAsJsonAsync("User/validatePassword", request);
+        if (result.IsSuccessStatusCode)
+        {
+            return true;
+        }
+        return false;
+
+    }
 }
 

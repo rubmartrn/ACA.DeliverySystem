@@ -14,5 +14,7 @@ namespace ACA.DeliverySystem.Business.Services
         Task<IEnumerable<OrderViewModel>> GetUserOrders(int userId, CancellationToken token);
         Task<OperationResult<ResponseForSignIn>> SignIn(SignInRequestModel model, CancellationToken token);
         Task<OperationResult> Update(int id, UserUpdateModel model, CancellationToken token);
+        Task<OperationResult> UpdatePassword(int id, string newPassword, CancellationToken token);
+        Task<OperationResult> ValidatePassword(int id, string password, CancellationToken token);
     }
 }

@@ -109,14 +109,14 @@ namespace ACA.DeliverySystem.Business.Services
             var user = await GetByEmail(model.Email, token);
             if (user == null)
             {
-                return OperationResult<ResponseForSignIn>.Error("Invalid email or password", ErrorType.Unauthorized);
+                return OperationResult<ResponseForSignIn>.Error("Invalid email or newPassword", ErrorType.Unauthorized);
             }
 
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash);
 
             if (!isPasswordValid)
             {
-                return OperationResult<ResponseForSignIn>.Error("Invalid email or password", ErrorType.Unauthorized);
+                return OperationResult<ResponseForSignIn>.Error("Invalid email or newPassword", ErrorType.Unauthorized);
             }
 
             var userView = _mapper.Map<ResponseForSignIn>(user);
@@ -126,6 +126,35 @@ namespace ACA.DeliverySystem.Business.Services
             userView.Token = userToken;
 
             return OperationResult<ResponseForSignIn>.Ok(userView);
+
+        }
+
+        public async Task<OperationResult> UpdatePassword(int id, string newPassword, CancellationToken token)
+        {
+            var user = await _uow.UserRepository.GetById(id, token);
+            if (user == null)
+            {
+                return OperationResult.Error($"User with id {id} not found.", ErrorType.NotFound);
+            }
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            await _uow.UserRepository.Update(user, token);
+            await _uow.Save(token);
+            return OperationResult.Ok();
+        }
+
+        public async Task<OperationResult> ValidatePassword(int id, string password, CancellationToken token)
+        {
+            var user = await _uow.UserRepository.GetById(id, token);
+            if (user == null)
+            {
+                return OperationResult.Error($"User with id {id} not found.", ErrorType.NotFound);
+            }
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+            if (!isPasswordValid)
+            {
+                return OperationResult.Error("Password is not valid", ErrorType.Forbidden);
+            }
+            return OperationResult.Ok();
 
         }
 

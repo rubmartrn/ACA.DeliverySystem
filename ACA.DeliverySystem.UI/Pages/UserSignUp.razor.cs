@@ -72,7 +72,7 @@ namespace ACA.DeliverySystem.UI.Pages
             if (!password.Any(c => "!@#$%^&*()_+[]{}|;:',.<>?/".Contains(c))) errors.Add("Password must contain at least one special character.");
             if (password.Any(char.IsWhiteSpace)) errors.Add("Password must not contain spaces.");
 
-            _passwordValidationMessage = string.Join("<br>", errors);
+            _passwordValidationMessage = string.Join(" ", errors);
 
             return !errors.Any();
         }
