@@ -28,8 +28,25 @@ namespace ACA.DeliverySystem.Business.Tests
         {
             //Arrange
             var users = new List<User>();
-            var user = new User { Id = 1, OrderId = 1, Name = "Artur", SurName = "Nikoxosyan",Orders = _mockOrders.Object, Email = "art56@gmail.com" };
-            var userAddModel = new UserAddModel { Name = "Artur", SurName = "Nikoxosyan", Email ="art56@gmail.com" };
+            var password = "MySecurePassword";
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+            var user = new User
+            {
+                Id = 1,
+                OrderId = 1,
+                Name = "Artur",
+                SurName = "Nikoxosyan",
+                Orders = _mockOrders.Object,
+                Email = "art56@gmail.com",
+                PasswordHash = hashedPassword
+            };
+            var userAddModel = new UserAddModel
+            {
+                Name = "Artur",
+                SurName = "Nikoxosyan",
+                Email = "art56@gmail.com",
+                PasswordHash = password
+            };
 
             _iUserRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(users);
             _uowMock.Setup(u => u.UserRepository).Returns(_iUserRepositoryMock.Object);
@@ -39,7 +56,7 @@ namespace ACA.DeliverySystem.Business.Tests
             await service.Create(userAddModel, CancellationToken.None);
 
             //Assert
-            _iUserRepositoryMock.Verify(m => m.Add(It.Is<User>(c => c == user),It.IsAny<CancellationToken>()), Times.Once);
+            _iUserRepositoryMock.Verify(m => m.Add(It.Is<User>(c => c == user), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -60,7 +77,7 @@ namespace ACA.DeliverySystem.Business.Tests
             await service.Delete(1, CancellationToken.None);
 
             //Assert
-            _iUserRepositoryMock.Verify(m => m.Delete(It.Is<int>(c => c == 1),It.IsAny<CancellationToken>()), Times.Once());
+            _iUserRepositoryMock.Verify(m => m.Delete(It.Is<int>(c => c == 1), It.IsAny<CancellationToken>()), Times.Once());
         }
 
         [Fact]
@@ -93,7 +110,7 @@ namespace ACA.DeliverySystem.Business.Tests
         public async Task GetById_Success()
         {
             //Arrange
-            var user = new User { Id = 1, OrderId = 1, Name = "Artur", SurName = "Nikoxosyan",Orders = _mockOrders.Object, Email = "art56@gmail.com" };
+            var user = new User { Id = 1, OrderId = 1, Name = "Artur", SurName = "Nikoxosyan", Orders = _mockOrders.Object, Email = "art56@gmail.com" };
 
             _iUserRepositoryMock.Setup(e => e.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(user);
             _uowMock.Setup(u => u.UserRepository).Returns(_iUserRepositoryMock.Object);
@@ -102,7 +119,7 @@ namespace ACA.DeliverySystem.Business.Tests
             await service.GetById(1, CancellationToken.None);
 
             //Assert
-            _iUserRepositoryMock.Verify(m => m.GetById(It.Is<int>(c => c == 1),It.IsAny<CancellationToken>()), Times.Once);
+            _iUserRepositoryMock.Verify(m => m.GetById(It.Is<int>(c => c == 1), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -116,7 +133,7 @@ namespace ACA.DeliverySystem.Business.Tests
                 new User { Id = 2, OrderId = 2, Name = "Nara", SurName = "Hovhannisyan", Orders =_mockOrders.Object, Email="narush28@gmail.com" }
             };
             var userUpdateModel = new UserUpdateModel { Name = "Gagik", SurName = "Sargsyan" };
-            var currentUser = new User { Id = 3, OrderId = 3, Name = "Gagik", SurName = "Sargsyan",Orders = _mockOrders.Object, Email = "gags8@gmail.com" };
+            var currentUser = new User { Id = 3, OrderId = 3, Name = "Gagik", SurName = "Sargsyan", Orders = _mockOrders.Object, Email = "gags8@gmail.com" };
 
             _iUserRepositoryMock.Setup(e => e.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(currentUser);
             _iUserRepositoryMock.Setup(e => e.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(users);
@@ -126,7 +143,7 @@ namespace ACA.DeliverySystem.Business.Tests
             await service.Update(userId, userUpdateModel, CancellationToken.None);
 
             //Assert
-            _iUserRepositoryMock.Verify(m => m.Update(It.Is<User>(c => c == currentUser),It.IsAny<CancellationToken>()), Times.Once);
+            _iUserRepositoryMock.Verify(m => m.Update(It.Is<User>(c => c == currentUser), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -143,7 +160,7 @@ namespace ACA.DeliverySystem.Business.Tests
                 new OrderViewModel { Id = 1, UserId = 1, Name = "fast food",  Date = new DateOnly(),PaidAmount=45,  ProgressEnum = ProgressEnum.Created, Items = _mockItemViewModels.Object },
                 new OrderViewModel { Id = 2, UserId = 2, Name = "Donar", Date = new DateOnly(),PaidAmount=25,  ProgressEnum = ProgressEnum.Canceled, Items = _mockItemViewModels.Object },
             };
-            var currentUser = new User { Id = 3, OrderId = 3, Name = "Gagik", SurName = "Sargsyan",Orders = _mockOrders.Object, Email = "gags8@gmail.com" };
+            var currentUser = new User { Id = 3, OrderId = 3, Name = "Gagik", SurName = "Sargsyan", Orders = _mockOrders.Object, Email = "gags8@gmail.com" };
 
             _iUserRepositoryMock.Setup(e => e.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(currentUser);
             _iUserRepositoryMock.Setup(e => e.GetUserOrders(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(orders);
@@ -162,8 +179,8 @@ namespace ACA.DeliverySystem.Business.Tests
         {
             //Arrange
             var orderAddModel = new OrderAddModel() { Name = "Busines Order" };
-            var order = new Order() { Id = 1, Name = "Busines Order", UserId = 1, PaidAmount = 25,ProgressEnum = ProgressEnum.Created, OrderItems = _mockItems.Object, User = _mockUsers.Object };
-            var currentUser = new User { Id = 1, OrderId = 1, Name = "Gagik", SurName = "Sargsyan",Orders = _mockOrders.Object, Email = "gags8@gmail.com" };
+            var order = new Order() { Id = 1, Name = "Busines Order", UserId = 1, PaidAmount = 25, ProgressEnum = ProgressEnum.Created, OrderItems = _mockItems.Object, User = _mockUsers.Object };
+            var currentUser = new User { Id = 1, OrderId = 1, Name = "Gagik", SurName = "Sargsyan", Orders = _mockOrders.Object, Email = "gags8@gmail.com" };
 
             _iUserRepositoryMock.Setup(e => e.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(currentUser);
             _uowMock.Setup(u => u.UserRepository).Returns(_iUserRepositoryMock.Object);
