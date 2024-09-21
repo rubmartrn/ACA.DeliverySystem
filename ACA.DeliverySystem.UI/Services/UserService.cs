@@ -159,5 +159,23 @@ namespace ACA.DeliverySystem.UI.Services
 
         }
 
+        public async Task<OperationResult> UpdatePasswordAsync(PasswordChangeRequest request)
+        {
+            var result = await _client.PutAsJsonAsync($"User/changePassword", request);
+            if (result.IsSuccessStatusCode)
+            {
+                return OperationResult.Ok();
+            }
+            else
+            {
+
+                return new OperationResult
+                {
+                    Success = false,
+                    ErrorMessage = "Failed to update password"
+                };
+            }
+        }
+
     }
 }

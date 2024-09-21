@@ -1,76 +1,157 @@
 ﻿@page "/User/Edit/{userId:int}"
 @inherits UserEditBase
 
-<h3>Edit User Details</h3>
+<PageTitle>Edit User Details</PageTitle>
 
-<style>
-    body {
-        background-image: url('https://plus.unsplash.com/premium_photo-1721080250995-5a83519eb2a0?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-    }
+<div class="container text-center">
+    <h2>Edit User Details</h2>
 
-    .edit-container {
-        background-color: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        max-width: 500px;
-        margin: auto;
-        margin-top: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    }
-
-        .edit-container h3 {
-            color: #00bfff;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .edit-container input, .edit-container button {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .edit-container button {
-            background-color: cornflowerblue;
-            border: none;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-            .edit-container button:hover {
-                background-color: darkblue;
-            }
-</style>
-
-<div class="edit-container">
     @if (_userModel != null)
     {
-        <EditForm Model="@_userModel" OnValidSubmit="HandleEditUser">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div>
-                <label>Name:</label>
-                <InputText @bind-Value="_userModel.Name" class="form-control" />
+        <form @onsubmit="HandleEditNameAndSurname" class="mb-4">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" @bind="_userModel.Name" required class="form-control" placeholder="Enter your name" />
             </div>
-            <div>
-                <label>Surname:</label>
-                <InputText @bind-Value="_userModel.SurName" class="form-control" />
+            <div class="form-group">
+                <label for="surname">Surname</label>
+                <input type="text" id="surname" @bind="_userModel.SurName" required class="form-control" placeholder="Enter your surname" />
             </div>
-            <button type="submit">Save Changes</button>
-        </EditForm>
+            <button type="submit" class="btn btn-primary btn-block">Save Name and Surname</button>
+        </form>
+
+        <hr class="my-4" />
+
+        <form @onsubmit="HandleChangePassword">
+            <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <div class="input-group">
+                    <input type="@_currentPasswordInputType" id="currentPassword" @bind="_passwordValidationRequest.Password" required class="form-control" placeholder="Current Password" />
+                    <span class="input-group-addon" @onclick="ToggleCurrentPasswordVisibility">
+                        <i class="@(_currentPasswordInputType == "password" ? "fa fa-eye-slash" : "fa fa-eye")"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <div class="input-group">
+                    <input type="@_newPasswordInputType" id="newPassword" @bind="_passwordChangeRequest.Password" required class="form-control" placeholder="New Password" />
+                    <span class="input-group-addon" @onclick="ToggleNewPasswordVisibility">
+                        <i class="@(_newPasswordInputType == "password" ? "fa fa-eye-slash" : "fa fa-eye")"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmNewPassword">Confirm New Password</label>
+                <div class="input-group">
+                    <input type="@_confirmPasswordInputType" id="confirmNewPassword" @bind="_confirmNewPassword" required class="form-control" placeholder="Confirm New Password" />
+                    <span class="input-group-addon" @onclick="ToggleConfirmPasswordVisibility">
+                        <i class="@(_confirmPasswordInputType == "password" ? "fa fa-eye-slash" : "fa fa-eye")"></i>
+                    </span>
+                </div>
+            </div>
+
+            <p class="text-danger">@_passwordValidationMessage</p>
+            <button type="submit" class="btn btn-primary btn-block">Change Password</button>
+        </form>
     }
     else
     {
-        <p>Loading user details...</p>
+        <p class="text-center">Loading user details...</p>
     }
 </div>
 
+<style>
+    body {
+        background-image: url('https://plus.unsplash.com/premium_photo-1685214580428-7eae1a78e7bc?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        font-family: 'Arial', sans-serif;
+    }
 
+    .container {
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(12px);
+        border: 1px solid #eaeaea;
+    }
 
+    h2 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
 
+    .form-group {
+        margin-bottom: 20px;
+    }
 
+    .form-control {
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        padding: 12px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        width: 100%; /* Ensure full width */
+    }
+
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+            outline: none; /* Remove default outline */
+        }
+
+    .btn {
+        font-size: 16px;
+        padding: 12px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+    .input-group {
+        position: relative;
+    }
+
+    .input-group-addon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+
+    .fa {
+        font-size: 18px;
+        color: #3498db;
+        transition: color 0.3s ease;
+    }
+
+        .fa:hover {
+            color: #2980b9;
+        }
+
+    .text-danger {
+        margin-top: 5px;
+        font-weight: bold;
+        color: #e74c3c;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />

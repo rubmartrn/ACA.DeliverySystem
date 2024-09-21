@@ -130,5 +130,29 @@ namespace ACA.DeliverySystem_Api.Controllers
             return Ok();
         }
 
+        [HttpPut("changePassword")]
+
+        public async Task<IActionResult> UpdatePassword([FromBody] PasswordChangeRequst request, CancellationToken token)
+        {
+            var result = await _userService.UpdatePassword(request.Id, request.Password, token);
+            if (result.Success)
+            {
+                return Ok();
+            }
+            return BadRequest(result.ErrorMessage);
+        }
+
+        [HttpPost("validatePassword")]
+
+        public async Task<IActionResult> ValidatePassword([FromBody] PasswordValidationRequest request, CancellationToken token)
+        {
+            var result = await _userService.ValidatePassword(request.Id, request.Password, token);
+            if (result.Success)
+            {
+                return Ok();
+            }
+            return BadRequest(result.ErrorMessage);
+        }
+
     }
 }
