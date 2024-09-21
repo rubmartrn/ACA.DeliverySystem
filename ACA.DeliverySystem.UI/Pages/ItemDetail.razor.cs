@@ -17,6 +17,8 @@ namespace ACA.DeliverySystem.UI.Pages
         protected NavigationManager NavigationManager { get; set; } = default!;
         [Inject]
         protected ISnackbar Snackbar { get; set; } = default!;
+        [Inject]
+        protected AuthService AuthService { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -30,10 +32,13 @@ namespace ACA.DeliverySystem.UI.Pages
             }
         }
 
-        protected void OrderItem()
+
+        protected async Task OrderItem()
         {
-            NavigationManager.NavigateTo("/signin");
+            var userId = await AuthService.GetUserIdAsync();
+            NavigationManager.NavigateTo($"User/{userId}/orders");
         }
+
 
         protected void GoBack()
         {

@@ -36,7 +36,10 @@ public class AuthService
                     return OperationResult<ResponseForSignIn>.Ok(result);
                 }
             }
-            return OperationResult<ResponseForSignIn>.Fail();
+            return new OperationResult<ResponseForSignIn>
+            {
+                ErrorMessage = "User name or password is not valid"
+            };
         }
         catch (Exception ex)
         {
