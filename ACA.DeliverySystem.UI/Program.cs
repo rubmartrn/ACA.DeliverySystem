@@ -14,18 +14,16 @@ builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
+var url = builder.Configuration["AcaDeliverySystemUrl"]!;
 
-builder.Services.AddHttpClient<OrderService>(
-    h => h.BaseAddress = new Uri("https://localhost:7055")
-    );
+builder.Services.AddHttpClient("AcaDS",
+    h => h.BaseAddress = new Uri(url));
 
-builder.Services.AddHttpClient<UserService>(
-    h => h.BaseAddress = new Uri("https://localhost:7055")
-    );
+builder.Services.AddHttpClient<OrderService>("AcaDS");
 
-builder.Services.AddHttpClient<AuthService>(
-    h => h.BaseAddress = new Uri("https://localhost:7055")
-    );
+builder.Services.AddHttpClient<UserService>("AcaDS");
+
+builder.Services.AddHttpClient<AuthService>("AcaDS");
 
 
 builder.Services.AddHttpClient<ItemService>(
